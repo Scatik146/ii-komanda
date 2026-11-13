@@ -12,6 +12,7 @@
 | `pamyat/obshchaya/` | общая память Claude (вне проектов): профиль, предпочтения, teacher-workpad | память claude.ai, дословно |
 | `pamyat/proekt-razrabotka-urokov/` | память проекта «Разработка уроков»: профиль, правила приложений, репозитории drakon-graf, ii-komanda, info10-class | память claude.ai, дословно |
 | `pamyat/proekt-zhivoj-konspekt/` | память проекта «Живой конспект»: предпочтения, drakon-graf, ii-komanda, teacher-workpad (профиля у проекта нет) | память claude.ai, дословно (13.11) |
+| `pamyat/proekt-komi-permyackij-igrovoj-kalendar/` | память проекта «Коми-пермяцкий игровой календарь»: профиль, предпочтения, календарь «Солнечная восьмёрка» (komi-perm-calendar), index | память claude.ai, дословно (13.11) |
 
 Остальные навыки (docx, pdf, pptx, xlsx, браузер и т. п.) — встроенные Anthropic, их копировать не нужно.
 
