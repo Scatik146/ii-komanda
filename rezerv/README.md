@@ -11,6 +11,7 @@
 | `navyki/<имя>/SKILL.md` | 4 навыка учителя: `ekonomnaya-sessiya`, `teacher-workpad-sajt`, `drakon-shema`, `graficheskij-konspekt` | установленные в claude.ai (13.11); в `ekonomnaya-sessiya` исправлен путь к заданиям (`teacher-workpad/docs/komanda/zadaniya/`) |
 | `pamyat/obshchaya/` | общая память Claude (вне проектов): профиль, предпочтения, teacher-workpad | память claude.ai, дословно |
 | `pamyat/proekt-razrabotka-urokov/` | память проекта «Разработка уроков»: профиль, правила приложений, репозитории drakon-graf, ii-komanda, info10-class | память claude.ai, дословно |
+| `pamyat/proekt-zhivoj-konspekt/` | память проекта «Живой конспект»: предпочтения, drakon-graf, ii-komanda, teacher-workpad (профиля у проекта нет) | память claude.ai, дословно (13.11) |
 
 Остальные навыки (docx, pdf, pptx, xlsx, браузер и т. п.) — встроенные Anthropic, их копировать не нужно.
 
