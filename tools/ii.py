@@ -896,11 +896,20 @@ def propustit_vizual(urok, kod):
     return kod == "vizual" and not zakazy_kartinok(vse_zakazy(urok))
 
 
+# канва принята: файл есть и страж сказал ПРИНЯТЬ (после vernut) — заново не собираем
+def kanva_prinyata(urok):
+    est = (urok / FAJL_ARTEFAKTA["kanva"]).exists()
+    return est and verdikt_iz_fajla(urok / "proverka" / "kanva-strazh.md") == "ПРИНЯТЬ"
+
+
 # шаг сборки: один код → строка итога или None; канва не принята — Oshibka (дальше нельзя)
 def shag_sborki(kt, kod):
     pauza(kt, kod)
     if propustit_vizual(kt.urok, kod):
         return "vizual: заказов картинок нет — пропущен"
+    if kod == "kanva" and kanva_prinyata(kt.urok):
+        print("kanva: уже принята — беру готовую")
+        return None
     verdikt, krug = sobrat_odin(kt, kod)
     print("%s: %s (круг %d)" % (kod, verdikt, krug))
     stroka = stroka_itoga(kod, verdikt, krug)

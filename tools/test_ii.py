@@ -261,6 +261,14 @@ class TestSborka(unittest.TestCase):
         self.assertIn("канва не принята", itog)
         self.assertFalse((self.urok / "artefakty" / "shpargalka.html").exists())
 
+    def test_prinyataya_kanva_ne_peresobiraetsya(self):
+        ii.http_post = umnaya_podmena(["ВЕРНУТЬ", "ВЕРНУТЬ"])
+        self.assertEqual(self.zapusk("sborka", str(self.urok)), 2)  # канва не принята
+        self.zapusk("vernut", str(self.urok), "kanva", "все 8 писем — один заход")
+        ii.http_post = umnaya_podmena([])
+        self.assertEqual(self.zapusk("sborka", str(self.urok)), 0)
+        self.assertEqual(len(ii.http_post.vyzovy), 4)  # канву не трогали: шпаргалка и приложение
+
     def test_bez_stop_2(self):
         (self.urok / "so-analiz.md").unlink()
         self.assertEqual(ii.main(["sborka", str(self.urok)]), 2)
