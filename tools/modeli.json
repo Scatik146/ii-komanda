@@ -1,34 +1,48 @@
 {
-  "_kommentarij": "Роли → порядок моделей (первая — по умолчанию, дальше — замена). Здесь только ИМЕНА переменных с ключами; сами ключи — в ~/.ii-komanda.env. Адреса DeepSeek, GLM, Qwen сверены 14.11.2026; Яндекс — 14.11.2026 (чат 07).",
+  "_kommentarij": "Роли → порядок моделей (первая — по умолчанию, дальше — замена). Решение 14.11: всё через Яндекс, один ключ YANDEX_API_KEY + каталог YANDEX_FOLDER_ID (сами значения — в ~/.ii-komanda.env). Адреса моделей — из прогона klyuchi 14.11 (ii-py/klyuchi-2026-11-14.md). GLM — вручную через учителя (команда ekspertiza). rassuzhdenie: true — у модели рассуждение включено по умолчанию: скрипт даёт больше токенов и убирает рассуждение из ответа. telo_dop — добавки в тело запроса; параметр выключения рассуждения у Яндекса не сверен — не знаю, надо проверить, поэтому пусто.",
   "roli": {
     "kanva": ["deepseek", "qwen"],
     "prilozhenie": ["deepseek", "qwen"],
-    "kontent": ["qwen", "deepseek"],
-    "ekspertiza": ["glm", "qwen", "deepseek"],
-    "strazh": ["alisa", "glm"],
-    "so_analiz": ["alisa", "glm"]
+    "kontent": ["deepseek", "qwen"],
+    "vizual": ["alisa_flash", "deepseek"],
+    "strazh": ["alisa", "alisa_flash"],
+    "so_analiz": ["alisa", "alisa_flash"],
+    "rutina": ["alisa_flash", "alisa"]
   },
   "modeli": {
     "alisa": {
       "adres": "https://ai.api.cloud.yandex.net/v1",
-      "model": "gpt://{YANDEX_FOLDER_ID}/aliceai-llm",
+      "model": "gpt://{YANDEX_FOLDER_ID}/aliceai-llm/latest",
+      "klyuch": "YANDEX_API_KEY",
+      "zagolovki": {"OpenAI-Project": "{YANDEX_FOLDER_ID}"}
+    },
+    "alisa_flash": {
+      "adres": "https://ai.api.cloud.yandex.net/v1",
+      "model": "gpt://{YANDEX_FOLDER_ID}/aliceai-llm-flash/latest",
       "klyuch": "YANDEX_API_KEY",
       "zagolovki": {"OpenAI-Project": "{YANDEX_FOLDER_ID}"}
     },
     "deepseek": {
-      "adres": "https://api.deepseek.com",
-      "model": "deepseek-v4-flash",
-      "klyuch": "DEEPSEEK_API_KEY"
-    },
-    "glm": {
-      "adres": "https://api.z.ai/api/paas/v4",
-      "model": "glm-5.1",
-      "klyuch": "GLM_API_KEY"
+      "adres": "https://ai.api.cloud.yandex.net/v1",
+      "model": "gpt://{YANDEX_FOLDER_ID}/deepseek-v4.1-flash/latest",
+      "klyuch": "YANDEX_API_KEY",
+      "zagolovki": {"OpenAI-Project": "{YANDEX_FOLDER_ID}"},
+      "rassuzhdenie": true,
+      "max_tokens": 32000,
+      "telo_dop": {}
     },
     "qwen": {
-      "adres": "https://dashscope-intl.aliyuncs.com/compatible-mode/v1",
-      "model": "qwen-plus",
-      "klyuch": "QWEN_API_KEY"
+      "adres": "https://ai.api.cloud.yandex.net/v1",
+      "model": "gpt://{YANDEX_FOLDER_ID}/qwen3.6-35b-a3b/latest",
+      "klyuch": "YANDEX_API_KEY",
+      "zagolovki": {"OpenAI-Project": "{YANDEX_FOLDER_ID}"},
+      "rassuzhdenie": true,
+      "max_tokens": 32000,
+      "telo_dop": {}
+    },
+    "glm": {
+      "vid": "vruchnuyu",
+      "_kommentarij": "экспертиза: ii.py ekspertiza готовит пакет → учитель копирует в чат GLM → ответ файлом обратно"
     },
     "claude": {
       "vid": "anthropic",

@@ -1,5 +1,8 @@
 """Тесты ii.py без сети: python -m unittest tools/test_ii.py (или python tools/test_ii.py)."""
+import os
+import shutil
 import tempfile
+from unittest import mock
 import unittest
 import urllib.error
 from pathlib import Path
@@ -122,11 +125,11 @@ class TestUrok(unittest.TestCase):
             t = ii.podstavit(ii.prochitat_prompt(p.stem), self.urok, {"KOD": "k", "REZULTAT": "r", "KARTINKI": "нет"})
             self.assertNotIn("{{", t, p.name)
 
-    def test_ekspertiza_bez_seti(self):
-        arg = ii.razbor(["ekspertiza", str(self.urok), "--bez-seti"])
+    def test_ekspertiza_paket_glm(self):
+        arg = ii.razbor(["ekspertiza", str(self.urok)])
         self.assertEqual(arg.f(arg), 0)
-        zapros = (self.urok / "proverka" / "ekspertiza-zapros.md").read_text(encoding="utf-8")
-        self.assertIn("Решения", zapros)
+        paket = (self.urok / "proverka" / ii.PAKET_GLM).read_text(encoding="utf-8")
+        self.assertIn("Решения", paket)
         self.assertFalse((self.urok / "ekspertiza.md").exists())  # ответ не имитируется
 
 
@@ -155,6 +158,141 @@ class TestOkruzhenie(unittest.TestCase):
 
     def test_kartinka_bez_zakaza(self):
         self.assertTrue(ii.proverit_okruzhenie(HOROSHIJ, "a.html", kartinki={"drugaya.jpg"}))
+
+
+class TestRassuzhdenie(unittest.TestCase):
+    def test_think_ubran(self):
+        t, _ = ii.razobrat_otvet(otvet("<think>долго думаю</think>\nПРИНЯТЬ"))
+        self.assertEqual(t, "ПРИНЯТЬ")
+
+    def test_rassuzhdenie_sjelo_limit(self):
+        d = {"choices": [{"message": {"content": "", "reasoning_content": "думаю…"}, "finish_reason": "length"}]}
+        with self.assertRaises(ii.Nerabochij) as e:
+            ii.razobrat_otvet(d)
+        self.assertIn("рассуждение", str(e.exception))
+
+    def test_limit_i_telo_dop(self):
+        m = dict(MODELI, modeli=dict(MODELI["modeli"]))
+        m["modeli"]["deepseek"] = dict(m["modeli"]["deepseek"], max_tokens=32000, telo_dop={"x": 1})
+        pod = Podmena(otvet("ок"))
+        staryj, ii.http_post = ii.http_post, pod
+        try:
+            ii.vyzov(ii.Kontekst(m, dict(KLYUCHI)), "solo", "т", "x")
+        finally:
+            ii.http_post = staryj
+        self.assertEqual((pod.vyzovy[0][2]["max_tokens"], pod.vyzovy[0][2]["x"]), (32000, 1))
+
+
+class TestModeliJson(unittest.TestCase):
+    def test_vse_cherez_yandeks(self):
+        m = ii.zagruzit_modeli()
+        for rol in ("kanva", "prilozhenie", "kontent", "vizual", "strazh", "so_analiz", "rutina"):
+            for imya in m["roli"][rol]:
+                self.assertEqual(m["modeli"][imya]["klyuch"], "YANDEX_API_KEY", rol)
+        self.assertIn("aliceai-llm/", m["modeli"][m["roli"]["strazh"][0]]["model"])
+        self.assertIn("aliceai-llm-flash", m["modeli"][m["roli"]["rutina"][0]]["model"])
+        self.assertIn("deepseek-v4.1-flash", m["modeli"][m["roli"]["kanva"][0]]["model"])
+        self.assertNotIn("ekspertiza", m["roli"])  # экспертиза — вручную через учителя
+
+
+HTML_OTVET = """Вот приложение.
+```html
+<!DOCTYPE html><html><head><meta charset="utf-8"></head><body><h1>Фишинг</h1>
+<figure><img src="assets/fish.jpg" alt="рыба"><figcaption>Рыба на крючке</figcaption></figure>
+<script>var a = 1;</script></body></html>
+```
+КАРТИНКИ:
+- fish.jpg — рыба на крючке — экран 1
+"""
+
+
+def umnaya_podmena(verdikty):
+    """Страж (aliceai-llm) отвечает вердиктами по очереди (потом ПРИНЯТЬ), остальные — HTML."""
+    vyzovy = []
+
+    def http(adres, zagolovki, telo, tajmaut=300):
+        vyzovy.append(telo)
+        if "/aliceai-llm/" in telo["model"]:
+            v = verdikty.pop(0) if verdikty else "ПРИНЯТЬ"
+            return otvet("| место | расхождение |\n|---|---|\n\n" + v + "\n\nДля учителя: глянуть экран 1.")
+        return otvet(HTML_OTVET)
+    http.vyzovy = vyzovy
+    return http
+
+
+class TestSborka(unittest.TestCase):
+    def setUp(self):
+        self.tmp = tempfile.TemporaryDirectory()
+        self.urok = Path(self.tmp.name) / "urok"
+        shutil.copytree(Path(ii.TOOLS) / "primer" / "ii-ib-7-fishing", self.urok)
+        (self.urok / "ekspertiza.md").write_text("Ответ GLM: замечаний два.", encoding="utf-8")
+        (self.urok / "so-analiz.md").write_text("Со-анализ: принять оба.", encoding="utf-8")
+        self.env = mock.patch.dict(os.environ, {"YANDEX_API_KEY": "y", "YANDEX_FOLDER_ID": "b1"})
+        self.env.start()
+        self.staryj = ii.http_post
+
+    def tearDown(self):
+        ii.http_post = self.staryj
+        self.env.stop()
+        self.tmp.cleanup()
+
+    def zapusk(self, *argv):
+        arg = ii.razbor(list(argv))
+        return arg.f(arg)
+
+    def test_do_itoga(self):
+        ii.http_post = umnaya_podmena([])
+        self.assertEqual(self.zapusk("sborka", str(self.urok)), 0)
+        self.assertTrue((self.urok / "proverka" / "itog.md").exists())
+        self.assertTrue((self.urok / "artefakty" / "prilozhenie.html").read_text(encoding="utf-8").startswith("<!DOCTYPE"))
+        self.assertIn("fish.jpg", (self.urok / "artefakty" / "prilozhenie-kartinki.md").read_text(encoding="utf-8"))
+        self.assertEqual(len(ii.http_post.vyzovy), 6)  # 3 артефакта × (исполнитель + страж)
+
+    def test_krug_vernut(self):
+        ii.http_post = umnaya_podmena(["ПРИНЯТЬ", "ВЕРНУТЬ", "ПРИНЯТЬ"])
+        self.zapusk("sborka", str(self.urok))
+        posledni = ii.http_post.vyzovy[4]["messages"][0]["content"]  # второй круг шпаргалки
+        self.assertIn("## Что исправить", posledni)
+
+    def test_kanva_ne_prinyata_stop(self):
+        ii.http_post = umnaya_podmena(["УЧИТЕЛЮ"])
+        self.assertEqual(self.zapusk("sborka", str(self.urok)), 2)
+        itog = (self.urok / "proverka" / "itog.md").read_text(encoding="utf-8")
+        self.assertIn("канва не принята", itog)
+        self.assertFalse((self.urok / "artefakty" / "shpargalka.html").exists())
+
+    def test_bez_stop_2(self):
+        (self.urok / "so-analiz.md").unlink()
+        self.assertEqual(ii.main(["sborka", str(self.urok)]), 2)
+
+    def test_ekspertiza_otvet_iz_fajla(self):
+        (self.urok / "ekspertiza.md").unlink()
+        fajl = self.urok / "otvet-glm.md"
+        fajl.write_text("Ответ GLM из чата", encoding="utf-8")
+        ii.http_post = umnaya_podmena([])
+        self.zapusk("ekspertiza", str(self.urok), "--otvet", str(fajl))
+        self.assertEqual((self.urok / "ekspertiza.md").read_text(encoding="utf-8").strip(), "Ответ GLM из чата")
+        self.assertIn("Ответ GLM из чата", ii.http_post.vyzovy[0]["messages"][0]["content"])
+
+    def test_vernut_i_vydacha(self):
+        ii.http_post = umnaya_podmena([])
+        self.zapusk("sborka", str(self.urok))
+        self.zapusk("vernut", str(self.urok), "prilozhenie", "крупнее шрифт")
+        self.assertTrue((self.urok / "proverka" / "starye" / "prilozhenie.html.1").exists())
+        self.assertIn("крупнее шрифт", ii.http_post.vyzovy[-2]["messages"][0]["content"])
+        (self.urok / "assets").mkdir(exist_ok=True)
+        (self.urok / "assets" / "fish.jpg").write_bytes(b"\xff\xd8\xff")
+        self.assertEqual(self.zapusk("vydacha", str(self.urok)), 0)
+        vyd = (self.urok / "vydacha" / "prilozhenie.html").read_text(encoding="utf-8")
+        self.assertIn("data:image/jpeg;base64,", vyd)
+        self.assertNotIn("assets/", vyd)
+
+    def test_vydacha_net_kartinki(self):
+        ii.http_post = umnaya_podmena([])
+        self.zapusk("sborka", str(self.urok))
+        self.zapusk("vydacha", str(self.urok))
+        otchet = (self.urok / "proverka" / "vydacha.md").read_text(encoding="utf-8")
+        self.assertIn("НЕТ КАРТИНКИ: fish.jpg, fish.jpg — рыба на крючке — экран 1", otchet)
 
 
 if __name__ == "__main__":

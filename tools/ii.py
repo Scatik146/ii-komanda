@@ -7,6 +7,7 @@
 Значения ключей не выводятся никогда.
 """
 import argparse
+import base64
 import datetime
 import json
 import os
@@ -16,7 +17,7 @@ import urllib.error
 import urllib.request
 from pathlib import Path
 
-VERSIYA = "0.1 (14.11.2026)"
+VERSIYA = "0.2 (15.11.2026)"
 TOOLS = Path(__file__).resolve().parent
 KOREN = TOOLS.parent
 PROMPTY = KOREN / "algoritm" / "prompty"
@@ -24,7 +25,7 @@ PREDEL_PO_UMOLCHANIYU = 40
 VERDIKTY = ("ПРИНЯТЬ", "ВЕРНУТЬ", "УЧИТЕЛЮ")
 KODY = ("kanva", "shpargalka", "prilozhenie", "prezentaciya", "pechatnye", "vizual", "tehkarta")
 ROL_ARTEFAKTA = {"kanva": "kanva", "prilozhenie": "prilozhenie", "prezentaciya": "kontent",
-                 "pechatnye": "kontent", "shpargalka": "kontent", "tehkarta": "kontent", "vizual": "strazh"}
+                 "pechatnye": "kontent", "shpargalka": "kontent", "tehkarta": "kontent", "vizual": "vizual"}
 FAJL_ARTEFAKTA = {"kanva": "kanva.md", "shpargalka": "artefakty/shpargalka.html",
                   "prilozhenie": "artefakty/prilozhenie.html", "prezentaciya": "artefakty/prezentaciya.html",
                   "pechatnye": "artefakty/pechatnye.html", "tehkarta": "artefakty/tehkarta.md",
@@ -148,15 +149,29 @@ def http_post(adres, zagolovki, telo, tajmaut=300):
 OTKAZY = ("я не могу помочь", "не могу выполнить", "i can't help", "i cannot help", "i'm sorry, but")
 
 
+# рассуждение: убирает из ответа блок <think>…</think> (DeepSeek, Qwen рассуждают по умолчанию)
+def ubrat_rassuzhdenie(tekst):
+    bez_bloka = re.sub(r"<think>.*?</think>", "", tekst, flags=re.S)
+    return bez_bloka.strip()
+
+
+# обрезка: объясняет, почему ответ обрезан — съело ли лимит рассуждение
+def prichina_obrezki(soobshchenie, tekst):
+    prichina = "ответ обрезан (finish_reason: length)"
+    if soobshchenie.get("reasoning_content") and not tekst:
+        prichina = "рассуждение съело лимит max_tokens, результата нет (увеличить max_tokens в modeli.json)"
+    return prichina
+
+
 def razobrat_otvet(dannye, ozhidaem=None):
     """Текст и токены из ответа /chat/completions; Nerabochij — если ответ не годится."""
     try:
         vybor = dannye["choices"][0]
-        tekst = vybor["message"].get("content") or ""
+        tekst = ubrat_rassuzhdenie(vybor["message"].get("content") or "")
     except (KeyError, IndexError, TypeError, AttributeError):
         raise Nerabochij("нет choices[0].message в ответе")
     if vybor.get("finish_reason") == "length":
-        raise Nerabochij("ответ обрезан (finish_reason: length)")
+        raise Nerabochij(prichina_obrezki(vybor["message"], tekst))
     if not tekst.strip():
         raise Nerabochij("пустой ответ")
     if any(o in tekst[:300].lower() for o in OTKAZY):
@@ -165,6 +180,18 @@ def razobrat_otvet(dannye, ozhidaem=None):
         raise Nerabochij("нет ожидаемого блока")
     tokeny = (dannye.get("usage") or {}).get("total_tokens", "")
     return tekst, tokeny
+
+
+# тело ошибки: первые 200 знаков ответа поставщика — чтобы видеть, что не так в запросе
+def telo_oshibki(e):
+    kusok = ""
+    try:
+        kusok = e.read().decode("utf-8", "replace")[:200]
+    except Exception:
+        kusok = ""
+    if kusok:
+        kusok = ": " + kusok.replace("\n", " ")
+    return kusok
 
 
 def prichina_http(e):
@@ -177,14 +204,29 @@ def prichina_http(e):
             return "лимит или нет денег (HTTP 429)"
         if e.code == 404:
             return "нет такой модели или адреса (HTTP 404)"
-        return "ошибка поставщика (HTTP %d)" % e.code
+        return "ошибка поставщика (HTTP %d)%s" % (e.code, telo_oshibki(e))
     if isinstance(e, (urllib.error.URLError, TimeoutError, OSError)):
         return "ошибка сети (%s)" % getattr(e, "reason", e)
     return "ошибка: %s" % e
 
 
-def odin_vyzov(kt, imya, tekst, ozhidaem=None, max_tokens=8000):
+# ручная модель: работает через учителя (GLM), по API не вызывается
+def vruchnuyu(m):
+    return m.get("vid") == "vruchnuyu"
+
+
+# лимит токенов: свой у модели (рассуждающей нужно больше), иначе — переданный
+def limit_tokenov(m, max_tokens):
+    limit = max_tokens
+    if limit is None:
+        limit = m.get("max_tokens", 8000)
+    return limit
+
+
+def odin_vyzov(kt, imya, tekst, ozhidaem=None, max_tokens=None):
     m = kt.modeli["modeli"][imya]
+    if vruchnuyu(m):
+        raise Nerabochij("модель вручную через учителя, не по API")
     if m.get("vid") == "anthropic" or m.get("vklyuchen") is False:
         raise Nerabochij("модель выключена в modeli.json")
     if m.get("klyuch") not in kt.klyuchi:
@@ -196,7 +238,8 @@ def odin_vyzov(kt, imya, tekst, ozhidaem=None, max_tokens=8000):
     for k, v in m.get("zagolovki", {}).items():
         zagolovki[k] = raskryt(v, kt.klyuchi)
     telo = {"model": raskryt(m["model"], kt.klyuchi), "messages": [{"role": "user", "content": tekst}],
-            "max_tokens": max_tokens, "temperature": 0.3}
+            "max_tokens": limit_tokenov(m, max_tokens), "temperature": 0.3}
+    telo.update(m.get("telo_dop", {}))
     try:
         dannye = http_post(m["adres"].rstrip("/") + "/chat/completions", zagolovki, telo)
     except Exception as e:  # сеть, HTTP, неразборчивый JSON
@@ -223,12 +266,20 @@ def vyzov(kt, rol, tekst, shag, krug=1, ozhidaem=None, krome=None):
             except Nerabochij as e:
                 kt.zhurnal(shag, imya, krug, "НЕРАБОЧИЙ: %s" % e)
                 prichiny.append("%s: %s" % (imya, e))
-                if str(e).startswith(("нет ключа", "модель выключена")):
+                if str(e).startswith(("нет ключа", "модель выключена", "модель вручную")):
                     break  # повтор не поможет
     raise Nerabochij("; ".join(prichiny))
 
 
 # ---------- шаг 3: klyuchi ----------
+
+# проба: сколько токенов дать на пробный вызов (рассуждающей модели — с запасом)
+def tokenov_dlya_proby(m):
+    tokenov = 20
+    if m.get("rassuzhdenie"):
+        tokenov = 2000
+    return tokenov
+
 
 def komanda_klyuchi(arg):
     modeli = zagruzit_modeli(arg.modeli)
@@ -239,6 +290,9 @@ def komanda_klyuchi(arg):
     kt = Kontekst(modeli, znach, predel=len(modeli["modeli"]) * 2, bez_seti=arg.bez_seti)
     print("\n| модель | что | итог |\n|---|---|---|")
     for imya, m in modeli["modeli"].items():
+        if vruchnuyu(m):
+            print("| %s | — | вручную через учителя (ekspertiza) |" % imya)
+            continue
         if m.get("vid") == "anthropic" or m.get("vklyuchen") is False:
             print("| %s | — | выключена |" % imya)
             continue
@@ -249,7 +303,7 @@ def komanda_klyuchi(arg):
             print("| %s | %s | ключ есть, проверка без сети не делалась |" % (imya, m.get("model")))
             continue
         try:
-            otvet, tokeny = odin_vyzov(kt, imya, "Ответь одним словом: работает", max_tokens=20)
+            otvet, tokeny = odin_vyzov(kt, imya, "Ответь одним словом: работает", max_tokens=tokenov_dlya_proby(m))
             print("| %s | %s | работает (%s ток.) |" % (imya, m.get("model"), tokeny))
         except (Nerabochij, Oshibka) as e:
             print("| %s | %s | %s |" % (imya, m.get("model"), e))
@@ -471,6 +525,31 @@ def proverit_okruzhenie(html, imya_fajla, tonkij=True, kartinki=None):
     return oshibki
 
 
+PROVERKA_OKRUZHENIYA = ("prilozhenie", "prezentaciya")
+
+
+# заказы артефакта: имена картинок из artefakty/<код>-kartinki.md (или из самого файла, как в 0.1)
+def zakazy_artefakta(urok, kod):
+    p = urok / "artefakty" / (kod + "-kartinki.md")
+    if not p.exists():
+        p = urok / FAJL_ARTEFAKTA[kod]
+    zakazy = zakazy_kartinok(p.read_text(encoding="utf-8"))
+    if not zakazy:
+        zakazy = None
+    return zakazy
+
+
+# окружение артефакта: проверяет тонкий файл и пишет отчёт proverka/<код>-okruzhenie.md
+def okruzhenie_artefakta(urok, kod):
+    p = urok / FAJL_ARTEFAKTA[kod]
+    oshibki = proverit_okruzhenie(p.read_text(encoding="utf-8"), p.name, tonkij=True, kartinki=zakazy_artefakta(urok, kod))
+    spisok = "\n".join("- " + o for o in oshibki) or "нарушений нет"
+    otchet = urok / "proverka" / (kod + "-okruzhenie.md")
+    otchet.parent.mkdir(parents=True, exist_ok=True)
+    otchet.write_text("# Окружение: %s\n\n%s\n" % (p.name, spisok), encoding="utf-8")
+    return oshibki
+
+
 def zakazy_kartinok(tekst):
     """Имена файлов из блока «КАРТИНКИ» в конце ответа исполнителя."""
     mt = re.search(r"КАРТИНКИ\s*:?(.*)$", tekst, flags=re.S)
@@ -529,11 +608,8 @@ def komanda_proverka(arg):
             itog.append("%s: файла %s нет" % (kod, p.relative_to(urok)))
             continue
         rezultat = p.read_text(encoding="utf-8")
-        if kod in ("prilozhenie", "prezentaciya"):
-            oshibki = proverit_okruzhenie(rezultat, p.name, tonkij=True, kartinki=zakazy_kartinok(rezultat) or None)
-            (urok / "proverka" / (kod + "-okruzhenie.md")).write_text(
-                "# Окружение: %s\n\n" % p.name + ("\n".join("- " + o for o in oshibki) or "нарушений нет") + "\n",
-                encoding="utf-8")
+        if kod in PROVERKA_OKRUZHENIYA:
+            oshibki = okruzhenie_artefakta(urok, kod)
             if oshibki:
                 kt.zhurnal("okruzhenie " + kod, "скрипт", 1, "ВЕРНУТЬ")
                 itog.append("%s: окружение — ВЕРНУТЬ (%d нарушений, proverka/%s-okruzhenie.md)" % (kod, len(oshibki), kod))
@@ -579,14 +655,56 @@ def shag_promptom(kt, kod, rol, vyhod, dop=None):
     return model
 
 
+PAKET_GLM = "ekspertiza-dlya-glm.md"
+
+
+# пакет GLM: собирает промпт экспертизы в файл — учитель копирует его в чат GLM целиком
+def podgotovit_paket_glm(urok):
+    tekst = podstavit(prochitat_prompt("ekspertiza"), urok)
+    p = urok / "proverka" / PAKET_GLM
+    p.parent.mkdir(parents=True, exist_ok=True)
+    p.write_text(tekst, encoding="utf-8")
+    return p
+
+
+# ответ GLM: переносит ответ из файла учителя в ekspertiza.md
+def prinyat_otvet_glm(urok, put):
+    tekst = Path(put).read_text(encoding="utf-8-sig").strip()
+    if not tekst:
+        raise Oshibka("файл с ответом GLM пустой: %s" % put)
+    (urok / "ekspertiza.md").write_text(tekst + "\n", encoding="utf-8")
+    return urok / "ekspertiza.md"
+
+
+# ответ есть: в ekspertiza.md лежит настоящий ответ, не пусто и не «нерабочий»
+def otvet_glm_est(urok):
+    p = urok / "ekspertiza.md"
+    est = False
+    if p.exists():
+        tekst = p.read_text(encoding="utf-8").strip()
+        est = bool(tekst) and not tekst.startswith("ОТВЕТ НЕРАБОЧИЙ")
+    return est
+
+
+# подсказка: что сделать учителю с пакетом GLM
+def podskazka_glm(paket, urok):
+    print("Пакет для GLM:", paket)
+    print("1) Открыть файл, скопировать всё в чат GLM.")
+    print("2) Ответ GLM сохранить в файл (например ответ-glm.md).")
+    print("3) Запустить: ii.py ekspertiza %s --otvet ответ-glm.md" % urok)
+
+
 def komanda_ekspertiza(arg):
     kt = sozdat_kontekst(arg)
-    shag_promptom(kt, "ekspertiza", "ekspertiza", kt.urok / "ekspertiza.md")
-    if kt.bez_seti:
-        print("Со-анализ не собран: ему нужен ответ экспертизы ({{EKSPERTIZA}}), а без сети его нет.")
+    if arg.otvet:
+        print("Ответ GLM принят →", prinyat_otvet_glm(kt.urok, arg.otvet))
+    if not otvet_glm_est(kt.urok):
+        podskazka_glm(podgotovit_paket_glm(kt.urok), kt.urok)
+        kt.zhurnal("ekspertiza", "glm (вручную)", 1, "пакет собран, ждём ответ учителя")
         return 0
     shag_promptom(kt, "so-analiz", "so_analiz", kt.urok / "so-analiz.md")
-    print("СТОП 2: прочитать so-analiz.md, принять / отклонить замечания, поправить resheniya.md.")
+    if not kt.bez_seti:
+        print("СТОП 2: прочитать so-analiz.md, принять / отклонить замечания, поправить resheniya.md.")
     return 0
 
 
@@ -602,8 +720,330 @@ def komanda_zapros(arg):
     return 0
 
 
+# ---------- шаг 7: sborka (0.2 — последовательно, по шагам v9), vernut ----------
+# Данные:
+#   nabor   — список кодов из заявки, например ["kanva", "shpargalka", "prilozhenie"]
+#   otvet   — текст модели; для HTML-кодов: HTML (можно в ```html … ```) + блок «КАРТИНКИ»
+#   verdikt — "ПРИНЯТЬ" | "ВЕРНУТЬ" | "УЧИТЕЛЮ" | "НЕРАБОЧИЙ"
+#   itog    — список строк для proverka/itog.md
+
+HTML_KODY = ("shpargalka", "prilozhenie", "prezentaciya", "pechatnye")
+VOLNA_2 = ("shpargalka", "prilozhenie", "prezentaciya", "pechatnye")
+VOLNA_3 = ("vizual", "tehkarta")
+
+
+# круги: сколько кругов стража положено артефакту (канва — 2, остальные — 3)
+def krugov(kod):
+    chislo = 3
+    if kod == "kanva":
+        chislo = 2
+    return chislo
+
+
+# шаги сборки: порядок v9 — канва, волна 2, волна 3; только то, что в наборе
+def shagi_sborki(nabor):
+    poryadok = ("kanva",) + VOLNA_2 + VOLNA_3
+    return [kod for kod in poryadok if kod in nabor]
+
+
+# вырезать HTML: из ```html … ``` или от <!DOCTYPE / <html до </html>; нет — None
+def vyrezat_html(otvet):
+    html = None
+    blok = re.search(r"```html\s*\n(.*?)```", otvet, flags=re.S | re.I)
+    if blok:
+        html = blok.group(1).strip()
+    else:
+        celyj = re.search(r"(<!DOCTYPE html.*?</html>|<html.*?</html>)", otvet, flags=re.S | re.I)
+        if celyj:
+            html = celyj.group(1).strip()
+    return html
+
+
+# блок картинок: текст от слова «КАРТИНКИ» до конца ответа; нет — пусто
+def blok_kartinok(otvet):
+    blok = ""
+    mesto = otvet.rfind("КАРТИНКИ")
+    if mesto >= 0:
+        blok = otvet[mesto:].strip()
+    return blok
+
+
+# ожидаемое: какой ответ годится для кода (HTML-кодам нужен HTML, стражу — вердикт)
+def ozhidaemoe(kod):
+    proverka = None
+    if kod in HTML_KODY:
+        proverka = vyrezat_html
+    return proverka
+
+
+# записать артефакт: основной файл + для HTML — artefakty/<код>-kartinki.md
+def zapisat_artefakt(urok, kod, otvet):
+    p = urok / FAJL_ARTEFAKTA[kod]
+    p.parent.mkdir(parents=True, exist_ok=True)
+    if kod in HTML_KODY:
+        p.write_text(vyrezat_html(otvet) + "\n", encoding="utf-8")
+        kartinki = blok_kartinok(otvet) or "КАРТИНКИ: нет"
+        (urok / "artefakty" / (kod + "-kartinki.md")).write_text(kartinki + "\n", encoding="utf-8")
+    else:
+        p.write_text(otvet.strip() + "\n", encoding="utf-8")
+    return p
+
+
+# все заказы: блоки «КАРТИНКИ» артефактов волны 2 — для {{KARTINKI}}
+def vse_zakazy(urok):
+    bloki = []
+    for kod in VOLNA_2:
+        p = urok / "artefakty" / (kod + "-kartinki.md")
+        if p.exists():
+            bloki.append("%s:\n%s" % (kod, p.read_text(encoding="utf-8").strip()))
+    return "\n\n".join(bloki)
+
+
+# основа промпта: промпт кода с подстановками (vizual получает заказы картинок)
+def osnova_prompta(urok, kod):
+    dop = {}
+    if kod == "vizual":
+        dop["KARTINKI"] = vse_zakazy(urok) or "нет"
+    return podstavit(prochitat_prompt(kod), urok, dop)
+
+
+# текст круга: основа + прошлый результат + что исправить
+def tekst_kruga(osnova, proshlyj, pravki):
+    return (osnova + "\n\n## Прошлый результат\n\n" + proshlyj.strip() +
+            "\n\n## Что исправить\n\n" + pravki.strip() +
+            "\n\nИсправь и дай результат целиком, в том же формате.\n")
+
+
+# сделать: один вызов исполнителя по роли кода → файл; возвращает модель-автора
+def sdelat(kt, kod, tekst, krug):
+    otvet, model, _ = vyzov(kt, ROL_ARTEFAKTA[kod], tekst, kod, krug, ozhidaem=ozhidaemoe(kod))
+    zapisat_artefakt(kt.urok, kod, otvet)
+    return model
+
+
+# проверить: окружение (без стража при ошибках), затем страж; → (вердикт, правки)
+def proverit(kt, kod, avtor, krug):
+    if kod in PROVERKA_OKRUZHENIYA:
+        oshibki = okruzhenie_artefakta(kt.urok, kod)
+        if oshibki:
+            kt.zhurnal("okruzhenie " + kod, "скрипт", krug, "ВЕРНУТЬ")
+            return "ВЕРНУТЬ", "Проверка окружения:\n" + "\n".join("- " + o for o in oshibki)
+    rezultat = (kt.urok / FAJL_ARTEFAKTA[kod]).read_text(encoding="utf-8")
+    verdikt = strazh(kt, kod, rezultat, avtor=avtor, krug=krug)
+    pravki = (kt.urok / "proverka" / (kod + "-strazh.md")).read_text(encoding="utf-8")
+    return verdikt, pravki
+
+
+# один круг: сделать и проверить; → (вердикт, правки)
+def odin_krug(kt, kod, tekst, krug):
+    avtor = sdelat(kt, kod, tekst, krug)
+    return proverit(kt, kod, avtor, krug)
+
+
+# круги артефакта: до krugov(kod) раз, пока страж возвращает; proshlyj/pravki — для vernut
+def krugi(kt, kod, proshlyj=None, pravki=None):
+    osnova = osnova_prompta(kt.urok, kod)
+    verdikt, krug = "ВЕРНУТЬ", 0
+    while verdikt == "ВЕРНУТЬ" and krug < krugov(kod):
+        krug += 1
+        tekst = osnova
+        if proshlyj is not None:
+            tekst = tekst_kruga(osnova, proshlyj, pravki)
+        verdikt, pravki = odin_krug(kt, kod, tekst, krug)
+        proshlyj = (kt.urok / FAJL_ARTEFAKTA[kod]).read_text(encoding="utf-8")
+    return verdikt, krug
+
+
+# собрать один: круги с перехватом нерабочего ответа; → (вердикт, круг)
+def sobrat_odin(kt, kod, proshlyj=None, pravki=None):
+    try:
+        verdikt, krug = krugi(kt, kod, proshlyj, pravki)
+    except Nerabochij as e:
+        (kt.urok / FAJL_ARTEFAKTA[kod]).write_text("ОТВЕТ НЕРАБОЧИЙ: %s\n" % e, encoding="utf-8")
+        verdikt, krug = "НЕРАБОЧИЙ: %s" % e, 0
+    return verdikt, krug
+
+
+# строка итога: что показать учителю по артефакту (ПРИНЯТЬ — ничего)
+def stroka_itoga(kod, verdikt, krug):
+    stroka = None
+    if verdikt == "ВЕРНУТЬ":
+        stroka = "%s: круги исчерпаны (%d) — выбрать: упростить / другой исполнитель / руками (proverka/%s-strazh.md)" % (kod, krug, kod)
+    elif verdikt == "УЧИТЕЛЮ":
+        stroka = "%s: страж — УЧИТЕЛЮ, нужно решение автора (proverka/%s-strazh.md)" % (kod, kod)
+    elif verdikt != "ПРИНЯТЬ":
+        stroka = "%s: %s" % (kod, verdikt)
+    return stroka
+
+
+# пауза: при --po-shagam ждёт учителя; «q» — остановка
+def pauza(kt, kod):
+    if getattr(kt, "po_shagam", False):
+        otvet = input("Дальше: %s. Enter — делать, q — остановить: " % kod)
+        if otvet.strip().lower() == "q":
+            raise Oshibka("остановлено учителем перед %s" % kod)
+
+
+# стоп 2 пройден: со-анализ есть и рабочий — без него канву не собираем
+def trebovat_stop_2(urok):
+    p = urok / "so-analiz.md"
+    if not p.exists() or p.read_text(encoding="utf-8").startswith("ОТВЕТ НЕРАБОЧИЙ"):
+        raise Oshibka("нет рабочего so-analiz.md — сначала ii.py ekspertiza и СТОП 2")
+
+
+# пропустить vizual: в наборе, но ни одного заказа картинок нет
+def propustit_vizual(urok, kod):
+    return kod == "vizual" and not zakazy_kartinok(vse_zakazy(urok))
+
+
+# шаг сборки: один код → строка итога или None; канва не принята — Oshibka (дальше нельзя)
+def shag_sborki(kt, kod):
+    pauza(kt, kod)
+    if propustit_vizual(kt.urok, kod):
+        return "vizual: заказов картинок нет — пропущен"
+    verdikt, krug = sobrat_odin(kt, kod)
+    print("%s: %s (круг %d)" % (kod, verdikt, krug))
+    stroka = stroka_itoga(kod, verdikt, krug)
+    if kod == "kanva" and verdikt != "ПРИНЯТЬ":
+        raise Oshibka("канва не принята — %s" % stroka)
+    return stroka
+
+
+# пройти шаги: все шаги набора; остановка — последней строкой итога
+def projti_shagi(kt, nabor):
+    itog = []
+    try:
+        for kod in shagi_sborki(nabor):
+            stroka = shag_sborki(kt, kod)
+            if stroka:
+                itog.append(stroka)
+    except Oshibka as e:
+        itog.append("ОСТАНОВКА: %s" % e)
+    return itog
+
+
+# сборка без сети: собирает только запрос канвы (дальше нужна готовая канва)
+def sborka_bez_seti(kt):
+    sohranit_zapros(kt.urok, "kanva", osnova_prompta(kt.urok, "kanva"))
+    print("Без сети: дальше канвы не идём — остальным шагам нужна готовая канва.")
+    return 0
+
+
+def komanda_sborka(arg):
+    kt = sozdat_kontekst(arg)
+    kt.po_shagam = arg.po_shagam
+    trebovat_stop_2(kt.urok)
+    if kt.bez_seti:
+        return sborka_bez_seti(kt)
+    itog = projti_shagi(kt, nabor_iz_zayavki(kt.urok))
+    napisat_itog(kt, itog)
+    print("СТОП 3: приёмка — открыть proverka/itog.md и отмеченные файлы.")
+    return 2 if any(s.startswith("ОСТАНОВКА") for s in itog) else 0
+
+
+# в архив: копия старой версии в proverka/starye/<имя>.<n>
+def v_arhiv(urok, kod):
+    p = urok / FAJL_ARTEFAKTA[kod]
+    arhiv = urok / "proverka" / "starye"
+    arhiv.mkdir(parents=True, exist_ok=True)
+    nomer = len(list(arhiv.glob(p.name + ".*"))) + 1
+    kopiya = arhiv / ("%s.%d" % (p.name, nomer))
+    kopiya.write_text(p.read_text(encoding="utf-8"), encoding="utf-8")
+    return kopiya
+
+
+def komanda_vernut(arg):
+    kt = sozdat_kontekst(arg)
+    p = kt.urok / FAJL_ARTEFAKTA[arg.kod]
+    if not p.exists():
+        raise Oshibka("нет файла %s — возвращать нечего" % p)
+    proshlyj = p.read_text(encoding="utf-8")
+    print("Старая версия →", v_arhiv(kt.urok, arg.kod))
+    verdikt, krug = sobrat_odin(kt, arg.kod, proshlyj, "Замечание учителя: " + arg.chto)
+    print("%s: %s (круг %d)" % (arg.kod, verdikt, krug))
+    napisat_itog(kt, [s for s in [stroka_itoga(arg.kod, verdikt, krug)] if s])
+    return 0
+
+
+# ---------- шаг 8: vydacha — вшить картинки, строгая проверка ----------
+
+IMG_ASSETS = r"""<img\b[^>]*?\bsrc\s*=\s*["']assets/([a-z0-9_.-]+\.jpg)["'][^>]*>"""
+
+
+# картинка в data: файл JPEG → строка data:image/jpeg;base64,…
+def kartinka_v_data(put):
+    return "data:image/jpeg;base64," + base64.b64encode(put.read_bytes()).decode("ascii")
+
+
+# где стоит: строка блока «КАРТИНКИ» с этим именем, иначе «место не указано»
+def gde_stoit(blok, imya):
+    mesto = "место не указано"
+    for stroka in blok.splitlines():
+        if imya in stroka:
+            mesto = stroka.strip(" -*")
+    return mesto
+
+
+# вшить одну: тег <img> с assets/ → с data:, нет файла — видимая строка «НЕТ КАРТИНКИ»
+def vshit_odnu(teg, imya, assets, blok, net):
+    put = assets / imya
+    if put.exists():
+        return teg.replace("assets/" + imya, kartinka_v_data(put))
+    net.append("НЕТ КАРТИНКИ: %s, %s" % (imya, gde_stoit(blok, imya)))
+    return '<span class="net-kartinki">НЕТ КАРТИНКИ: %s</span>' % imya
+
+
+# вшить картинки: все <img src="assets/…"> файла; → (html, список «НЕТ КАРТИНКИ»)
+def vshit_kartinki(html, assets, blok):
+    net = []
+    novyj = re.sub(IMG_ASSETS, lambda mt: vshit_odnu(mt.group(0), mt.group(1), assets, blok, net), html, flags=re.I)
+    return novyj, net
+
+
+# блок артефакта: текст artefakty/<код>-kartinki.md или пусто
+def blok_artefakta(urok, kod):
+    p = urok / "artefakty" / (kod + "-kartinki.md")
+    return p.read_text(encoding="utf-8") if p.exists() else ""
+
+
+# выдать файл: вшить, строго проверить, положить в vydacha/; → строки отчёта
+def vydat_fajl(urok, kod):
+    p = urok / FAJL_ARTEFAKTA[kod]
+    html, net = vshit_kartinki(p.read_text(encoding="utf-8"), urok / "assets", blok_artefakta(urok, kod))
+    oshibki = proverit_okruzhenie(html, p.name, tonkij=False)
+    otchet = ["%s: %s" % (kod, s) for s in net]
+    if oshibki:
+        otchet += ["%s: НЕ ВЫДАН — %s" % (kod, o) for o in oshibki]
+    else:
+        (urok / "vydacha").mkdir(exist_ok=True)
+        (urok / "vydacha" / p.name).write_text(html, encoding="utf-8")
+        otchet.append("%s: выдан → vydacha/%s" % (kod, p.name))
+    return otchet
+
+
+# не принят: страж по файлу сказал не ПРИНЯТЬ — предупредить
+def preduprezhdenie_strazha(urok, kod):
+    verdikt = verdikt_iz_fajla(urok / "proverka" / (kod + "-strazh.md"))
+    stroki = []
+    if verdikt != "ПРИНЯТЬ":
+        stroki.append("%s: внимание — вердикт стража %s, выдаю по решению учителя" % (kod, verdikt or "нет"))
+    return stroki
+
+
+def komanda_vydacha(arg):
+    urok = put_uroka(arg.urok)
+    otchet = []
+    for kod in nabor_iz_zayavki(urok):
+        if kod in HTML_KODY and (urok / FAJL_ARTEFAKTA[kod]).exists():
+            otchet += preduprezhdenie_strazha(urok, kod) + vydat_fajl(urok, kod)
+    (urok / "proverka").mkdir(exist_ok=True)
+    (urok / "proverka" / "vydacha.md").write_text("# Выдача\n\n" + "\n".join("- " + s for s in otchet) + "\n", encoding="utf-8")
+    print("\n".join(otchet) or "выдавать нечего")
+    return 2 if any("НЕ ВЫДАН" in s for s in otchet) else 0
+
+
 def ne_sdelano(arg):
-    raise Oshibka("команда %s ещё не написана (план USTROJSTVO.md § 8, шаги 7–8 — следующий чат)" % arg.komanda)
+    raise Oshibka("команда %s ещё не написана (вторая очередь, USTROJSTVO.md § 7)" % arg.komanda)
 
 
 # ---------- разбор команд ----------
@@ -617,11 +1057,24 @@ def razbor(argv=None):
     k = p.add_subparsers(dest="komanda", required=True)
     k.add_parser("klyuchi", parents=[obshchie], help="проверить ключи и модели").set_defaults(f=komanda_klyuchi)
     for imya, f, pomoshch in (("novyj", komanda_novyj, "создать папку урока"),
-                              ("ekspertiza", komanda_ekspertiza, "шаг 3: экспертиза → со-анализ"),
-                              ("status", komanda_status, "где урок")):
+                              ("status", komanda_status, "где урок"),
+                              ("vydacha", komanda_vydacha, "вшить картинки из assets/, строгая проверка → vydacha/")):
         s = k.add_parser(imya, parents=[obshchie], help=pomoshch)
         s.add_argument("urok", help="путь к папке урока")
         s.set_defaults(f=f)
+    s = k.add_parser("ekspertiza", parents=[obshchie], help="шаг 3: пакет для GLM → ответ GLM → со-анализ")
+    s.add_argument("urok")
+    s.add_argument("--otvet", help="файл с ответом GLM (скопированным из чата)")
+    s.set_defaults(f=komanda_ekspertiza)
+    s = k.add_parser("sborka", parents=[obshchie], help="шаги 4–6: канва, артефакты, проверка → СТОП 3")
+    s.add_argument("urok")
+    s.add_argument("--po-shagam", action="store_true", help="ждать Enter учителя перед каждым артефактом")
+    s.set_defaults(f=komanda_sborka)
+    s = k.add_parser("vernut", parents=[obshchie], help="вернуть один артефакт с замечанием учителя")
+    s.add_argument("urok")
+    s.add_argument("kod", choices=KODY)
+    s.add_argument("chto", help="что не так (в кавычках)")
+    s.set_defaults(f=komanda_vernut)
     s = k.add_parser("proverka", parents=[obshchie], help="окружение + страж")
     s.add_argument("urok")
     s.add_argument("kod", nargs="?", choices=KODY)
@@ -631,10 +1084,9 @@ def razbor(argv=None):
     s.add_argument("--prompt", required=True)
     s.add_argument("--vyhod", required=True)
     s.set_defaults(f=komanda_zapros, urok=None)
-    for imya in ("sborka", "vernut", "kartinki", "vydacha"):
-        s = k.add_parser(imya, parents=[obshchie], help="(ещё не написана)")
-        s.add_argument("ostalnoe", nargs="*")
-        s.set_defaults(f=ne_sdelano)
+    s = k.add_parser("kartinki", parents=[obshchie], help="(вторая очередь, ещё не написана)")
+    s.add_argument("ostalnoe", nargs="*")
+    s.set_defaults(f=ne_sdelano)
     return p.parse_args(argv)
 
 
