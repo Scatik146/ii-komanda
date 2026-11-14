@@ -17,7 +17,7 @@ import urllib.error
 import urllib.request
 from pathlib import Path
 
-VERSIYA = "0.2.3 (15.11.2026)"
+VERSIYA = "0.2.4 (15.11.2026)"
 TOOLS = Path(__file__).resolve().parent
 KOREN = TOOLS.parent
 PROMPTY = KOREN / "algoritm" / "prompty"
@@ -581,6 +581,14 @@ def zadanie_ispolnitelyu(kod):
     return razdel
 
 
+# уточнить вердикт: ВЕРНУТЬ без «критично» в ответе — это ПРИНЯТЬ (возврат только за критичное)
+def utochnit_verdikt(otvet, verdikt):
+    itog = verdikt
+    if verdikt == "ВЕРНУТЬ" and "критично" not in otvet.lower():
+        itog = "ПРИНЯТЬ"
+    return itog
+
+
 def strazh(kt, kod, rezultat, avtor=None, krug=1):
     urok = kt.urok
     dop = {"KOD": kod, "REZULTAT": rezultat, "ZADANIE_ISPOLNITELYU": zadanie_ispolnitelyu(kod)}
@@ -589,8 +597,10 @@ def strazh(kt, kod, rezultat, avtor=None, krug=1):
         sohranit_zapros(urok, kod + "-strazh", tekst)
         return None
     otvet, model, _ = vyzov(kt, "strazh", tekst, "strazh " + kod, krug, ozhidaem=najti_verdikt, krome=avtor)
+    v = utochnit_verdikt(otvet, najti_verdikt(otvet))
+    if v != najti_verdikt(otvet):
+        otvet += "\n\n(скрипт: «критично» в таблице нет — ВЕРНУТЬ заменён на ПРИНЯТЬ, решение учителя 15.11)\n"
     (urok / "proverka" / (kod + "-strazh.md")).write_text(otvet, encoding="utf-8")
-    v = najti_verdikt(otvet)
     kt.zhurnal("strazh " + kod, model, krug, v)
     return v
 

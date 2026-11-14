@@ -206,6 +206,9 @@ HTML_OTVET = """Вот приложение.
 """
 
 
+VERNUT_KRIT = "| экран 1 | нет ответа | решения | Критично | дописать |\n\nВЕРНУТЬ"
+
+
 def umnaya_podmena(verdikty):
     """Страж (aliceai-llm) отвечает вердиктами по очереди (потом ПРИНЯТЬ), остальные — HTML."""
     vyzovy = []
@@ -249,7 +252,7 @@ class TestSborka(unittest.TestCase):
         self.assertEqual(len(ii.http_post.vyzovy), 6)  # 3 артефакта × (исполнитель + страж)
 
     def test_krug_vernut(self):
-        ii.http_post = umnaya_podmena(["ПРИНЯТЬ", "ВЕРНУТЬ", "ПРИНЯТЬ"])
+        ii.http_post = umnaya_podmena(["ПРИНЯТЬ", VERNUT_KRIT, "ПРИНЯТЬ"])
         self.zapusk("sborka", str(self.urok))
         posledni = ii.http_post.vyzovy[4]["messages"][0]["content"]  # второй круг шпаргалки
         self.assertIn("## Что исправить", posledni)
@@ -262,7 +265,7 @@ class TestSborka(unittest.TestCase):
         self.assertFalse((self.urok / "artefakty" / "shpargalka.html").exists())
 
     def test_prinyataya_kanva_ne_peresobiraetsya(self):
-        ii.http_post = umnaya_podmena(["ВЕРНУТЬ", "ВЕРНУТЬ"])
+        ii.http_post = umnaya_podmena([VERNUT_KRIT, VERNUT_KRIT])
         self.assertEqual(self.zapusk("sborka", str(self.urok)), 2)  # канва не принята
         self.zapusk("vernut", str(self.urok), "kanva", "все 8 писем — один заход")
         ii.http_post = umnaya_podmena([])
@@ -281,6 +284,12 @@ class TestSborka(unittest.TestCase):
         self.zapusk("sborka", str(self.urok))
         itog = (self.urok / "proverka" / "itog.md").read_text(encoding="utf-8")
         self.assertIn("shpargalka: принят, есть желательные правки", itog)
+
+    def test_vernut_bez_kritichnogo_eto_prinyat(self):
+        ii.http_post = umnaya_podmena(["ПРИНЯТЬ", "| конец | итог | канва | Желательно | иначе |\n\nВЕРНУТЬ"])
+        self.zapusk("sborka", str(self.urok))
+        self.assertEqual(len(ii.http_post.vyzovy), 6)  # шпаргалка не пошла на второй круг
+        self.assertIn("ВЕРНУТЬ заменён на ПРИНЯТЬ", (self.urok / "proverka" / "shpargalka-strazh.md").read_text(encoding="utf-8"))
 
     def test_bez_stop_2(self):
         (self.urok / "so-analiz.md").unlink()
