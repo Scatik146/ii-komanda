@@ -54,7 +54,7 @@
 
 ## 4. Проверка скрипта
 
-`python -m unittest discover -s tools -p "test_*.py"` — 31 тест, без сети. Среди них сборка учебного урока `primer/ii-ib-7-fishing/` с подменой моделей до `itog.md`, круг `ВЕРНУТЬ`, остановка на канве, `vernut`, `vydacha`.
+`python -m unittest discover -s tools -p "test_*.py"` — 32 теста, без сети. Среди них сборка учебного урока `primer/ii-ib-7-fishing/` с подменой моделей до `itog.md`, круг `ВЕРНУТЬ`, остановка на канве, `vernut`, `vydacha`.
 
 ## 5. Ещё не написано
 

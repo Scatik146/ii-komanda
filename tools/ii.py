@@ -17,7 +17,7 @@ import urllib.error
 import urllib.request
 from pathlib import Path
 
-VERSIYA = "0.2 (15.11.2026)"
+VERSIYA = "0.2.2 (15.11.2026)"
 TOOLS = Path(__file__).resolve().parent
 KOREN = TOOLS.parent
 PROMPTY = KOREN / "algoritm" / "prompty"
@@ -568,9 +568,23 @@ def najti_verdikt(tekst):
     return None
 
 
+# задание исполнителю: раздел «## Задание» из промпта кода — страж видит, что требовалось
+def zadanie_ispolnitelyu(kod):
+    tekst = prochitat_prompt(kod)
+    nachalo = tekst.find("## Задание")
+    razdel = "(раздела «Задание» в промпте нет)"
+    if nachalo >= 0:
+        konec = tekst.find("\n## ", nachalo + 1)
+        if konec < 0:
+            konec = len(tekst)
+        razdel = tekst[nachalo:konec].strip()
+    return razdel
+
+
 def strazh(kt, kod, rezultat, avtor=None, krug=1):
     urok = kt.urok
-    tekst = podstavit(prochitat_prompt("strazh"), urok, {"KOD": kod, "REZULTAT": rezultat})
+    dop = {"KOD": kod, "REZULTAT": rezultat, "ZADANIE_ISPOLNITELYU": zadanie_ispolnitelyu(kod)}
+    tekst = podstavit(prochitat_prompt("strazh"), urok, dop)
     if kt.bez_seti:
         sohranit_zapros(urok, kod + "-strazh", tekst)
         return None

@@ -122,7 +122,7 @@ class TestUrok(unittest.TestCase):
         for p in sorted(ii.PROMPTY.glob("*.md")):
             if p.name == "README.md":
                 continue
-            t = ii.podstavit(ii.prochitat_prompt(p.stem), self.urok, {"KOD": "k", "REZULTAT": "r", "KARTINKI": "нет"})
+            t = ii.podstavit(ii.prochitat_prompt(p.stem), self.urok, {"KOD": "k", "REZULTAT": "r", "KARTINKI": "нет", "ZADANIE_ISPOLNITELYU": "з"})
             self.assertNotIn("{{", t, p.name)
 
     def test_ekspertiza_paket_glm(self):
@@ -268,6 +268,13 @@ class TestSborka(unittest.TestCase):
         ii.http_post = umnaya_podmena([])
         self.assertEqual(self.zapusk("sborka", str(self.urok)), 0)
         self.assertEqual(len(ii.http_post.vyzovy), 4)  # канву не трогали: шпаргалка и приложение
+
+    def test_strazh_vidit_zadanie_ispolnitelya(self):
+        ii.http_post = umnaya_podmena([])
+        self.zapusk("sborka", str(self.urok))
+        strazh_shpargalki = ii.http_post.vyzovy[3]["messages"][0]["content"]
+        self.assertIn("## Задание исполнителю", strazh_shpargalki)
+        self.assertIn("планируемые результаты", strazh_shpargalki)  # требование промпта шпаргалки
 
     def test_bez_stop_2(self):
         (self.urok / "so-analiz.md").unlink()
