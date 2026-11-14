@@ -1,3 +1,4 @@
 .env
 *.env
 !*.env.primer
+__pycache__/

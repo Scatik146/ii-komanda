@@ -1,0 +1,39 @@
+{
+  "_kommentarij": "Роли → порядок моделей (первая — по умолчанию, дальше — замена). Здесь только ИМЕНА переменных с ключами; сами ключи — в ~/.ii-komanda.env. Адреса DeepSeek, GLM, Qwen сверены 14.11.2026; Яндекс — 14.11.2026 (чат 07).",
+  "roli": {
+    "kanva": ["deepseek", "qwen"],
+    "prilozhenie": ["deepseek", "qwen"],
+    "kontent": ["qwen", "deepseek"],
+    "ekspertiza": ["glm", "qwen", "deepseek"],
+    "strazh": ["alisa", "glm"],
+    "so_analiz": ["alisa", "glm"]
+  },
+  "modeli": {
+    "alisa": {
+      "adres": "https://ai.api.cloud.yandex.net/v1",
+      "model": "gpt://{YANDEX_FOLDER_ID}/aliceai-llm",
+      "klyuch": "YANDEX_API_KEY",
+      "zagolovki": {"OpenAI-Project": "{YANDEX_FOLDER_ID}"}
+    },
+    "deepseek": {
+      "adres": "https://api.deepseek.com",
+      "model": "deepseek-v4-flash",
+      "klyuch": "DEEPSEEK_API_KEY"
+    },
+    "glm": {
+      "adres": "https://api.z.ai/api/paas/v4",
+      "model": "glm-5.1",
+      "klyuch": "GLM_API_KEY"
+    },
+    "qwen": {
+      "adres": "https://dashscope-intl.aliyuncs.com/compatible-mode/v1",
+      "model": "qwen-plus",
+      "klyuch": "QWEN_API_KEY"
+    },
+    "claude": {
+      "vid": "anthropic",
+      "klyuch": "ANTHROPIC_API_KEY",
+      "vklyuchen": false
+    }
+  }
+}
