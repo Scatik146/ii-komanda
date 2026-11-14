@@ -276,6 +276,12 @@ class TestSborka(unittest.TestCase):
         self.assertIn("## Задание исполнителю", strazh_shpargalki)
         self.assertIn("планируемые результаты", strazh_shpargalki)  # требование промпта шпаргалки
 
+    def test_pozhelaniya_v_itog(self):
+        ii.http_post = umnaya_podmena(["ПРИНЯТЬ", "| экран 1 | мелко | канва | Желательно | крупнее |\n\nПРИНЯТЬ"])
+        self.zapusk("sborka", str(self.urok))
+        itog = (self.urok / "proverka" / "itog.md").read_text(encoding="utf-8")
+        self.assertIn("shpargalka: принят, есть желательные правки", itog)
+
     def test_bez_stop_2(self):
         (self.urok / "so-analiz.md").unlink()
         self.assertEqual(ii.main(["sborka", str(self.urok)]), 2)

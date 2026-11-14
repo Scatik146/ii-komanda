@@ -17,7 +17,7 @@ import urllib.error
 import urllib.request
 from pathlib import Path
 
-VERSIYA = "0.2.2 (15.11.2026)"
+VERSIYA = "0.2.3 (15.11.2026)"
 TOOLS = Path(__file__).resolve().parent
 KOREN = TOOLS.parent
 PROMPTY = KOREN / "algoritm" / "prompty"
@@ -890,6 +890,15 @@ def stroka_itoga(kod, verdikt, krug):
     return stroka
 
 
+# пожелания: принят, но в таблице стража есть «желательно» — строка учителю на приёмку
+def stroka_pozhelanij(urok, kod, verdikt):
+    stroka = None
+    p = urok / "proverka" / (kod + "-strazh.md")
+    if verdikt == "ПРИНЯТЬ" and p.exists() and "желательно" in p.read_text(encoding="utf-8").lower():
+        stroka = "%s: принят, есть желательные правки — посмотреть на приёмке (proverka/%s-strazh.md)" % (kod, kod)
+    return stroka
+
+
 # пауза: при --po-shagam ждёт учителя; «q» — остановка
 def pauza(kt, kod):
     if getattr(kt, "po_shagam", False):
@@ -926,7 +935,7 @@ def shag_sborki(kt, kod):
         return None
     verdikt, krug = sobrat_odin(kt, kod)
     print("%s: %s (круг %d)" % (kod, verdikt, krug))
-    stroka = stroka_itoga(kod, verdikt, krug)
+    stroka = stroka_itoga(kod, verdikt, krug) or stroka_pozhelanij(kt.urok, kod, verdikt)
     if kod == "kanva" and verdikt != "ПРИНЯТЬ":
         raise Oshibka("канва не принята — %s" % stroka)
     return stroka
@@ -984,7 +993,8 @@ def komanda_vernut(arg):
     print("Старая версия →", v_arhiv(kt.urok, arg.kod))
     verdikt, krug = sobrat_odin(kt, arg.kod, proshlyj, "Замечание учителя: " + arg.chto)
     print("%s: %s (круг %d)" % (arg.kod, verdikt, krug))
-    napisat_itog(kt, [s for s in [stroka_itoga(arg.kod, verdikt, krug)] if s])
+    stroka = stroka_itoga(arg.kod, verdikt, krug) or stroka_pozhelanij(kt.urok, arg.kod, verdikt)
+    napisat_itog(kt, [s for s in [stroka] if s])
     return 0
 
 
