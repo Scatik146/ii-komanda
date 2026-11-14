@@ -289,7 +289,10 @@ class TestSborka(unittest.TestCase):
         ii.http_post = umnaya_podmena(["ПРИНЯТЬ", "| конец | итог | канва | Желательно | иначе |\n\nВЕРНУТЬ"])
         self.zapusk("sborka", str(self.urok))
         self.assertEqual(len(ii.http_post.vyzovy), 6)  # шпаргалка не пошла на второй круг
-        self.assertIn("ВЕРНУТЬ заменён на ПРИНЯТЬ", (self.urok / "proverka" / "shpargalka-strazh.md").read_text(encoding="utf-8"))
+        fajl = self.urok / "proverka" / "shpargalka-strazh.md"
+        self.assertIn("ВЕРНУТЬ стража заменён на ПРИНЯТЬ", fajl.read_text(encoding="utf-8"))
+        self.assertEqual(ii.verdikt_iz_fajla(fajl), "ПРИНЯТЬ")  # выдача и status видят ПРИНЯТЬ
+        self.assertIn("shpargalka: принят, есть желательные правки", (self.urok / "proverka" / "itog.md").read_text(encoding="utf-8"))
 
     def test_bez_stop_2(self):
         (self.urok / "so-analiz.md").unlink()

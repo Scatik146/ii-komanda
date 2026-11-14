@@ -17,7 +17,7 @@ import urllib.error
 import urllib.request
 from pathlib import Path
 
-VERSIYA = "0.2.4 (15.11.2026)"
+VERSIYA = "0.2.5 (15.11.2026)"
 TOOLS = Path(__file__).resolve().parent
 KOREN = TOOLS.parent
 PROMPTY = KOREN / "algoritm" / "prompty"
@@ -599,7 +599,7 @@ def strazh(kt, kod, rezultat, avtor=None, krug=1):
     otvet, model, _ = vyzov(kt, "strazh", tekst, "strazh " + kod, krug, ozhidaem=najti_verdikt, krome=avtor)
     v = utochnit_verdikt(otvet, najti_verdikt(otvet))
     if v != najti_verdikt(otvet):
-        otvet += "\n\n(скрипт: «критично» в таблице нет — ВЕРНУТЬ заменён на ПРИНЯТЬ, решение учителя 15.11)\n"
+        otvet = "ПРИНЯТЬ — скрипт: «критично» в таблице нет, ВЕРНУТЬ стража заменён на ПРИНЯТЬ (решение учителя 15.11)\n\n" + otvet
     (urok / "proverka" / (kod + "-strazh.md")).write_text(otvet, encoding="utf-8")
     kt.zhurnal("strazh " + kod, model, krug, v)
     return v
@@ -647,6 +647,8 @@ def komanda_proverka(arg):
             itog.append("%s: прогон без сети — запрос стража собран, вердикта нет" % kod)
         elif v != "ПРИНЯТЬ":
             itog.append("%s: страж — %s (proverka/%s-strazh.md)" % (kod, v, kod))
+        elif stroka_pozhelanij(urok, kod, v):
+            itog.append(stroka_pozhelanij(urok, kod, v))
     napisat_itog(kt, itog)
     return 0
 
