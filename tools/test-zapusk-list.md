@@ -22,6 +22,11 @@
   нет:
 git pull --rebase в ii-komanda и teacher-workpad
 python tools\test_koda.py задание --model модель
+вопрос: Тест дошёл до конца?
+  да:
+  нет:
+    вывод: итог не отправляю, запусти ещё раз
+    конец
 git add testy
 вопрос: Есть новые итоги?
   да:

@@ -19,7 +19,7 @@ call :najti_zadanie "%~1" || goto konec
 call :proverit_otvet || goto konec
 call :obnovit "%II%" || goto konec
 call :obnovit "%TW%" || goto konec
-call :zapustit
+call :zapustit || goto konec
 call :otpravit
 :konec
 endlocal
@@ -48,13 +48,15 @@ git -C "%~1" pull --rebase
 if errorlevel 1 (echo Не обновилось: %~1 — напиши Марьям, что сказал git.& exit /b 1)
 exit /b 0
 
-rem zapustit: прогнать задание через test_koda.py; для glm — с подставленным ответом
+rem zapustit: прогнать задание через test_koda.py; для glm — с подставленным ответом; остановка — ничего не отправлять
 :zapustit
 set "PODSTAVIT="
 if /i "%MODEL%"=="glm" set "PODSTAVIT=--podstavit "%OTVET_GLM%""
 pushd "%II%"
 python tools\test_koda.py "%ZADANIYA%\%IMYA%.md" --model %MODEL% %PODSTAVIT%
+set "KOD=%errorlevel%"
 popd
+if not "%KOD%"=="0" (echo Тест остановился — итог не отправляю. Запусти эту же команду ещё раз.& exit /b 1)
 exit /b 0
 
 rem otpravit: итог теста — в GitHub; новых итогов нет — ничего не отправлять
