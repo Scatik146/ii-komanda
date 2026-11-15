@@ -1,0 +1,770 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Почтовый ящик детектива</title>
+<style>
+  * {
+    box-sizing: border-box;
+  }
+  body {
+    font-family: Arial, sans-serif;
+    background: #f5f5f5;
+    color: #222;
+    margin: 0;
+    padding: 20px;
+    font-size: 20px;
+    line-height: 1.5;
+  }
+  header {
+    max-width: 900px;
+    margin: 0 auto 15px;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 15px;
+    justify-content: space-between;
+  }
+  h1 {
+    font-size: 32px;
+    margin: 0;
+  }
+  .progress {
+    font-size: 22px;
+    font-weight: bold;
+  }
+  main {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  .note {
+    font-size: 17px;
+    color: #555;
+    margin: 0 0 15px;
+  }
+  .letter {
+    background: #fff;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+  .letter.done-real {
+    border-color: #2e7d32;
+    background: #e8f5e9;
+  }
+  .letter.done-fake {
+    border-color: #c62828;
+    background: #ffebee;
+  }
+  .letter-header {
+    margin-bottom: 8px;
+  }
+  .from {
+    font-size: 18px;
+    color: #555;
+  }
+  .subject {
+    font-size: 24px;
+    font-weight: bold;
+    margin: 8px 0;
+  }
+  .body {
+    margin: 8px 0;
+    white-space: pre-wrap;
+  }
+  .link-block {
+    margin: 8px 0;
+    padding: 8px;
+    background: #f0f0f0;
+    border-radius: 4px;
+  }
+  .link-block .link {
+    background: transparent;
+    padding: 0;
+    margin: 0 0 6px;
+  }
+  .link-block .sign-label {
+    margin-top: 6px;
+  }
+  .link {
+    margin: 8px 0;
+    padding: 8px;
+    background: #f0f0f0;
+    border-radius: 4px;
+    font-family: monospace;
+    font-size: 18px;
+    color: #1565c0;
+    text-decoration: underline;
+    cursor: default;
+  }
+  .attachment-wrap {
+    margin: 8px 0;
+  }
+  .attachment {
+    display: block;
+    width: 100%;
+    text-align: left;
+    background: #f0f0f0;
+    border: none;
+    border-radius: 4px;
+    padding: 8px;
+    font-family: monospace;
+    font-size: 18px;
+    cursor: pointer;
+    color: #222;
+  }
+  .attachment:hover {
+    background: #e0e0e0;
+  }
+  .attachment:focus {
+    outline: 3px solid #1565c0;
+    outline-offset: 2px;
+  }
+  .attachment-note {
+    margin-top: 6px;
+    padding: 8px;
+    background: #fffde7;
+    border-left: 4px solid #fbc02d;
+    font-size: 17px;
+  }
+  .signs {
+    margin: 12px 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .sign-label {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 18px;
+    cursor: pointer;
+  }
+  .sign-label input {
+    width: 22px;
+    height: 22px;
+  }
+  .actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+  }
+  button {
+    font-size: 20px;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  button:focus, input:focus, textarea:focus {
+    outline: 3px solid #1565c0;
+    outline-offset: 2px;
+  }
+  .btn-real {
+    background: #2e7d32;
+    color: white;
+  }
+  .btn-fake {
+    background: #c62828;
+    color: white;
+  }
+  .btn-reset {
+    background: #757575;
+    color: white;
+  }
+  .explanation {
+    margin-top: 12px;
+    padding: 10px;
+    background: #fffde7;
+    border-left: 4px solid #fbc02d;
+  }
+  .hidden {
+    display: none;
+  }
+  #final {
+    max-width: 900px;
+    margin: 20px auto;
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    border: 2px solid #ccc;
+  }
+  #final label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: bold;
+  }
+  textarea {
+    width: 100%;
+    font-size: 20px;
+    padding: 8px;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+  }
+  @media (max-width: 600px) {
+    body { padding: 10px; font-size: 18px; }
+    h1 { font-size: 26px; }
+    .subject { font-size: 21px; }
+  }
+</style>
+</head>
+<body>
+<header>
+  <h1>Почтовый ящик детектива</h1>
+  <div class="progress">Размечено: <span id="progress-count">0</span> из 8</div>
+  <button id="reset-btn" type="button" class="btn-reset">Начать заново</button>
+</header>
+<main>
+  <p class="note">Сначала отметьте признаки, которые заметили. Затем выберите «Настоящее» или «Подделка». Объяснение появится после выбора. Ссылки показаны текстом и не открываются.</p>
+  <div id="letters"></div>
+</main>
+<section id="final" class="hidden">
+  <h2>Финальный вопрос</h2>
+  <p id="final-question">Что сделать с письмом, которое пометили подделкой?</p>
+  <label for="final-answer">Ваш ответ:</label>
+  <textarea id="final-answer" rows="3" placeholder="Напишите 2–3 действия..."></textarea>
+  <button id="save-final" type="button" class="btn-real">Сохранить</button>
+  <p id="final-saved" class="hidden">Ответ сохранён.</p>
+</section>
+<script>
+  // Данные: тексты интерфейса
+  const TEXTS = {
+    resetConfirm: 'Начать заново? Все ответы будут удалены.',
+    finalQuestion: 'Что сделать с письмом, которое пометили подделкой?',
+    finalPlaceholder: 'Напишите 2–3 действия...'
+  };
+
+  // Данные: признаки
+  const SIGNS = [
+    { key: 'sender', label: 'Незнакомый отправитель' },
+    { key: 'domain', label: 'Странный домен в адресе' },
+    { key: 'attachment', label: 'Неожиданное вложение' },
+    { key: 'urgency', label: 'Срочность, давление' },
+    { key: 'link', label: 'Ссылка с просьбой перейти' }
+  ];
+
+  // Данные: письма
+  const LETTERS = [
+    {
+      id: 'l1',
+      fromName: 'Школьный дневник',
+      fromAddress: 'support@school7-dnevnik.test',
+      subject: 'Срочно подтвердите аккаунт',
+      body: 'Здравствуйте! Мы заметили вход с нового устройства. Чтобы не потерять доступ, подтвердите аккаунт в течение 30 минут. Перейдите по ссылке:',
+      link: 'school7-dnevnik.test/confirm',
+      attachment: '',
+      isFake: true,
+      explanation: 'Признаки подделки: отправитель — незнакомый (support@school7-dnevnik.test); домен — .test, не домен школы; срочность — «в течение 30 минут»; ссылка — просят перейти по адресу school7-dnevnik.test/confirm. Настоящий школьный дневник не просит подтверждать вход по ссылке из письма.'
+    },
+    {
+      id: 'l2',
+      fromName: 'Мария Ивановна, классный руководитель',
+      fromAddress: 'ivanova@school7.example',
+      subject: 'Расписание на четверг',
+      body: 'Здравствуйте! Выкладываю расписание на четверг. Проверьте, пожалуйста, кабинет на 5 уроке. Если что-то не совпадает, напишите мне в школьном чате.',
+      link: '',
+      attachment: 'raspisanie-chetverg.pdf',
+      attachmentNote: 'Вложение ожидаемое: расписание на четверг, о котором договорились. Но всегда проверяйте, от кого файл.',
+      isFake: false,
+      explanation: 'Признаков подделки нет: отправитель — учитель с адресом школы (ivanova@school7.example); домен — school7.example; вложение — ожидаемое расписание; срочности и ссылки нет.'
+    },
+    {
+      id: 'l3',
+      fromName: 'Служба поддержки',
+      fromAddress: 'support@school7-help.invalid',
+      subject: 'Доступ может быть ограничен через 24 часа',
+      body: 'Уважаемый пользователь! Доступ к аккаунту может быть ограничен, если вы не подтвердите данные. Заполните форму:',
+      link: 'school7-help.invalid/form',
+      attachment: '',
+      isFake: true,
+      explanation: 'Признаки подделки: отправитель — незнакомый (support@school7-help.invalid); домен — .invalid; срочность — «через 24 часа»; ссылка — просят заполнить форму по адресу school7-help.invalid/form.'
+    },
+    {
+      id: 'l4',
+      fromName: 'Оргкомитет олимпиады',
+      fromAddress: 'olymp@school7.example',
+      subject: 'Приглашение на олимпиаду по информатике',
+      body: 'Здравствуйте! Приглашаем вас на школьный этап олимпиады по информатике. Он пройдёт в субботу в кабинете 204. Регистрация — у классного руководителя. Подробности в приложении.',
+      link: '',
+      attachment: 'polozhenie-olimpiada.pdf',
+      attachmentNote: 'Вложение ожидаемое: положение об олимпиаде, которое обещано в тексте письма.',
+      isFake: false,
+      explanation: 'Признаков подделки нет: отправитель — оргкомитет с домена школы (olymp@school7.example); домен — school7.example; вложение — положение об олимпиаде, которое обещано в тексте; срочности и ссылки нет.'
+    },
+    {
+      id: 'l5',
+      fromName: 'Почтовая служба',
+      fromAddress: 'post@dostavka.test',
+      subject: 'Ваша посылка ожидает',
+      body: 'Здравствуйте! Ваша посылка задержана на складе. Срочно оплатите доставку 150 рублей по ссылке:',
+      link: 'dostavka.test/pay',
+      attachment: '',
+      isFake: true,
+      explanation: 'Признаки подделки: отправитель — незнакомый (post@dostavka.test); домен — .test; срочность — «срочно оплатите»; ссылка — просят оплатить по адресу dostavka.test/pay. Вы не заказывали посылку.'
+    },
+    {
+      id: 'l6',
+      fromName: 'Мария Ивановна',
+      fromAddress: 'ivanova@school7.example',
+      subject: 'Родительское собрание в пятницу',
+      body: 'Здравствуйте! Напоминаю, что в пятницу в 18:00 состоится родительское собрание. Тема: итоги четверти. Вход в школу через главные двери.',
+      link: '',
+      attachment: '',
+      isFake: false,
+      explanation: 'Признаков подделки нет: отправитель — учитель с адресом школы (ivanova@school7.example); домен — school7.example; срочности, вложений и ссылок нет. Обычное информационное письмо.'
+    },
+    {
+      id: 'l7',
+      fromName: 'Учитель информатики',
+      fromAddress: 'teacher@school7-homework.test',
+      subject: 'Ваше домашнее задание не загружено',
+      body: 'Здравствуйте! Ваше домашнее задание не загружено. Срочно загрузите его по ссылке:',
+      link: 'school7-homework.test/upload',
+      attachment: '',
+      isFake: true,
+      explanation: 'Признаки подделки: отправитель — незнакомый (teacher@school7-homework.test); домен — .test, не домен школы; срочность — «срочно загрузите»; ссылка — просят перейти по адресу school7-homework.test/upload. Учитель пишет с адреса школы.'
+    },
+    {
+      id: 'l8',
+      fromName: 'Бухгалтерия школы',
+      fromAddress: 'buh@school7-pitanie.test',
+      subject: 'Проверьте оплату питания',
+      body: 'Здравствуйте! По оплате питания появилась новая квитанция. Срочно оплатите до 18:00. Квитанция во вложении.',
+      link: '',
+      attachment: 'kvitanciya.pdf',
+      attachmentNote: 'Вложение неожиданное: вы не ждали квитанцию об оплате. Не открывайте вложения от незнакомых отправителей.',
+      isFake: true,
+      explanation: 'Признаки подделки: отправитель — незнакомый (buh@school7-pitanie.test); домен — .test, не домен школы; срочность — «срочно оплатите до 18:00»; вложение — неожиданная квитанция. Ссылки нет, но других признаков достаточно.'
+    }
+  ];
+
+  // Состояние
+  let state = {
+    answers: {},
+    finalAnswer: ''
+  };
+
+  // слово: проверяет, что у состояния есть нужные поля
+  function ensureStateShape() {
+    if (!state || typeof state !== 'object') {
+      state = { answers: {}, finalAnswer: '' };
+    }
+    if (!state.answers) {
+      state.answers = {};
+    }
+    if (typeof state.finalAnswer !== 'string') {
+      state.finalAnswer = '';
+    }
+  }
+
+  // слово: загружает состояние из localStorage или создаёт новое
+  function loadState() {
+    try {
+      const saved = localStorage.getItem('detective_mail_state');
+      if (saved) {
+        state = JSON.parse(saved);
+      }
+    } catch (e) {
+      // localStorage недоступен — работаем в памяти
+    }
+    ensureStateShape();
+  }
+
+  // слово: сохраняет состояние в localStorage
+  function saveState() {
+    try {
+      localStorage.setItem('detective_mail_state', JSON.stringify(state));
+    } catch (e) {
+      // localStorage недоступен — пропускаем
+    }
+  }
+
+  // слово: возвращает состояние письма, создавая его при необходимости
+  function getLetterState(letterId) {
+    if (!state.answers[letterId]) {
+      state.answers[letterId] = { signs: [], choice: null };
+    }
+    return state.answers[letterId];
+  }
+
+  // слово: обновляет состояние признака и перерисовывает письмо
+  function onSignChange(letterId, signKey, checked) {
+    const ls = getLetterState(letterId);
+    if (checked) {
+      if (ls.signs.indexOf(signKey) === -1) {
+        ls.signs.push(signKey);
+      }
+    } else {
+      ls.signs = ls.signs.filter(function(k) {
+        return k !== signKey;
+      });
+    }
+    saveState();
+    updateLetterCard(letterId);
+  }
+
+  // слово: фиксирует выбор «настоящее» или «подделка»
+  function onChoice(letterId, choice) {
+    const ls = getLetterState(letterId);
+    if (ls.choice) {
+      return;
+    }
+    ls.choice = choice;
+    saveState();
+    updateLetterCard(letterId);
+    updateProgress();
+    checkAllAnswered();
+  }
+
+  // слово: обновляет чекбоксы признаков в карточке
+  function updateCheckboxes(letterId, ls) {
+    SIGNS.forEach(function(sign) {
+      const cb = document.getElementById('sign-' + letterId + '-' + sign.key);
+      if (!cb) {
+        return;
+      }
+      cb.checked = ls.signs.indexOf(sign.key) !== -1;
+      cb.disabled = !!ls.choice;
+    });
+  }
+
+  // слово: обновляет кнопки выбора в карточке
+  function updateButtons(letterId, ls) {
+    const card = document.getElementById('card-' + letterId);
+    if (!card) {
+      return;
+    }
+    const btnReal = card.querySelector('.btn-real');
+    const btnFake = card.querySelector('.btn-fake');
+    if (btnReal) {
+      btnReal.disabled = !!ls.choice;
+    }
+    if (btnFake) {
+      btnFake.disabled = !!ls.choice || ls.signs.length === 0;
+    }
+  }
+
+  // слово: показывает или скрывает объяснение в карточке
+  function updateExplanation(letterId, ls, letter) {
+    const card = document.getElementById('card-' + letterId);
+    if (!card) {
+      return;
+    }
+    const expl = card.querySelector('.explanation');
+    if (ls.choice) {
+      expl.textContent = letter.explanation;
+      expl.classList.remove('hidden');
+    } else {
+      expl.classList.add('hidden');
+    }
+  }
+
+  // слово: ставит цветовую рамку карточке по выбору
+  function updateCardClass(letterId, ls) {
+    const card = document.getElementById('card-' + letterId);
+    if (!card) {
+      return;
+    }
+    card.classList.remove('done-real', 'done-fake');
+    if (ls.choice === 'real') {
+      card.classList.add('done-real');
+    }
+    if (ls.choice === 'fake') {
+      card.classList.add('done-fake');
+    }
+  }
+
+  // слово: обновляет карточку письма по состоянию
+  function updateLetterCard(letterId) {
+    const letter = LETTERS.find(function(l) {
+      return l.id === letterId;
+    });
+    const ls = getLetterState(letterId);
+    updateCheckboxes(letterId, ls);
+    updateButtons(letterId, ls);
+    updateExplanation(letterId, ls, letter);
+    updateCardClass(letterId, ls);
+  }
+
+  // слово: обновляет счётчик прогресса
+  function updateProgress() {
+    let count = 0;
+    LETTERS.forEach(function(l) {
+      const ls = state.answers[l.id];
+      if (ls && ls.choice) {
+        count++;
+      }
+    });
+    const el = document.getElementById('progress-count');
+    if (el) {
+      el.textContent = count;
+    }
+  }
+
+  // слово: проверяет, размечены ли все письма
+  function allLettersAnswered() {
+    let all = true;
+    LETTERS.forEach(function(l) {
+      const ls = state.answers[l.id];
+      if (!ls || !ls.choice) {
+        all = false;
+      }
+    });
+    return all;
+  }
+
+  // слово: показывает или скрывает финальный вопрос
+  function showFinal(visible) {
+    const final = document.getElementById('final');
+    if (!final) {
+      return;
+    }
+    if (visible) {
+      final.classList.remove('hidden');
+      const ta = document.getElementById('final-answer');
+      if (ta) {
+        ta.value = state.finalAnswer || '';
+      }
+    } else {
+      final.classList.add('hidden');
+    }
+  }
+
+  // слово: обновляет видимость финального вопроса
+  function checkAllAnswered() {
+    showFinal(allLettersAnswered());
+  }
+
+  // слово: создаёт шапку письма (от кого и тема)
+  function createHeader(letter) {
+    const header = document.createElement('div');
+    header.className = 'letter-header';
+    const from = document.createElement('div');
+    from.className = 'from';
+    from.textContent = 'От: ' + letter.fromName + ' <' + letter.fromAddress + '>';
+    const subject = document.createElement('div');
+    subject.className = 'subject';
+    subject.textContent = letter.subject;
+    header.appendChild(from);
+    header.appendChild(subject);
+    return header;
+  }
+
+  // слово: создаёт текст письма
+  function createBody(letter) {
+    const body = document.createElement('div');
+    body.className = 'body';
+    body.textContent = letter.body;
+    return body;
+  }
+
+  // слово: создаёт блок вложения с пояснением по клику
+  function createAttachment(letter) {
+    if (!letter.attachment) return null;
+    const frag = document.createDocumentFragment();
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'attachment';
+    btn.textContent = 'Вложение: ' + letter.attachment;
+    const note = document.createElement('div');
+    note.className = 'attachment-note hidden';
+    note.textContent = letter.attachmentNote || 'Проверьте, ждали ли вы это вложение.';
+    btn.addEventListener('click', function() { note.classList.toggle('hidden'); });
+    frag.appendChild(btn);
+    frag.appendChild(note);
+    return frag;
+  }
+
+  // слово: создаёт текст ссылки, если она есть
+  function createLinkText(letter) {
+    if (!letter.link) {
+      return null;
+    }
+    const link = document.createElement('div');
+    link.className = 'link';
+    link.textContent = 'Ссылка (не нажимать): ' + letter.link;
+    return link;
+  }
+
+  // слово: создаёт чекбокс признака «ссылка» для письма
+  function createLinkCheckbox(letter) {
+    const label = document.createElement('label');
+    label.className = 'sign-label';
+    const cb = document.createElement('input');
+    cb.type = 'checkbox';
+    cb.id = 'sign-' + letter.id + '-link';
+    cb.addEventListener('change', function() {
+      onSignChange(letter.id, 'link', cb.checked);
+    });
+    label.appendChild(cb);
+    label.appendChild(document.createTextNode('Ссылка с просьбой перейти'));
+    return label;
+  }
+
+  // слово: собирает блок ссылки с чекбоксом
+  function createLinkBlock(letter) {
+    const text = createLinkText(letter);
+    if (!text) {
+      return null;
+    }
+    const block = document.createElement('div');
+    block.className = 'link-block';
+    block.appendChild(text);
+    block.appendChild(createLinkCheckbox(letter));
+    return block;
+  }
+
+  // слово: создаёт один чекбокс признака
+  function createSignCheckbox(letter, sign) {
+    const label = document.createElement('label');
+    label.className = 'sign-label';
+    const cb = document.createElement('input');
+    cb.type = 'checkbox';
+    cb.id = 'sign-' + letter.id + '-' + sign.key;
+    cb.addEventListener('change', function() {
+      onSignChange(letter.id, sign.key, cb.checked);
+    });
+    label.appendChild(cb);
+    label.appendChild(document.createTextNode(sign.label));
+    return label;
+  }
+
+  // слово: создаёт все чекбоксы признаков для письма
+  function createSigns(letter) {
+    const signsDiv = document.createElement('div');
+    signsDiv.className = 'signs';
+    SIGNS.forEach(function(sign) {
+      if (sign.key === 'link') {
+        return;
+      }
+      if (sign.key === 'attachment' && !letter.attachment) {
+        return;
+      }
+      signsDiv.appendChild(createSignCheckbox(letter, sign));
+    });
+    return signsDiv;
+  }
+
+  // слово: создаёт кнопку выбора
+  function createChoiceButton(text, className, letterId, choice) {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = className;
+    btn.textContent = text;
+    btn.addEventListener('click', function() {
+      onChoice(letterId, choice);
+    });
+    return btn;
+  }
+
+  // слово: создаёт блок кнопок выбора
+  function createActions(letter) {
+    const actions = document.createElement('div');
+    actions.className = 'actions';
+    actions.appendChild(createChoiceButton('Настоящее', 'btn-real', letter.id, 'real'));
+    actions.appendChild(createChoiceButton('Подделка', 'btn-fake', letter.id, 'fake'));
+    return actions;
+  }
+
+  // слово: создаёт пустой блок для объяснения
+  function createExplanation() {
+    const expl = document.createElement('div');
+    expl.className = 'explanation hidden';
+    return expl;
+  }
+
+  // слово: добавляет вложение в карточку, если оно есть
+  function appendAttachment(card, letter) {
+    const att = createAttachment(letter);
+    if (!att) {
+      return;
+    }
+    card.appendChild(att);
+  }
+
+  // слово: добавляет ссылку в карточку, если она есть
+  function appendLink(card, letter) {
+    const link = createLinkBlock(letter);
+    if (!link) {
+      return;
+    }
+    card.appendChild(link);
+  }
+
+  // слово: собирает карточку письма из частей
+  function createLetterCard(letter) {
+    const card = document.createElement('article');
+    card.className = 'letter';
+    card.id = 'card-' + letter.id;
+    card.appendChild(createHeader(letter));
+    card.appendChild(createBody(letter));
+    appendAttachment(card, letter);
+    appendLink(card, letter);
+    card.appendChild(createSigns(letter));
+    card.appendChild(createActions(letter));
+    card.appendChild(createExplanation());
+    return card;
+  }
+
+  // слово: перерисовывает все письма
+  function renderAll() {
+    const container = document.getElementById('letters');
+    container.innerHTML = '';
+    LETTERS.forEach(function(letter) {
+      const card = createLetterCard(letter);
+      container.appendChild(card);
+      updateLetterCard(letter.id);
+    });
+    updateProgress();
+    checkAllAnswered();
+  }
+
+  // слово: сбрасывает все ответы и начинает заново
+  function onReset() {
+    if (!confirm(TEXTS.resetConfirm)) {
+      return;
+    }
+    state = { answers: {}, finalAnswer: '' };
+    saveState();
+    renderAll();
+    showFinal(false);
+  }
+
+  // слово: сохраняет финальный ответ
+  function onSaveFinal() {
+    const ta = document.getElementById('final-answer');
+    if (!ta) {
+      return;
+    }
+    state.finalAnswer = ta.value;
+    saveState();
+    const msg = document.getElementById('final-saved');
+    if (msg) {
+      msg.classList.remove('hidden');
+      setTimeout(function() {
+        msg.classList.add('hidden');
+      }, 2000);
+    }
+  }
+
+  // слово: запускает приложение
+  function init() {
+    loadState();
+    renderAll();
+    document.getElementById('final-question').textContent = TEXTS.finalQuestion;
+    document.getElementById('final-answer').placeholder = TEXTS.finalPlaceholder;
+    document.getElementById('reset-btn').addEventListener('click', onReset);
+    document.getElementById('save-final').addEventListener('click', onSaveFinal);
+  }
+
+  init();
+</script>
+</body>
+</html>
