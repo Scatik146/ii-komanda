@@ -1,0 +1,19 @@
+# Итог: 012-blok6-sereznoe — deepseek
+
+- модель: `gpt://{YANDEX_FOLDER_ID}/deepseek-v4.1-flash/latest`
+- когда: 16.11.2026 01:17
+- первый круг: 2 из 2; последний круг (1): 2 из 2
+
+## Круг 1 (токенов: 22864; файлы: otvet.txt, r-list.md)
+
+- ✓ авто: `node "{tw}/tools/drakon-list.mjs" "{otvet}/r-list.md" --strogo --kod python -o "{otvet}/kod-iz-lista.py"` → код (python): C:\Users\scati\Documents\ii-komanda\testy\012-blok6-sereznoe\deepseek\krug-1\kod-iz-lista.py
+- ✓ авто: `node "{tw}/docs/komanda/zadaniya/proverki/012-chislo-r.cjs" "{otvet}"` → ответ задачи: верен
+
+## Руками (учитель, по последнему кругу)
+
+- ✓ руками: `открой https://scatik146.github.io/drakon-graf/generator/ и вставь по очереди тексты трёх блоков «конспект» (не знаний) из файла {otvet}/r-list.md (без строк с кавычками). Ждём: каждый рисунок читается и подходит к своему куску содержания` → все правильно
+- ✓ руками: `открой https://scatik146.github.io/drakon-graf/experiments/prolog/ , вставь текст блока «конспект» в режиме знаний, нажми «4. Знания». Ждём: ✓ пример, ✓ контрпример, на запрос — три ответа: 9, A, B` → все хорошо
+
+## Чтением (лист проверки — заполняет проверяющий)
+
+_не заполнено_
