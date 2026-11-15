@@ -1,4 +1,4 @@
-Claude
+ChatGPT
 parol-list.md
 ````markdown
 # ДРАКОН-лист: пароль
@@ -8,14 +8,14 @@ parol-list.md
 ```дракон
 название: Есть ли цифра в пароле
 ввод: parol = input()
-result = False
-для: simvol in parol
+naydeno = False
+для: for simvol in parol
   вопрос: simvol.isdigit()
     да:
-      result = True
+      naydeno = True
     нет:
-      result = result
-вывод: result
+      pass
+вывод: naydeno
 ```
 
 ## Данные
@@ -30,8 +30,8 @@ result = False
 
 ## Тест
 
-- пример: ввод "abc1" → вывод True
-- контрпример: ввод "abc1" → вывод False
+- пример: пароль "abc123" → вывод True
+- контрпример: пароль "abc123" → вывод False
 ````
 
-Пополнение словаря: новых слов нет (только переменные parol, simvol, result).
+Пополнение словаря: новых слов нет (переменные parol, simvol, naydeno — не слова).
