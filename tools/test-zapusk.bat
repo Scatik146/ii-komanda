@@ -6,11 +6,18 @@ rem   задание — номер или имя файла без .md: 011 и�
 rem   модель — alisa, deepseek или glm; для glm ответ GLM лежит в ii-komanda\otvet-glm.md
 rem   ручные вопросы скрипта test_koda.py задаёт сам — отвечать по ходу
 rem Код по-фортовски: слова — метки, над каждой строка «слово: что делает»; ДРАКОН-лист — test-zapusk-list.md
-setlocal
+rem Работаем с копии во временной папке: git pull может обновить этот файл, пока он идёт.
+if not defined TEST_ZAPUSK_KOPIYA (
+  copy /y "%~f0" "%TEMP%\test-zapusk.bat" >nul
+  set "TEST_ZAPUSK_KOPIYA=%~dp0"
+  "%TEMP%\test-zapusk.bat" %*
+)
+rem Метку снять до setlocal (она не останется в окне cmd), папку tools запомнить в TOOLS.
+set "TEST_ZAPUSK_KOPIYA=" & setlocal & set "TOOLS=%TEST_ZAPUSK_KOPIYA%"
 
 rem Данные. Папки и файлы (teacher-workpad — рядом с ii-komanda).
-for %%p in ("%~dp0..") do set "II=%%~fp"
-for %%p in ("%~dp0..\..\teacher-workpad") do set "TW=%%~fp"
+for %%p in ("%TOOLS%..") do set "II=%%~fp"
+for %%p in ("%TOOLS%..\..\teacher-workpad") do set "TW=%%~fp"
 set "ZADANIYA=%TW%\docs\komanda\zadaniya"
 set "OTVET_GLM=%II%\otvet-glm.md"
 set "MODEL=%~2"
