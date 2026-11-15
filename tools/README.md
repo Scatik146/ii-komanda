@@ -83,3 +83,4 @@ python tools\test_koda.py ..\teacher-workpad\docs\komanda\zadaniya\<задани
 
 Из папки `ii-komanda`: `tools\test-zapusk.bat 011 alisa` (задание — номер или имя файла без `.md`; модель — `alisa`, `deepseek`, `glm`). Делает по порядку: для `glm` проверяет `otvet-glm.md` на следы копирования (`tools/chistyj_otvet.py`: `&#x20;`, `\[`) → `git pull --rebase` в ii-komanda и teacher-workpad → `test_koda.py` (для `glm` — `--podstavit otvet-glm.md`) → `git add testy`, `git commit -m "Тест навыка: <задание> · <модель>"`, `git push` (отклонён — `git pull --rebase` и снова). Ручные вопросы `test_koda.py` задаёт по ходу. ДРАКОН-лист — `test-zapusk-list.md`.
 
+С 16.11: перед ручной проверкой `test_koda.py` открывает её файлы в Блокноте; если модель файл не сдала — вопрос не задаётся, в итоге «файл не сдан»; во втором круге модель получает образец оформления (имя — строкой вне ограды, `.md` — в ограде из четырёх кавычек); пути — с `\`.

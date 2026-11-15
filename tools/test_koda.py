@@ -7,6 +7,8 @@
 Круг: модель отвечает → файлы ответа раскладываются по папке → запускаются проверки задания.
 Есть ошибки — второй круг: модель получает текст ошибок и присылает всё заново. Кругов — два.
 Ручные проверки (строки «руками:») скрипт задаёт учителю один раз, по последнему кругу.
+Перед ручной проверкой файлы из неё открываются в Блокноте (Windows); файла нет — проверка пропускается («файл не сдан»).
+Не сдан файл — во втором круге модель получает образец оформления.
 Итог — testy/<задание>/<модель>/itog.md. Нижние слова (ключи, модели, вызов) взяты из ii.py.
 
 Задание — Markdown. Скрипт читает в нём два раздела:
@@ -17,6 +19,7 @@
 """
 import argparse
 import datetime
+import os
 import re
 import subprocess
 import sys
@@ -105,7 +108,7 @@ def razlozhit(fajly, papka):
 # команда: подставить в строку проверки папки ответа и репозиториев
 def komanda(tekst, puti):
     for klyuch, put in puti.items():
-        tekst = tekst.replace("{" + klyuch + "}", str(put))
+        tekst = tekst.replace("{" + klyuch + "}/", str(put) + os.sep).replace("{" + klyuch + "}", str(put))
     return tekst
 
 
@@ -120,11 +123,20 @@ def zapustit_avto(proverka, puti):
     return {"vid": "авто", "tekst": proverka["tekst"], "proshla": proshla, "vyvod": vyvod[-1500:]}
 
 
+# образецОформления: как сдать файл — имя отдельной строкой вне ограды, файл — в ограде
+def obrazec_oformleniya(imya):
+    ograda = "````" if imya.endswith(".md") else "```"
+    return ("в ответе нет блока кода с именем файла " + imya + " над ним. Сдай так: строка с именем файла — "
+            "ВНЕ ограды, сразу под ней — ограда, в ней весь файл. Файл .md, внутри которого есть блоки ```, — "
+            "в ограде из ЧЕТЫРЁХ обратных кавычек. Образец:\n\n`" + imya + "`\n" + ograda
+            + "\n…весь файл…\n" + ograda)
+
+
 # нетФайлов: итоги-ошибки за файлы, которых модель не сдала
 def net_fajlov(nuzhnye, fajly):
     propushcheny = [n for n in nuzhnye if n not in fajly]
     return [{"vid": "авто", "tekst": "сдан файл " + n, "proshla": False,
-             "vyvod": "в ответе нет блока кода с именем файла " + n + " над ним"} for n in propushcheny]
+             "vyvod": obrazec_oformleniya(n)} for n in propushcheny]
 
 
 # проверитьАвто: итоги всех автоматических проверок круга
@@ -134,6 +146,32 @@ def proverit_avto(zadanie, fajly, puti):
         if proverka["vid"] == "авто":
             itogi.append(zapustit_avto(proverka, puti))
     return itogi
+
+
+# файлыПроверки: файлы ответа, на которые ссылается проверка ({otvet}/имя)
+def fajly_proverki(proverka, puti):
+    imena = re.findall(r"\{otvet\}[/\\](" + IMYA_FAJLA.pattern + ")", proverka["tekst"])
+    return [Path(puti["otvet"]) / imya for imya in imena]
+
+
+# открытьВБлокноте: показать файлы учителю (Windows — Блокнот; в другой системе — ничего)
+def otkryt_v_bloknote(fajly):
+    if sys.platform.startswith("win"):
+        for put in fajly:
+            subprocess.Popen(["notepad.exe", str(put)])
+
+
+# ручнаяПроверка: файла нет — проверку не задавать; есть — открыть его и спросить учителя
+def ruchnaya_proverka(proverka, puti):
+    fajly = fajly_proverki(proverka, puti)
+    net = [p.name for p in fajly if not p.exists()]
+    if net:
+        print("\nРУКАМИ: пропущено — модель не сдала " + ", ".join(net))
+        itog = {"vid": "руками", "tekst": proverka["tekst"], "proshla": None, "vyvod": "не проверялось: файл не сдан — " + ", ".join(net)}
+    else:
+        otkryt_v_bloknote(fajly)
+        itog = sprosit_uchitelya(proverka, puti)
+    return itog
 
 
 # спроситьУчителя: одна ручная проверка — учитель делает и отвечает «да» или «нет»
@@ -152,7 +190,7 @@ def proverit_rukami(zadanie, puti, bez_ruk):
         if proverka["vid"] == "руками" and bez_ruk:
             itogi.append({"vid": "руками", "tekst": proverka["tekst"], "proshla": None, "vyvod": "не проверялось"})
         elif proverka["vid"] == "руками":
-            itogi.append(sprosit_uchitelya(proverka, puti))
+            itogi.append(ruchnaya_proverka(proverka, puti))
     return itogi
 
 
