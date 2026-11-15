@@ -28,7 +28,7 @@
       "klyuch": "YANDEX_API_KEY",
       "zagolovki": {"OpenAI-Project": "{YANDEX_FOLDER_ID}"},
       "rassuzhdenie": true,
-      "max_tokens": 32000,
+      "max_tokens": 48000,
       "tajmaut": 900,
       "telo_dop": {}
     },
