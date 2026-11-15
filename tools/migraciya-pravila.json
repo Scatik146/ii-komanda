@@ -1,0 +1,75 @@
+{
+  "_opisanie": "Правила миграции docs/komanda в ii-komanda (комната 2026-11-15-migraciya, реплики 1б и 6). Данные для tools/migraciya.py. perenos: куда переносится (префикс, длиннее — главнее); dejstvie: perenos | ostaetsya | ukazatel (копия уже есть); vnutri: zhivoj — пути внутри меняются, istoriya — не трогаются. klass: какие файлы четырёх репозиториев живые, какие — история (для замены ссылок).",
+  "repozitorii": ["ii-komanda", "drakon-graf", "teacher-workpad", "memory_maryam_ai"],
+  "ne_trogat": ["max-class-bot"],
+  "ne_chitat": ["tools/migraciya.py", "tools/migraciya-pravila.json", "komanda/migraciya/"],
+  "podskazki": {"_opisanie": "чей docs/komanda в файле, если ссылка неясна (README.md есть в обоих)", "navyki/teacher-workpad-sajt/": "teacher-workpad", "rezerv/navyki/teacher-workpad-sajt/": "teacher-workpad", "navyki/tri-stilya-koda/": "teacher-workpad", "rezerv/navyki/tri-stilya-koda/": "teacher-workpad"},
+  "perenos": {
+    "drakon-graf": [
+      {"iz": "BEZ_CLAUDE.md", "v": "komanda/BEZ_CLAUDE.md", "dejstvie": "perenos", "vnutri": "istoriya"},
+      {"iz": "BRIFING.md", "v": "komanda/BRIFING.md", "dejstvie": "perenos", "vnutri": "zhivoj", "istoriya_s": "## 13.11.2026", "pochemu": "стартовые сообщения брифинга и рабочего чата (до первого дня) живые, дни — история"},
+      {"iz": "SOSTOYANIE.md", "v": "komanda/SOSTOYANIE.md", "dejstvie": "perenos", "vnutri": "zhivoj"},
+      {"iz": "README.md", "v": "komanda/README.md", "dejstvie": "perenos", "vnutri": "zhivoj", "istoriya_razdel": "## 4."},
+      {"iz": "STORONNIE.md", "v": "drakon-graf:docs/STORONNIE.md", "dejstvie": "v_repo", "vnutri": "zhivoj", "pochemu": "продукт drakon-graf (сторонние программы и лицензии), рядом с docs/LICENSE.md; в NOTICE — одна строка"},
+      {"iz": "drakonhub-prompt.md", "v": "prompty/drakonhub-prompt.md", "dejstvie": "perenos", "vnutri": "zhivoj"},
+      {"iz": "brifing/", "v": "komanda/brifing/", "dejstvie": "perenos", "vnutri": "istoriya"},
+      {"iz": "vstavka/den/", "v": "komanda/vstavka/den/", "dejstvie": "perenos", "vnutri": "istoriya"},
+      {"iz": "vstavka/claude/", "v": "komanda/vstavka/claude/", "dejstvie": "perenos", "vnutri": "zhivoj"},
+      {"iz": "vstavka/README.md", "v": "komanda/vstavka/README.md", "dejstvie": "perenos", "vnutri": "zhivoj"},
+      {"iz": "vstavka/", "v": "prompty/roli/", "dejstvie": "perenos", "vnutri": "zhivoj"}
+    ],
+    "teacher-workpad": [
+      {"iz": "KOD-PO-", "v": "pravila/KOD-PO-", "dejstvie": "perenos", "vnutri": "zhivoj"},
+      {"iz": "TRI-STILYA-ODNIM-TEKSTOM.md", "v": "pravila/TRI-STILYA-ODNIM-TEKSTOM.md", "dejstvie": "perenos", "vnutri": "zhivoj"},
+      {"iz": "primery/", "v": "pravila/primery/", "dejstvie": "perenos", "vnutri": "zhivoj"},
+      {"iz": "README.md", "v": "komanda/VHOD-UROKI.md", "dejstvie": "perenos", "vnutri": "zhivoj"},
+      {"iz": "drakon-zapis.md", "v": "teacher-workpad:lib/drakon-shema/drakon-zapis.md", "dejstvie": "v_repo", "vnutri": "zhivoj", "pochemu": "продукт, не работа команды: копия drakon-graf docs/drakon/текстовая_запись.md рядом с библиотекой zapis.js; на неё смотрят tools/drakon-zapis-test.mjs и .github/workflows/proverka.yml"},
+      {"iz": "navyki/", "v": "rezerv/navyki/", "dejstvie": "ukazatel", "vnutri": "zhivoj", "pochemu": "копия в ii-komanda/rezerv/navyki/ совпадает байт в байт"},
+      {"iz": "zadaniya/", "v": "komanda/zadaniya/", "dejstvie": "perenos", "vnutri": "istoriya", "pochemu": "работа команды; в proverki/*.cjs пути ../../../../tools/drakon-list.mjs → ../../../../teacher-workpad/tools/drakon-list.mjs, ../../../../../drakon-graf → ../../../../drakon-graf; в test-zapusk.bat и test_koda.py — путь к заданиям"},
+      {"iz": "zadaniya/SHABLON.md", "v": "komanda/zadaniya/SHABLON.md", "dejstvie": "perenos", "vnutri": "zhivoj"},
+      {"iz": "zadaniya/TESTY-NAVYKA.md", "v": "komanda/zadaniya/TESTY-NAVYKA.md", "dejstvie": "perenos", "vnutri": "zhivoj"},
+      {"iz": "zadaniya/proverki/", "v": "komanda/zadaniya/proverki/", "dejstvie": "perenos", "vnutri": "zhivoj"},
+      {"iz": "zadaniya/proverki/obrazcy/", "v": "komanda/zadaniya/proverki/obrazcy/", "dejstvie": "perenos", "vnutri": "istoriya"}
+    ]
+  },
+  "klass": {
+    "ii-komanda": [
+      {"iz": "", "klass": "?"},
+      {"iz": "README.md", "klass": "zhivoj"},
+      {"iz": "AVTOMATIZACIYA.md", "klass": "zhivoj"},
+      {"iz": "algoritm/", "klass": "zhivoj"},
+      {"iz": "prompty/", "klass": "zhivoj"},
+      {"iz": "ii-py/", "klass": "zhivoj"},
+      {"iz": "tools/", "klass": "zhivoj"},
+      {"iz": "rezerv/", "klass": "zhivoj"},
+      {"iz": "komnata/README.md", "klass": "zhivoj"},
+      {"iz": "komnata/", "klass": "istoriya"},
+      {"iz": "testy/", "klass": "istoriya"},
+      {"iz": "resheniya/", "klass": "istoriya"},
+      {"iz": "istochniki/", "klass": "istoriya"}
+    ],
+    "drakon-graf": [
+      {"iz": "", "klass": "?"},
+      {"iz": "README.md", "klass": "zhivoj"},
+      {"iz": "NOTICE", "klass": "zhivoj"},
+      {"iz": "site/", "klass": "zhivoj"},
+      {"iz": "docs/литература.md", "klass": "zhivoj"},
+      {"iz": "docs/research/", "klass": "istoriya"}
+    ],
+    "teacher-workpad": [
+      {"iz": "", "klass": "?"},
+      {"iz": "CLAUDE.md", "klass": "zhivoj"},
+      {"iz": "plan/", "klass": "zhivoj"},
+      {"iz": "chernoviki/", "klass": "zhivoj"},
+      {"iz": "lib/", "klass": "zhivoj"},
+      {"iz": "tools/", "klass": "zhivoj"},
+      {"iz": ".github/", "klass": "zhivoj"}
+    ],
+    "memory_maryam_ai": [
+      {"iz": "", "klass": "?"},
+      {"iz": "README.md", "klass": "zhivoj"},
+      {"iz": "navyki/", "klass": "zhivoj"},
+      {"iz": "pamyat/", "klass": "istoriya"}
+    ]
+  }
+}
