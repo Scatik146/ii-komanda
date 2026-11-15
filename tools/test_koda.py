@@ -49,7 +49,7 @@ def razdel(zadanie, nazvanie):
 
 # файлыЗадания: имена файлов, которые модель должна сдать
 def fajly_zadaniya(zadanie):
-    return re.findall(r"`([^`\s]+\.[A-Za-z0-9]+)`", razdel(zadanie, "Сдать файлы"))
+    return list(dict.fromkeys(re.findall(r"`([^`\s]+\.[A-Za-z0-9]+)`", razdel(zadanie, "Сдать файлы"))))
 
 
 # проверкиЗадания: список проверок из раздела «Проверки командой»
@@ -296,12 +296,24 @@ def nastrojki_progona(arg, modeli):
             "papka": KOREN / "testy" / zadanie.stem / arg.model, "puti": {"tw": tw, "dg": dg}}
 
 
+# чужойОтвет: подставной ответ без единого имени из «Сдать файлы» — ответ на другое задание
+def proverit_podstavnye(zadanie, podstavit):
+    nuzhnye = fajly_zadaniya(zadanie)
+    for fajl in podstavit or []:
+        tekst = Path(fajl).read_text(encoding="utf-8")
+        if nuzhnye and not any(imya in tekst for imya in nuzhnye):
+            raise ii.Oshibka("в %s нет ни одного файла задания (%s) — похоже, это ответ на другое задание; "
+                             "сохрани туда новый ответ" % (Path(fajl).name, ", ".join(nuzhnye)))
+    return None
+
+
 # прогон: верхнее слово — настройки, круги, ручные проверки, отчёт
 def progon(arg):
     modeli = ii.zagruzit_modeli(arg.modeli)
     znach, _ = ii.najti_klyuchi(ii.imena_peremennyh(modeli))
     kt = ii.Kontekst(modeli, znach, predel=KRUGOV)
     nastrojki = nastrojki_progona(arg, modeli)
+    proverit_podstavnye(nastrojki["zadanie"], nastrojki["podstavit"])
     spisok = krugi(kt, nastrojki)
     puti = dict(nastrojki["puti"], otvet=spisok[-1]["papka"])
     ruchnye = proverit_rukami(nastrojki["zadanie"], puti, arg.bez_ruk)
