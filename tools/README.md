@@ -79,3 +79,7 @@ python tools\test_koda.py ..\teacher-workpad\docs\komanda\zadaniya\<задани
 - Без сети, для проверки самого скрипта: `--podstavit ответ1.md ответ2.md`.
 - Внимание: проверки запускают код, написанный моделью, на этом компьютере.
 
+### Одной командой: `test-zapusk.bat` (15.11.2026)
+
+Из папки `ii-komanda`: `tools\test-zapusk.bat 011 alisa` (задание — номер или имя файла без `.md`; модель — `alisa`, `deepseek`, `glm`). Делает по порядку: для `glm` проверяет `otvet-glm.md` на следы копирования (`tools/chistyj_otvet.py`: `&#x20;`, `\[`) → `git pull --rebase` в ii-komanda и teacher-workpad → `test_koda.py` (для `glm` — `--podstavit otvet-glm.md`) → `git add testy`, `git commit -m "Тест навыка: <задание> · <модель>"`, `git push` (отклонён — `git pull --rebase` и снова). Ручные вопросы `test_koda.py` задаёт по ходу. ДРАКОН-лист — `test-zapusk-list.md`.
+
