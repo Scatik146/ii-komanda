@@ -1,0 +1,16 @@
+{
+  "knigi": [
+    { "id": "k1", "nazvanie": "Тайна пароля", "avtor": "А. Ветров" },
+    { "id": "k2", "nazvanie": "Робот и ветер", "avtor": "Н. Лесной" },
+    { "id": "k3", "nazvanie": "Карта сети", "avtor": "И. Морозова" }
+  ],
+  "chitateli": [
+    { "id": "ch1", "imya": "Тимур" },
+    { "id": "ch2", "imya": "Вера" }
+  ],
+  "vydachi": [
+    { "id": "v1", "kniga_id": "k1", "chitatel_id": "ch1" },
+    { "id": "v2", "kniga_id": "k3", "chitatel_id": "ch1" },
+    { "id": "v3", "kniga_id": "k2", "chitatel_id": "ch2" }
+  ]
+}

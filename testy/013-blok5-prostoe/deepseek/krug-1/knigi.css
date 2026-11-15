@@ -1,0 +1,18 @@
+:root {
+  --tsvet-fona: #f7f3e8;
+  --tsvet-teksta: #2b2b2b;
+  --otstup: 12px;
+}
+
+.stranitsa {
+  background-color: var(--tsvet-fona);
+  color: var(--tsvet-teksta);
+}
+
+.spisok-knig {
+  padding: var(--otstup);
+}
+
+.kniga {
+  margin-bottom: var(--otstup);
+}
