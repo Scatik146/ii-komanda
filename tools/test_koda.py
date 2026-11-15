@@ -9,6 +9,7 @@
 Ручные проверки (строки «руками:») скрипт задаёт учителю один раз, по последнему кругу.
 Перед ручной проверкой файлы из неё открываются в Блокноте (Windows); файла нет — проверка пропускается («файл не сдан»).
 Не сдан файл — во втором круге модель получает образец оформления.
+С --podstavit кругов не больше, чем подставленных ответов (GLM через комнату — один круг).
 Итог — testy/<задание>/<модель>/itog.md. Нижние слова (ключи, модели, вызов) взяты из ii.py.
 
 Задание — Markdown. Скрипт читает в нём два раздела:
@@ -236,11 +237,17 @@ def krug(kt, nastrojki, tekst, nomer):
     return {"nomer": nomer, "tokeny": tokeny, "fajly": sorted(fajly), "itogi": itogi, "otvet": otvet, "papka": papka}
 
 
+# пределКругов: сколько кругов можно; с подставными ответами — не больше, чем ответов
+def predel_krugov(nastrojki):
+    podstavit = nastrojki["podstavit"]
+    return min(KRUGOV, len(podstavit)) if podstavit else KRUGOV
+
+
 # круги: первый круг и, если есть ошибки, круги исправления
 def krugi(kt, nastrojki):
     osnova = prompt_zadaniya(nastrojki["zadanie"], nastrojki["puti"]["tw"])
     spisok = [krug(kt, nastrojki, osnova, 1)]
-    while tekst_oshibok(spisok[-1]["itogi"]) and len(spisok) < KRUGOV:
+    while tekst_oshibok(spisok[-1]["itogi"]) and len(spisok) < predel_krugov(nastrojki):
         proshlyj = spisok[-1]
         tekst = prompt_ispravleniya(osnova, proshlyj["otvet"], proshlyj["itogi"])
         spisok.append(krug(kt, nastrojki, tekst, len(spisok) + 1))
