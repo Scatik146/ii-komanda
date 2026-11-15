@@ -29,6 +29,7 @@
       "zagolovki": {"OpenAI-Project": "{YANDEX_FOLDER_ID}"},
       "rassuzhdenie": true,
       "max_tokens": 32000,
+      "tajmaut": 900,
       "telo_dop": {}
     },
     "qwen": {

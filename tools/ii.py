@@ -241,7 +241,7 @@ def odin_vyzov(kt, imya, tekst, ozhidaem=None, max_tokens=None):
             "max_tokens": limit_tokenov(m, max_tokens), "temperature": 0.3}
     telo.update(m.get("telo_dop", {}))
     try:
-        dannye = http_post(m["adres"].rstrip("/") + "/chat/completions", zagolovki, telo)
+        dannye = http_post(m["adres"].rstrip("/") + "/chat/completions", zagolovki, telo, m.get("tajmaut", 300))
     except Exception as e:  # сеть, HTTP, неразборчивый JSON
         raise Nerabochij(prichina_http(e))
     return razobrat_otvet(dannye, ozhidaem)
