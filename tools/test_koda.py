@@ -212,7 +212,8 @@ def krugi(kt, nastrojki):
 # строкаИтога: одна проверка одной строкой отчёта
 def stroka_itoga(i):
     znak = {True: "✓", False: "✗", None: "—"}[i["proshla"]]
-    hvost = "" if i["proshla"] else "\n  ```\n  " + i["vyvod"].replace("\n", "\n  ") + "\n  ```"
+    poslednyaya = (i["vyvod"].strip().splitlines() or [""])[-1]
+    hvost = " → " + poslednyaya if i["proshla"] else "\n  ```\n  " + i["vyvod"].replace("\n", "\n  ") + "\n  ```"
     return "- %s %s: `%s`%s" % (znak, i["vid"], i["tekst"], hvost)
 
 
