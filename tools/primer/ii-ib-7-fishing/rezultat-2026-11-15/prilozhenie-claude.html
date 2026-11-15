@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Почтовый ящик детектива</title>
+<style>
+  :root {
+    --fon: #f3efe6; --list: #fffdf8; --chernila: #2b2620; --seryj: #6f675c;
+    --ramka: #d8cfbf; --akcent: #1f5f8b; --akcent-svet: #e3eef6;
+    --verno: #2e7d4f; --verno-svet: #e4f3ea; --neverno: #b23a2e; --neverno-svet: #f8e4e1;
+    --marker: #fff2a8;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--fon); color: var(--chernila);
+    font: 19px/1.45 Georgia, "PT Serif", "Times New Roman", serif; }
+  button, input { font: inherit; }
+  .shapka { display: flex; align-items: center; gap: 18px; padding: 12px 22px;
+    background: var(--chernila); color: #fffdf8; }
+  .shapka h1 { margin: 0; font-size: 24px; font-weight: normal; letter-spacing: .5px; }
+  .shapka h1 b { color: var(--marker); font-weight: normal; }
+  .schet { margin-left: auto; font: 17px/1 Verdana, sans-serif; }
+  .schet span { display: inline-block; margin-left: 14px; }
+  .knopka { border: 2px solid var(--chernila); background: var(--list); color: var(--chernila);
+    padding: 8px 16px; border-radius: 6px; cursor: pointer; }
+  .knopka:hover:not(:disabled) { background: var(--marker); }
+  .knopka:disabled { opacity: .35; cursor: not-allowed; }
+  .knopka.glavnaya { background: var(--akcent); border-color: var(--akcent); color: #fff; }
+  .knopka.svetlaya { border-color: #fffdf8; background: transparent; color: #fffdf8; }
+  .yashchik { display: grid; grid-template-columns: 300px 1fr 280px; gap: 0;
+    height: calc(100vh - 60px); }
+  .spisok { border-right: 1px solid var(--ramka); overflow-y: auto; background: #ebe5d8; }
+  .stroka { display: block; width: 100%; text-align: left; border: 0; border-bottom: 1px solid var(--ramka);
+    background: transparent; padding: 12px 16px; cursor: pointer; }
+  .stroka:hover { background: #e1d9c8; }
+  .stroka.otkryto { background: var(--list); box-shadow: inset 5px 0 0 var(--akcent); }
+  .stroka .kto { display: block; font-weight: bold; font-size: 17px; }
+  .stroka .tema { display: block; font-size: 16px; color: var(--seryj);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .stroka .metka { float: right; font: 15px/1 Verdana, sans-serif; }
+  .chtenie { overflow-y: auto; padding: 22px 30px; background: var(--list); }
+  .pismo-shapka { border-bottom: 1px dashed var(--ramka); padding-bottom: 10px; margin-bottom: 14px; }
+  .pismo-shapka h2 { margin: 0 0 6px; font-size: 26px; }
+  .pole { color: var(--seryj); font-size: 17px; }
+  .pole code { font: 17px Consolas, "PT Mono", monospace; color: var(--chernila);
+    background: #f0ebe0; padding: 1px 5px; border-radius: 3px; }
+  .tekst p { margin: 0 0 10px; }
+  .ssylka { font: 17px Consolas, "PT Mono", monospace; color: var(--akcent); text-decoration: underline; }
+  .zametka { font-size: 14px; color: var(--seryj); font-family: Verdana, sans-serif; }
+  .vlozhenie { display: inline-block; margin: 6px 0 10px; padding: 6px 12px; border: 1px solid var(--ramka);
+    border-radius: 6px; background: #f0ebe0; font: 16px Verdana, sans-serif; }
+  .podpis { color: var(--seryj); font-style: italic; margin-top: 8px; }
+  .rassledovanie { margin-top: 18px; padding: 14px 18px; border: 2px solid var(--chernila);
+    border-radius: 8px; background: #fffdf8; }
+  .rassledovanie h3 { margin: 0 0 8px; font: bold 17px Verdana, sans-serif; text-transform: uppercase; letter-spacing: 1px; }
+  .priznak { display: flex; gap: 10px; align-items: flex-start; padding: 5px 4px; cursor: pointer; border-radius: 4px; }
+  .priznak:hover { background: var(--marker); }
+  .priznak input { width: 22px; height: 22px; margin-top: 3px; }
+  .resheniya { display: flex; gap: 12px; margin-top: 12px; }
+  .itog { margin-top: 16px; padding: 14px 18px; border-radius: 8px; }
+  .itog.verno { background: var(--verno-svet); border-left: 6px solid var(--verno); }
+  .itog.neverno { background: var(--neverno-svet); border-left: 6px solid var(--neverno); }
+  .itog strong { font: bold 22px Verdana, sans-serif; }
+  .itog ul { margin: 8px 0 0; padding-left: 22px; }
+  .propushchen { color: var(--neverno); }
+  .lishnij { color: var(--seryj); text-decoration: line-through; }
+  .kontakty { border-left: 1px solid var(--ramka); padding: 16px; overflow-y: auto; background: #ebe5d8; }
+  .kontakty h3 { margin: 0 0 4px; font: bold 16px Verdana, sans-serif; text-transform: uppercase; }
+  .kontakty p { margin: 0 0 12px; font-size: 15px; color: var(--seryj); }
+  .kontakt { padding: 8px 0; border-bottom: 1px solid var(--ramka); font-size: 16px; }
+  .kontakt code { display: block; font: 15px Consolas, "PT Mono", monospace; word-break: break-all; }
+  .ekran { max-width: 760px; margin: 50px auto; padding: 30px 40px; background: var(--list);
+    border: 2px solid var(--chernila); border-radius: 10px; }
+  .ekran h2 { margin-top: 0; font-size: 30px; }
+  .skrytyj { display: none !important; }
+  .obrazec li { margin-bottom: 6px; }
+  @media (max-width: 1000px) {
+    .yashchik { grid-template-columns: 1fr; height: auto; }
+    .spisok, .kontakty { border: 0; }
+  }
+</style>
+</head>
+<body>
+
+<div id="ekran-start" class="ekran">
+  <h2>Почтовый ящик детектива</h2>
+  <p>В ящик пришло 8 писем. Часть из них — подделки: кто-то притворяется школой, учителем или службой доставки.</p>
+  <p>Для каждого письма:</p>
+  <ol>
+    <li>Прочитай письмо. Сверь отправителя со списком <b>«Контакты»</b> справа.</li>
+    <li>Отметь, что тебя насторожило. Ничего не насторожило — отметь «Признаков не нашёл».</li>
+    <li>Реши: <b>настоящее</b> или <b>подделка</b>. Потом увидишь, прав ли ты, и разбор.</li>
+  </ol>
+  <p class="zametka">Все письма, имена и адреса выдуманы. Ссылки в письмах показаны текстом и не открываются.</p>
+  <p><button class="knopka glavnaya" id="knopka-nachat">Открыть ящик</button>
+     <button class="knopka" id="knopka-zanovo-start">Новая смена / начать заново</button></p>
+</div>
+
+<div id="ekran-yashchik" class="skrytyj">
+  <div class="shapka">
+    <h1>Почтовый ящик <b>детектива</b></h1>
+    <div class="schet"><span id="schet-razobrano"></span><span id="schet-verno"></span></div>
+    <button class="knopka svetlaya" id="knopka-final">Итог</button>
+  </div>
+  <div class="yashchik">
+    <nav class="spisok" id="spisok"></nav>
+    <main class="chtenie" id="chtenie"></main>
+    <aside class="kontakty" id="kontakty"></aside>
+  </div>
+</div>
+
+<div id="ekran-final" class="ekran skrytyj">
+  <h2>Итог расследования</h2>
+  <p id="final-schet"></p>
+  <p><b>Последний вопрос:</b> что сделать с письмом, которое ты пометил подделкой? Подумай и назови 2–3 действия, потом сравни.</p>
+  <p><button class="knopka glavnaya" id="knopka-sravnit">Сравнить с образцом</button></p>
+  <ul id="obrazec" class="obrazec skrytyj"></ul>
+  <p><button class="knopka" id="knopka-nazad">Вернуться к письмам</button></p>
+</div>
+
+<script>
+// ===== ДАННЫЕ =====
+
+/** Контакт: { imya, adres } — те, кого ученик знает. */
+var KONTAKTY = [
+  { imya: "Школа № 7 (канцелярия)", adres: "info@school7.example" },
+  { imya: "Электронный дневник", adres: "noreply@dnevnik.school7.example" },
+  { imya: "Иванова М. А. — классный руководитель", adres: "ivanova@school7.example" },
+  { imya: "Петров С. Н. — учитель информатики", adres: "petrov@school7.example" },
+  { imya: "Бухгалтерия школы", adres: "buh@school7.example" },
+  { imya: "Школьная библиотека", adres: "library@school7.example" }
+];
+
+/** Признак: { kod, tekst } — что может насторожить. */
+var PRIZNAKI = [
+  { kod: "imya", tekst: "Имя знакомое, а адреса нет в «Контактах»" },
+  { kod: "domen", tekst: "Адрес похож на школьный, но отличается" },
+  { kod: "srochno", tekst: "Торопят или пугают сроком" },
+  { kod: "dannye", tekst: "Просят пароль, код или деньги" },
+  { kod: "ssylka", tekst: "Зовут перейти по ссылке на незнакомый сайт" },
+  { kod: "vlozhenie", tekst: "Вложение, которого не ждали" },
+  { kod: "net", tekst: "Признаков не нашёл" }
+];
+
+/** Письмо: { id, imya, adres, tema, data, abzacy[], ssylka?, vlozhenie?, podpis,
+ *  poddelka, priznaki[], razbor[] } */
+var PISMA = [
+  { id: "p1", imya: "Электронный дневник", adres: "support@school7-dnevnik.example",
+    tema: "Срочно: подтвердите вход в аккаунт", data: "пн, 07:42",
+    abzacy: ["Мы заметили вход в ваш аккаунт с нового устройства.",
+             "Если не подтвердите вход в течение 30 минут, аккаунт будет заблокирован."],
+    ssylka: "school7-dnevnik.example/vhod", podpis: "Служба поддержки",
+    poddelka: true, priznaki: ["imya", "domen", "srochno", "ssylka"],
+    razbor: ["Настоящий дневник пишет с noreply@dnevnik.school7.example — сверь с «Контактами».",
+             "school7-dnevnik — другое имя сайта, хоть и похожее.",
+             "30 минут и блокировка — давят, чтобы не успел подумать."] },
+  { id: "p2", imya: "Иванова М. А. — классный руководитель", adres: "ivanova@school7.example",
+    tema: "Расписание на четверг", data: "пн, 16:05",
+    abzacy: ["Ребята, как обещала на классном часе, высылаю расписание на четверг.",
+             "Первым уроком — физкультура, форму не забывайте."],
+    vlozhenie: "raspisanie-chetverg.pdf", podpis: "Мария Андреевна",
+    poddelka: false, priznaki: [],
+    razbor: ["Адрес совпадает с «Контактами».",
+             "Вложение ждали: о нём сказали на классном часе.",
+             "Ничего не просят и не торопят."] },
+  { id: "p3", imya: "Петров С. Н. — учитель информатики", adres: "petrov.school7@pochta-mail.example",
+    tema: "Нужен твой пароль от дневника", data: "вт, 21:30",
+    abzacy: ["Привет! Сломалась система, не вижу твои оценки за четверть.",
+             "Пришли мне сегодня до 22:00 логин и пароль от дневника, я проверю и всё исправлю."],
+    podpis: "С. Н.",
+    poddelka: true, priznaki: ["imya", "domen", "srochno", "dannye"],
+    razbor: ["Имя учителя настоящее, а адрес чужой: в «Контактах» petrov@school7.example.",
+             "Пароль не просит никто — ни учитель, ни школа.",
+             "«Сегодня до 22:00» — давят сроком."] },
+  { id: "p4", imya: "Школьная библиотека", adres: "library@school7.example",
+    tema: "Новые книги и приглашение на клуб", data: "вт, 12:10",
+    abzacy: ["В библиотеку пришли новые книги о космосе и детективы.",
+             "Список — на странице библиотеки на сайте школы. Клуб читателей — в среду после уроков."],
+    ssylka: "school7.example/biblioteka", podpis: "Библиотекарь Ольга Петровна",
+    poddelka: false, priznaki: [],
+    razbor: ["Адрес совпадает с «Контактами».",
+             "Ссылка ведёт на сайт школы school7.example — ссылка сама по себе не признак подделки.",
+             "Ничего не просят и не торопят."] },
+  { id: "p5", imya: "Служба доставки «Быстрый курьер»", adres: "post@dostavka-bystro.example",
+    tema: "Ваша посылка ждёт оплаты", data: "ср, 09:15",
+    abzacy: ["Посылка на ваше имя задержана на складе.",
+             "Оплатите доставку 99 рублей до конца дня, иначе посылка вернётся отправителю."],
+    ssylka: "dostavka-bystro.example/oplata", podpis: "Отдел доставки",
+    poddelka: true, priznaki: ["srochno", "dannye", "ssylka"],
+    razbor: ["Ты ничего не заказывал — а посылка «на твоё имя».",
+             "Просят деньги по ссылке на незнакомый сайт.",
+             "«До конца дня» — давят сроком."] },
+  { id: "p6", imya: "Электронный дневник", adres: "noreply@dnevnik.school7.example",
+    tema: "Напоминание: проект сдать до пятницы", data: "ср, 18:00",
+    abzacy: ["Напоминаем: проект по истории нужно сдать учителю до пятницы.",
+             "Работы после срока принимаются по договорённости с учителем."],
+    podpis: "Электронный дневник школы № 7",
+    poddelka: false, priznaki: [],
+    razbor: ["Адрес совпадает с «Контактами».",
+             "Срок есть, но не пугают и ничего не просят — обычное напоминание.",
+             "Срок сам по себе не признак: важно, давят ли и что требуют."] },
+  { id: "p7", imya: "Бухгалтерия школы", adres: "buh@schoo17.example",
+    tema: "Квитанция за питание", data: "чт, 08:20",
+    abzacy: ["Во вложении квитанция за питание на следующий месяц.",
+             "Откройте архив и распечатайте квитанцию."],
+    vlozhenie: "kvitanciya.zip", podpis: "Бухгалтерия",
+    poddelka: true, priznaki: ["domen", "vlozhenie"],
+    razbor: ["Сравни по буквам: schoo17 — вместо буквы «l» стоит цифра «1».",
+             "Квитанцию не ждали, а архив .zip может прятать вредную программу.",
+             "Подделка без спешки и ссылок — самая коварная."] },
+  { id: "p8", imya: "Школа № 7 (канцелярия)", adres: "info@school7.example",
+    tema: "Олимпиада по информатике: положение", data: "чт, 14:40",
+    abzacy: ["Школьный этап олимпиады — 25 ноября.",
+             "Положение во вложении. Записаться можно у учителя информатики."],
+    vlozhenie: "polozhenie-olimpiada.pdf", podpis: "Канцелярия школы № 7",
+    poddelka: false, priznaki: [],
+    razbor: ["Адрес совпадает с «Контактами».",
+             "Вложение — обычный документ, о котором сказано в письме.",
+             "Записаться предлагают у учителя, а не по ссылке."] }
+];
+
+/** Образец ответа на финальный вопрос. */
+var OBRAZEC = [
+  "Не переходить по ссылкам из письма.",
+  "Не открывать вложения.",
+  "Не отвечать и никому не сообщать пароль, коды, данные.",
+  "Показать письмо взрослому: родителям или учителю.",
+  "Проверить другим путём: позвонить, спросить лично, зайти на сайт самому."
+];
+
+var KLYUCH = "detektiv-pochta-v1";
+
+/** Состояние: { otkryto: id, otvety: { id: { otmetki[], vybor } } } */
+var sostoyanie = { otkryto: "p1", otvety: {} };
+var zapas = null;
+
+// ===== НИЖНИЕ СЛОВА: хранение =====
+
+// прочитать: берёт сохранённое из localStorage, при ошибке — из памяти страницы
+function prochitat() {
+  var tekst = zapas;
+  try { tekst = window.localStorage.getItem(KLYUCH) || zapas; } catch (e) { tekst = zapas; }
+  return tekst;
+}
+
+// сохранить: пишет состояние в localStorage, при ошибке — в память страницы
+function sohranit() {
+  zapas = JSON.stringify(sostoyanie);
+  try { window.localStorage.setItem(KLYUCH, zapas); } catch (e) { /* остаётся в памяти */ }
+}
+
+// загрузить: восстанавливает состояние, если оно было
+function zagruzit() {
+  var tekst = prochitat();
+  if (tekst) {
+    try { sostoyanie = JSON.parse(tekst); } catch (e) { sostoyanie = { otkryto: "p1", otvety: {} }; }
+  }
+}
+
+// сбросить: новая смена — всё с начала
+function sbrosit() {
+  sostoyanie = { otkryto: "p1", otvety: {} };
+  sohranit();
+}
+
+// ===== НИЖНИЕ СЛОВА: данные =====
+
+// найти письмо: письмо по id
+function najtiPismo(id) {
+  var najdeno = PISMA[0];
+  for (var i = 0; i < PISMA.length; i++) {
+    if (PISMA[i].id === id) { najdeno = PISMA[i]; }
+  }
+  return najdeno;
+}
+
+// ответ: запись ученика по письму (создаёт пустую)
+function otvet(id) {
+  if (!sostoyanie.otvety[id]) { sostoyanie.otvety[id] = { otmetki: [], vybor: null }; }
+  return sostoyanie.otvety[id];
+}
+
+// верно ли: совпало ли решение ученика с правдой
+function vernoLi(pismo) {
+  var o = otvet(pismo.id);
+  return o.vybor === (pismo.poddelka ? "poddelka" : "nastoyashchee");
+}
+
+// подсчёт: сколько писем разобрано и сколько верно
+function podschet() {
+  var itog = { razobrano: 0, verno: 0 };
+  PISMA.forEach(function (p) {
+    if (otvet(p.id).vybor) {
+      itog.razobrano += 1;
+      if (vernoLi(p)) { itog.verno += 1; }
+    }
+  });
+  return itog;
+}
+
+// есть ли: входит ли код в список
+function estLi(spisok, kod) {
+  return spisok.indexOf(kod) >= 0;
+}
+
+// ===== НИЖНИЕ СЛОВА: рисование =====
+
+// элемент: создаёт тег с классом и текстом
+function element(teg, klass, tekst) {
+  var el = document.createElement(teg);
+  if (klass) { el.className = klass; }
+  if (tekst) { el.textContent = tekst; }
+  return el;
+}
+
+// абзац: <p> с текстом
+function abzac(tekst) {
+  return element("p", "", tekst);
+}
+
+// очистить: убирает содержимое узла
+function ochistit(uzel) {
+  while (uzel.firstChild) { uzel.removeChild(uzel.firstChild); }
+}
+
+// показать экран: один экран видно, остальные скрыты
+function pokazatEkran(id) {
+  ["ekran-start", "ekran-yashchik", "ekran-final"].forEach(function (e) {
+    document.getElementById(e).classList.toggle("skrytyj", e !== id);
+  });
+}
+
+// ===== СРЕДНИЕ СЛОВА: список и контакты =====
+
+// метка письма: значок в списке — не тронуто, верно, неверно
+function metkaPisma(p) {
+  var metka = "";
+  if (otvet(p.id).vybor) { metka = vernoLi(p) ? "✔" : "✘"; }
+  return metka;
+}
+
+// строка списка: одно письмо в левой колонке
+function strokaSpiska(p) {
+  var kn = element("button", "stroka" + (p.id === sostoyanie.otkryto ? " otkryto" : ""));
+  kn.appendChild(element("span", "metka", metkaPisma(p)));
+  kn.appendChild(element("span", "kto", p.imya));
+  kn.appendChild(element("span", "tema", p.tema));
+  kn.addEventListener("click", function () { otkryt(p.id); });
+  return kn;
+}
+
+// нарисовать список: все письма слева
+function narisovatSpisok() {
+  var spisok = document.getElementById("spisok");
+  ochistit(spisok);
+  PISMA.forEach(function (p) { spisok.appendChild(strokaSpiska(p)); });
+}
+
+// нарисовать контакты: справочник знакомых адресов справа
+function narisovatKontakty() {
+  var blok = document.getElementById("kontakty");
+  blok.appendChild(element("h3", "", "Контакты"));
+  blok.appendChild(element("p", "", "Эти адреса ты знаешь точно. Сверяй по буквам."));
+  KONTAKTY.forEach(function (k) {
+    var str = element("div", "kontakt", k.imya);
+    str.appendChild(element("code", "", k.adres));
+    blok.appendChild(str);
+  });
+}
+
+// нарисовать счёт: разобрано и верно в шапке
+function narisovatSchet() {
+  var s = podschet();
+  document.getElementById("schet-razobrano").textContent = "Разобрано: " + s.razobrano + " из " + PISMA.length;
+  document.getElementById("schet-verno").textContent = "Верно: " + s.verno;
+}
+
+// ===== СРЕДНИЕ СЛОВА: письмо =====
+
+// шапка письма: тема, от кого, когда
+function shapkaPisma(p) {
+  var blok = element("div", "pismo-shapka");
+  blok.appendChild(element("h2", "", p.tema));
+  var ot = element("div", "pole", "От: " + p.imya + " ");
+  ot.appendChild(element("code", "", p.adres));
+  blok.appendChild(ot);
+  blok.appendChild(element("div", "pole", "Получено: " + p.data));
+  return blok;
+}
+
+// текст письма: абзацы, ссылка текстом, вложение, подпись
+function tekstPisma(p) {
+  var blok = element("div", "tekst");
+  p.abzacy.forEach(function (a) { blok.appendChild(abzac(a)); });
+  if (p.ssylka) {
+    blok.appendChild(element("div", "ssylka", p.ssylka));
+    blok.appendChild(element("div", "zametka", "В настоящем письме здесь была бы ссылка. В уроке она показана текстом."));
+  }
+  if (p.vlozhenie) { blok.appendChild(element("div", "vlozhenie", "📎 " + p.vlozhenie)); }
+  blok.appendChild(element("div", "podpis", p.podpis));
+  return blok;
+}
+
+// флажок: один признак с галочкой
+function flazhok(p, pr) {
+  var o = otvet(p.id);
+  var metka = element("label", "priznak");
+  var vvod = element("input");
+  vvod.type = "checkbox";
+  vvod.checked = estLi(o.otmetki, pr.kod);
+  vvod.disabled = !!o.vybor;
+  vvod.addEventListener("change", function () { otmetit(p.id, pr.kod, vvod.checked); });
+  metka.appendChild(vvod);
+  metka.appendChild(element("span", "", pr.tekst));
+  return metka;
+}
+
+// кнопка решения: «Настоящее» или «Подделка»
+function knopkaResheniya(p, vybor, tekst) {
+  var o = otvet(p.id);
+  var kn = element("button", "knopka", tekst);
+  kn.disabled = !!o.vybor || o.otmetki.length === 0;
+  kn.addEventListener("click", function () { reshit(p.id, vybor); });
+  return kn;
+}
+
+// расследование: признаки и решение
+function rassledovanie(p) {
+  var blok = element("div", "rassledovanie");
+  blok.appendChild(element("h3", "", "Что насторожило?"));
+  PRIZNAKI.forEach(function (pr) { blok.appendChild(flazhok(p, pr)); });
+  var ryad = element("div", "resheniya");
+  ryad.appendChild(knopkaResheniya(p, "nastoyashchee", "Настоящее"));
+  ryad.appendChild(knopkaResheniya(p, "poddelka", "Подделка"));
+  blok.appendChild(ryad);
+  if (otvet(p.id).otmetki.length === 0 && !otvet(p.id).vybor) {
+    blok.appendChild(element("div", "zametka", "Сначала отметь хотя бы одну строку — даже «Признаков не нашёл»."));
+  }
+  return blok;
+}
+
+// сверка признаков: какие признаки ученик пропустил и какие лишние
+function sverkaPriznakov(p) {
+  var spisok = element("ul");
+  var otmetki = otvet(p.id).otmetki;
+  p.priznaki.forEach(function (kod) {
+    if (!estLi(otmetki, kod)) { spisok.appendChild(element("li", "propushchen", "Пропущено: " + tekstPriznaka(kod))); }
+  });
+  otmetki.forEach(function (kod) {
+    if (kod !== "net" && !estLi(p.priznaki, kod)) { spisok.appendChild(element("li", "lishnij", tekstPriznaka(kod))); }
+  });
+  return spisok;
+}
+
+// текст признака: подпись по коду
+function tekstPriznaka(kod) {
+  var tekst = kod;
+  PRIZNAKI.forEach(function (pr) { if (pr.kod === kod) { tekst = pr.tekst; } });
+  return tekst;
+}
+
+// итог письма: «Верно / Неверно», правда и разбор
+function itogPisma(p) {
+  var verno = vernoLi(p);
+  var blok = element("div", "itog " + (verno ? "verno" : "neverno"));
+  blok.appendChild(element("strong", "", verno ? "Верно!" : "Неверно."));
+  blok.appendChild(abzac("Это письмо — " + (p.poddelka ? "подделка." : "настоящее.")));
+  var razbor = element("ul");
+  p.razbor.forEach(function (r) { razbor.appendChild(element("li", "", r)); });
+  blok.appendChild(razbor);
+  blok.appendChild(sverkaPriznakov(p));
+  return blok;
+}
+
+// нарисовать письмо: правая часть — письмо, расследование, итог
+function narisovatPismo() {
+  var p = najtiPismo(sostoyanie.otkryto);
+  var chtenie = document.getElementById("chtenie");
+  ochistit(chtenie);
+  chtenie.appendChild(shapkaPisma(p));
+  chtenie.appendChild(tekstPisma(p));
+  chtenie.appendChild(rassledovanie(p));
+  if (otvet(p.id).vybor) { chtenie.appendChild(itogPisma(p)); }
+}
+
+// ===== ВЕРХНИЕ СЛОВА: действия ученика =====
+
+// перерисовать: список, письмо и счёт заново
+function pererisovat() {
+  narisovatSpisok();
+  narisovatPismo();
+  narisovatSchet();
+}
+
+// открыть: показать письмо по id
+function otkryt(id) {
+  sostoyanie.otkryto = id;
+  sohranit();
+  pererisovat();
+}
+
+// отметить: поставить или снять признак («нет» исключает остальные)
+function otmetit(id, kod, vklyuchit) {
+  var o = otvet(id);
+  o.otmetki = o.otmetki.filter(function (k) { return k !== kod; });
+  if (vklyuchit && kod === "net") { o.otmetki = []; }
+  if (vklyuchit && kod !== "net") { o.otmetki = o.otmetki.filter(function (k) { return k !== "net"; }); }
+  if (vklyuchit) { o.otmetki.push(kod); }
+  sohranit();
+  pererisovat();
+}
+
+// решить: записать выбор ученика
+function reshit(id, vybor) {
+  otvet(id).vybor = vybor;
+  sohranit();
+  pererisovat();
+}
+
+// финал: итоговый экран с вопросом
+function final() {
+  var s = podschet();
+  document.getElementById("final-schet").textContent =
+    "Разобрано писем: " + s.razobrano + " из " + PISMA.length + ". Верно: " + s.verno + ".";
+  pokazatEkran("ekran-final");
+}
+
+// сравнить: показать образец ответа
+function sravnit() {
+  var spisok = document.getElementById("obrazec");
+  ochistit(spisok);
+  OBRAZEC.forEach(function (d) { spisok.appendChild(element("li", "", d)); });
+  spisok.classList.remove("skrytyj");
+}
+
+// открыть ящик: экран с письмами
+function otkrytYashchik() {
+  pokazatEkran("ekran-yashchik");
+  pererisovat();
+}
+
+// подключить кнопки: обработчики постоянных кнопок
+function podklyuchitKnopki() {
+  document.getElementById("knopka-nachat").addEventListener("click", otkrytYashchik);
+  document.getElementById("knopka-zanovo-start").addEventListener("click", function () { sbrosit(); otkrytYashchik(); });
+  document.getElementById("knopka-final").addEventListener("click", final);
+  document.getElementById("knopka-sravnit").addEventListener("click", sravnit);
+  document.getElementById("knopka-nazad").addEventListener("click", otkrytYashchik);
+}
+
+// запуск: загрузить, нарисовать контакты, подключить кнопки
+function zapusk() {
+  zagruzit();
+  narisovatKontakty();
+  podklyuchitKnopki();
+}
+
+zapusk();
+</script>
+</body>
+</html>
