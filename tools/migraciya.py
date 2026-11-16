@@ -628,7 +628,7 @@ def mozhno_li(pravila, dejstviya, zametki):
     return prichiny
 
 
-# sdelat: проба → проверки → запись всех действий → sdelano.json → коммит в каждом репозитории
+# sdelat: проба → проверки → запись всех действий → sdelano.json → коммит в каждом репозитории (нельзя — код выхода 1)
 def sdelat():
     pravila = prochitat_pravila()
     napisat_probu()
@@ -636,7 +636,7 @@ def sdelat():
     prichiny = mozhno_li(pravila, dejstviya, zametki)
     kommity = {r: kommit(r) for r in REPOZITORII}
     if prichiny:
-        print("Не делаю:\n" + "\n".join("- " + p for p in prichiny))
+        sys.exit("Не делаю:\n" + "\n".join("- " + p for p in prichiny))
     else:
         zapisat_vse(dejstviya)
         for repo in REPOZITORII:
@@ -671,7 +671,7 @@ def ostalis_starye(pravila, d):
             if i not in istoriya and STAROE in s and "перенесено из " not in s and not any(o in s for o in ostavit)]
 
 
-# proverit_posle: после --sdelat: файлы на месте, старых путей в живой части нет, относительные ссылки .md целы
+# proverit_posle: после --sdelat: файлы на месте, старых путей в живой части нет, относительные ссылки .md целы (нет — код 1)
 def proverit_posle():
     pravila = prochitat_pravila()
     sled = json.loads(SDELANO.read_text(encoding="utf-8"))
@@ -684,6 +684,7 @@ def proverit_posle():
             bitye += [f"- {d['repo']} `{d['put']}` — `{a}`" for a in bitye_posle(pravila, d, nabor)]
     print(f"Проверка после --sdelat: файлов {len(sled)}, нет на месте {len(net)}, старых путей {len(starye)}, битых ссылок {len(bitye)}")
     print("\n".join(net + starye + bitye) or "Всё цело.")
+    sys.exit(1 if net + starye + bitye else 0)
 
 
 # bitye_posle: битые относительные ссылки перенесённого или изменённого живого .md (на диске сейчас)
@@ -701,7 +702,7 @@ def glavnoe():
     elif "--sdelat" in sys.argv:
         sdelat()
     elif "--proverit" in sys.argv and not SDELANO.exists():
-        print("Нет komanda/migraciya/sdelano.json — сначала python tools/migraciya.py --sdelat")
+        sys.exit("Нет komanda/migraciya/sdelano.json — сначала python tools/migraciya.py --sdelat")
     elif "--proverit" in sys.argv:
         proverit_posle()
     else:
