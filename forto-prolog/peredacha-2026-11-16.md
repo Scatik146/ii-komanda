@@ -23,9 +23,9 @@
 
 Репозиторий `Scatik146/ii-komanda`, ветка **`ekspertiza-forto-prolog`** (в `main` пока не слита; решение о слиянии — моё). Проверка чтения: назови заголовок первого файла и сколько вопросов в файле вопросов.
 
-1. `komanda/ekspertiza-forto-prolog-itog.md` — итог экспертизы модели, находки D1–D16, проект решения из 10 условий.
-2. `komanda/voprosy-uchitelyu-forto-prolog.md` — 24 вопроса мне с вариантами и советами (★).
-3. `komanda/forto-prolog-postanovka.md` — постановка для исполнителя: запись атома, поля, типы, статусы, правило вывода, 18 проверок, этапы 0–3, образцы.
+1. `forto-prolog/ekspertiza-itog.md` — итог экспертизы модели, находки D1–D16, проект решения из 10 условий.
+2. `forto-prolog/voprosy-uchitelyu.md` — 24 вопроса мне с вариантами и советами (★).
+3. `forto-prolog/postanovka.md` — постановка для исполнителя: запись атома, поля, типы, статусы, правило вывода, 18 проверок, этапы 0–3, образцы.
 4. `komanda/zadaniya/020-…` и `021-…` — задания для GLM и DeepSeek, **не выданы**.
 5. `pravila/FORTO-PROLOG.md` — сама модель (не менять: решает учитель).
 6. `pravila/KOD-PO-FORTOVSKI.md`, `KOD-PO-PROLOGOVSKI.md`, `KOD-PO-GRAFOVSKI.md` — три стиля кода.

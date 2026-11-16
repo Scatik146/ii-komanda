@@ -2,7 +2,7 @@
 
 **Внимание:** эти отметки поставила та же модель, что извлекла кандидатов. Так вышло до правила К-23
 («извлекает одна модель, размечает другая»). Файл нужен для двух вещей: проба скрипта без сети
-(`python tools/analiz.py razmetka komanda/srez-1 --podstavit komanda/srez-1/analiz/razmetka-maryam.md --model maryam`)
+(`python tools/analiz.py razmetka forto-prolog/srez-1 --podstavit forto-prolog/srez-1/analiz/razmetka-maryam.md --model maryam`)
 и сравнение с разметкой DeepSeek.
 
 ```разметка

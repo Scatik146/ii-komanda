@@ -258,7 +258,7 @@ class TestNastoyashchieDannye(unittest.TestCase):
     """Кандидаты опроса 16.11: все цитаты стоят в файле опроса."""
 
     def test_kandidaty_sreza_1(self):
-        papka = analiz.KOREN / "komanda" / "srez-1"
+        papka = analiz.KOREN / "forto-prolog" / "srez-1"
         spisok = analiz.iz_fajla(papka / "analiz" / "kandidaty.md")
         self.assertEqual(len(spisok), 25)
         self.assertEqual(analiz.proverit_kandidatov(spisok, papka), [])

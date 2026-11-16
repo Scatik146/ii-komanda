@@ -1,6 +1,6 @@
 # ДРАКОН-лист: analiz.bat и analiz.py — кандидаты в словари одной командой
 
-16.11.2026, Марьям. Код — `analiz.bat`, `analiz.py`, тесты — `test_analiz.py` рядом. Правила — `komanda/srez-1/postanovka.md`. Запуск из папки `ii-komanda`: `tools\analiz.bat <папка урока>`.
+16.11.2026, Марьям. Код — `analiz.bat`, `analiz.py`, тесты — `test_analiz.py` рядом. Правила — `forto-prolog/srez-1/postanovka.md`. Запуск из папки `ii-komanda`: `tools\analiz.bat <папка урока>`.
 
 ## Действия
 
@@ -100,7 +100,7 @@ python tools\ii.py analiz папка
 
 ## Тест
 
-- пример: `python tools/analiz.py citaty komanda/srez-1` → `кандидаты в порядке: 25`, код выхода 0
+- пример: `python tools/analiz.py citaty forto-prolog/srez-1` → `кандидаты в порядке: 25`, код выхода 0
 - пример: кандидат словаря «тема» с разметкой «в уроке: да», «источник: нет» → в очереди первым, с пометкой «КРИТИЧНО» (`test_analiz.py`, `test_razmetka_s_podstavnym_otvetom`)
 - контрпример: кандидат, у которого цитата изменена на одно слово → `кандидаты в порядке` (на деле — `Ц05 …: цитаты нет в файле`, код выхода 1)
 - контрпример: 12 некритичных вопросов → учителю показаны все 12 (на деле — 10, два ждут)
@@ -112,4 +112,4 @@ python tools\ii.py analiz папка
 | лист | `node tools/drakon-list.mjs tools/analiz-list.md --strogo` | 2 блока `дракон`, 2 `конспект`, ошибок нет |
 | стиль `analiz.py` | `node tools/stil-fort.cjs tools/analiz.py` | замечаний нет |
 | тесты | `python tools/test_analiz.py` и `python tools/test_ii.py` | 33 и 34 теста, все прошли |
-| `analiz.bat` | — | **не запускался: у Марьям нет Windows.** Собран из слов `test-zapusk.bat`; первый запуск — проба на `komanda\srez-1` |
+| `analiz.bat` | — | **не запускался: у Марьям нет Windows.** Собран из слов `test-zapusk.bat`; первый запуск — проба на `forto-prolog\srez-1` |

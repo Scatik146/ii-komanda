@@ -3,7 +3,7 @@ chcp 65001 >nul
 rem analiz: кандидаты в словари одной командой — отправить материалы урока, разметить другой моделью, спросить учителя, отправить итог
 rem   из папки ii-komanda:  tools\analiz.bat <папка урока>
 rem   пример:               tools\analiz.bat ..\teacher-workpad\chernoviki\9-rech
-rem   проба на опросе 16.11: tools\analiz.bat komanda\srez-1
+rem   проба на опросе 16.11: tools\analiz.bat forto-prolog\srez-1
 rem   разметчик GLM, ответ из чата файлом: tools\analiz.bat <папка урока> --podstavit otvet-glm.md --model glm
 rem Запускается дважды. Первый раз кандидатов ещё нет: материалы уходят в GitHub, дальше работает Марьям.
 rem Второй раз, когда Марьям положила кандидатов: разметка, очередь вопросов в Блокноте, отправка.
@@ -41,7 +41,7 @@ exit /b
 
 rem proverit_vhod: папка урока названа и существует
 :proverit_vhod
-if "%~1"=="" (echo Как запускать: tools\analiz.bat ^<папка урока^>, например: tools\analiz.bat komanda\srez-1& exit /b 1)
+if "%~1"=="" (echo Как запускать: tools\analiz.bat ^<папка урока^>, например: tools\analiz.bat forto-prolog\srez-1& exit /b 1)
 if not exist "%UROK%\" (echo Нет папки: %UROK%& exit /b 1)
 echo Урок: %UROK%
 exit /b 0
