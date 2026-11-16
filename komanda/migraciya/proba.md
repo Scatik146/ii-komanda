@@ -15,16 +15,15 @@
 | откуда | куда |
 |---|---|
 | drakon-graf `docs/komanda/BEZ_CLAUDE.md` | ii-komanda `komanda/BEZ_CLAUDE.md` |
-| drakon-graf `docs/komanda/BRIFING.md` | ii-komanda `komanda/BRIFING.md` |
-| drakon-graf `docs/komanda/README.md` | ii-komanda `komanda/README.md` |
-| drakon-graf `docs/komanda/SOSTOYANIE.md` | ii-komanda `komanda/SOSTOYANIE.md` |
-| drakon-graf `docs/komanda/STORONNIE.md` | drakon-graf `docs/STORONNIE.md` |
 | drakon-graf `docs/komanda/brifing/2026-11-15-noch-itog.md` | ii-komanda `komanda/brifing/2026-11-15-noch-itog.md` |
 | drakon-graf `docs/komanda/brifing/2026-11-15-noch-krug-2.md` | ii-komanda `komanda/brifing/2026-11-15-noch-krug-2.md` |
 | drakon-graf `docs/komanda/brifing/2026-11-15-noch-krug-3.md` | ii-komanda `komanda/brifing/2026-11-15-noch-krug-3.md` |
 | drakon-graf `docs/komanda/brifing/2026-11-15-utro-start.md` | ii-komanda `komanda/brifing/2026-11-15-utro-start.md` |
+| drakon-graf `docs/komanda/BRIFING.md` | ii-komanda `komanda/BRIFING.md` |
 | drakon-graf `docs/komanda/drakonhub-prompt.md` | ii-komanda `prompty/drakonhub-prompt.md` |
-| drakon-graf `docs/komanda/vstavka/README.md` | ii-komanda `komanda/vstavka/README.md` |
+| drakon-graf `docs/komanda/README.md` | ii-komanda `komanda/README.md` |
+| drakon-graf `docs/komanda/SOSTOYANIE.md` | ii-komanda `komanda/SOSTOYANIE.md` |
+| drakon-graf `docs/komanda/STORONNIE.md` | drakon-graf `docs/STORONNIE.md` |
 | drakon-graf `docs/komanda/vstavka/alisa-koordinator.md` | ii-komanda `prompty/roli/alisa-koordinator.md` |
 | drakon-graf `docs/komanda/vstavka/claude/01-brifing.md` | ii-komanda `komanda/vstavka/claude/01-brifing.md` |
 | drakon-graf `docs/komanda/vstavka/claude/02-rabochij-chat.md` | ii-komanda `komanda/vstavka/claude/02-rabochij-chat.md` |
@@ -65,13 +64,14 @@
 | drakon-graf `docs/komanda/vstavka/den/2026-11-16/04-claude-migraciya-zadanie.md` | ii-komanda `komanda/vstavka/den/2026-11-16/04-claude-migraciya-zadanie.md` |
 | drakon-graf `docs/komanda/vstavka/glm-recenzent.md` | ii-komanda `prompty/roli/glm-recenzent.md` |
 | drakon-graf `docs/komanda/vstavka/qwen-kontent.md` | ii-komanda `prompty/roli/qwen-kontent.md` |
+| drakon-graf `docs/komanda/vstavka/README.md` | ii-komanda `komanda/vstavka/README.md` |
+| teacher-workpad `docs/komanda/drakon-zapis.md` | teacher-workpad `lib/drakon-shema/drakon-zapis.md` |
 | teacher-workpad `docs/komanda/KOD-PO-FORTOVSKI.md` | ii-komanda `pravila/KOD-PO-FORTOVSKI.md` |
 | teacher-workpad `docs/komanda/KOD-PO-GRAFOVSKI.md` | ii-komanda `pravila/KOD-PO-GRAFOVSKI.md` |
 | teacher-workpad `docs/komanda/KOD-PO-PROLOGOVSKI.md` | ii-komanda `pravila/KOD-PO-PROLOGOVSKI.md` |
+| teacher-workpad `docs/komanda/primery/drakon-list-evklid.md` | ii-komanda `pravila/primery/drakon-list-evklid.md` |
 | teacher-workpad `docs/komanda/README.md` | ii-komanda `komanda/VHOD-UROKI.md` |
 | teacher-workpad `docs/komanda/TRI-STILYA-ODNIM-TEKSTOM.md` | ii-komanda `pravila/TRI-STILYA-ODNIM-TEKSTOM.md` |
-| teacher-workpad `docs/komanda/drakon-zapis.md` | teacher-workpad `lib/drakon-shema/drakon-zapis.md` |
-| teacher-workpad `docs/komanda/primery/drakon-list-evklid.md` | ii-komanda `pravila/primery/drakon-list-evklid.md` |
 | teacher-workpad `docs/komanda/zadaniya/001-shag-cikla.md` | ii-komanda `komanda/zadaniya/001-shag-cikla.md` |
 | teacher-workpad `docs/komanda/zadaniya/002-formuly.md` | ii-komanda `komanda/zadaniya/002-formuly.md` |
 | teacher-workpad `docs/komanda/zadaniya/003-uchitel-posle-uroka.html` | ii-komanda `komanda/zadaniya/003-uchitel-posle-uroka.html` |
@@ -96,8 +96,6 @@
 | teacher-workpad `docs/komanda/zadaniya/016-blok2-sereznoe.md` | ii-komanda `komanda/zadaniya/016-blok2-sereznoe.md` |
 | teacher-workpad `docs/komanda/zadaniya/017-blok3-prostoe.md` | ii-komanda `komanda/zadaniya/017-blok3-prostoe.md` |
 | teacher-workpad `docs/komanda/zadaniya/018-blok3-sereznoe.md` | ii-komanda `komanda/zadaniya/018-blok3-sereznoe.md` |
-| teacher-workpad `docs/komanda/zadaniya/SHABLON.md` | ii-komanda `komanda/zadaniya/SHABLON.md` |
-| teacher-workpad `docs/komanda/zadaniya/TESTY-NAVYKA.md` | ii-komanda `komanda/zadaniya/TESTY-NAVYKA.md` |
 | teacher-workpad `docs/komanda/zadaniya/proverki/009-dezhurstvo.cjs` | ii-komanda `komanda/zadaniya/proverki/009-dezhurstvo.cjs` |
 | teacher-workpad `docs/komanda/zadaniya/proverki/009-vybor.cjs` | ii-komanda `komanda/zadaniya/proverki/009-vybor.cjs` |
 | teacher-workpad `docs/komanda/zadaniya/proverki/011-parol.cjs` | ii-komanda `komanda/zadaniya/proverki/011-parol.cjs` |
@@ -134,22 +132,23 @@
 | teacher-workpad `docs/komanda/zadaniya/proverki/obrazcy/chernovik-forth-luna.fs` | ii-komanda `komanda/zadaniya/proverki/obrazcy/chernovik-forth-luna.fs` |
 | teacher-workpad `docs/komanda/zadaniya/proverki/obrazcy/chernovik-znaniya-propusk.txt` | ii-komanda `komanda/zadaniya/proverki/obrazcy/chernovik-znaniya-propusk.txt` |
 | teacher-workpad `docs/komanda/zadaniya/proverki/stil-fort.cjs` | ii-komanda `komanda/zadaniya/proverki/stil-fort.cjs` |
+| teacher-workpad `docs/komanda/zadaniya/SHABLON.md` | ii-komanda `komanda/zadaniya/SHABLON.md` |
+| teacher-workpad `docs/komanda/zadaniya/TESTY-NAVYKA.md` | ii-komanda `komanda/zadaniya/TESTY-NAVYKA.md` |
 
 ## Указатели и файлы с заменой
 
 | файл | куда |
 |---|---|
 | drakon-graf `docs/komanda/BEZ_CLAUDE.md` | ii-komanda/komanda/BEZ_CLAUDE.md |
-| drakon-graf `docs/komanda/BRIFING.md` | ii-komanda/komanda/BRIFING.md |
-| drakon-graf `docs/komanda/README.md` | ii-komanda/komanda/README.md |
-| drakon-graf `docs/komanda/SOSTOYANIE.md` | ii-komanda/komanda/SOSTOYANIE.md |
-| drakon-graf `docs/komanda/STORONNIE.md` | drakon-graf/docs/STORONNIE.md |
 | drakon-graf `docs/komanda/brifing/2026-11-15-noch-itog.md` | ii-komanda/komanda/brifing/2026-11-15-noch-itog.md |
 | drakon-graf `docs/komanda/brifing/2026-11-15-noch-krug-2.md` | ii-komanda/komanda/brifing/2026-11-15-noch-krug-2.md |
 | drakon-graf `docs/komanda/brifing/2026-11-15-noch-krug-3.md` | ii-komanda/komanda/brifing/2026-11-15-noch-krug-3.md |
 | drakon-graf `docs/komanda/brifing/2026-11-15-utro-start.md` | ii-komanda/komanda/brifing/2026-11-15-utro-start.md |
+| drakon-graf `docs/komanda/BRIFING.md` | ii-komanda/komanda/BRIFING.md |
 | drakon-graf `docs/komanda/drakonhub-prompt.md` | ii-komanda/prompty/drakonhub-prompt.md |
-| drakon-graf `docs/komanda/vstavka/README.md` | ii-komanda/komanda/vstavka/README.md |
+| drakon-graf `docs/komanda/README.md` | ii-komanda/komanda/README.md |
+| drakon-graf `docs/komanda/SOSTOYANIE.md` | ii-komanda/komanda/SOSTOYANIE.md |
+| drakon-graf `docs/komanda/STORONNIE.md` | drakon-graf/docs/STORONNIE.md |
 | drakon-graf `docs/komanda/vstavka/alisa-koordinator.md` | ii-komanda/prompty/roli/alisa-koordinator.md |
 | drakon-graf `docs/komanda/vstavka/claude/01-brifing.md` | ii-komanda/komanda/vstavka/claude/01-brifing.md |
 | drakon-graf `docs/komanda/vstavka/claude/02-rabochij-chat.md` | ii-komanda/komanda/vstavka/claude/02-rabochij-chat.md |
@@ -190,12 +189,11 @@
 | drakon-graf `docs/komanda/vstavka/den/2026-11-16/04-claude-migraciya-zadanie.md` | ii-komanda/komanda/vstavka/den/2026-11-16/04-claude-migraciya-zadanie.md |
 | drakon-graf `docs/komanda/vstavka/glm-recenzent.md` | ii-komanda/prompty/roli/glm-recenzent.md |
 | drakon-graf `docs/komanda/vstavka/qwen-kontent.md` | ii-komanda/prompty/roli/qwen-kontent.md |
+| drakon-graf `docs/komanda/vstavka/README.md` | ii-komanda/komanda/vstavka/README.md |
+| teacher-workpad `docs/komanda/drakon-zapis.md` | teacher-workpad/lib/drakon-shema/drakon-zapis.md |
 | teacher-workpad `docs/komanda/KOD-PO-FORTOVSKI.md` | ii-komanda/pravila/KOD-PO-FORTOVSKI.md |
 | teacher-workpad `docs/komanda/KOD-PO-GRAFOVSKI.md` | ii-komanda/pravila/KOD-PO-GRAFOVSKI.md |
 | teacher-workpad `docs/komanda/KOD-PO-PROLOGOVSKI.md` | ii-komanda/pravila/KOD-PO-PROLOGOVSKI.md |
-| teacher-workpad `docs/komanda/README.md` | ii-komanda/komanda/VHOD-UROKI.md |
-| teacher-workpad `docs/komanda/TRI-STILYA-ODNIM-TEKSTOM.md` | ii-komanda/pravila/TRI-STILYA-ODNIM-TEKSTOM.md |
-| teacher-workpad `docs/komanda/drakon-zapis.md` | teacher-workpad/lib/drakon-shema/drakon-zapis.md |
 | teacher-workpad `docs/komanda/navyki/brifing.md` | ii-komanda/rezerv/navyki/brifing/SKILL.md |
 | teacher-workpad `docs/komanda/navyki/drakon-shema.md` | ii-komanda/rezerv/navyki/drakon-shema/SKILL.md |
 | teacher-workpad `docs/komanda/navyki/ekonomnaya-sessiya.md` | ii-komanda/rezerv/navyki/ekonomnaya-sessiya/SKILL.md |
@@ -204,6 +202,8 @@
 | teacher-workpad `docs/komanda/navyki/teacher-workpad-sajt.md` | ii-komanda/rezerv/navyki/teacher-workpad-sajt/SKILL.md |
 | teacher-workpad `docs/komanda/navyki/tri-stilya-koda.md` | ii-komanda/rezerv/navyki/tri-stilya-koda/SKILL.md |
 | teacher-workpad `docs/komanda/primery/drakon-list-evklid.md` | ii-komanda/pravila/primery/drakon-list-evklid.md |
+| teacher-workpad `docs/komanda/README.md` | ii-komanda/komanda/VHOD-UROKI.md |
+| teacher-workpad `docs/komanda/TRI-STILYA-ODNIM-TEKSTOM.md` | ii-komanda/pravila/TRI-STILYA-ODNIM-TEKSTOM.md |
 | teacher-workpad `docs/komanda/zadaniya/001-shag-cikla.md` | ii-komanda/komanda/zadaniya/001-shag-cikla.md |
 | teacher-workpad `docs/komanda/zadaniya/002-formuly.md` | ii-komanda/komanda/zadaniya/002-formuly.md |
 | teacher-workpad `docs/komanda/zadaniya/003-uchitel-posle-uroka.html` | ii-komanda/komanda/zadaniya/003-uchitel-posle-uroka.html |
@@ -228,8 +228,6 @@
 | teacher-workpad `docs/komanda/zadaniya/016-blok2-sereznoe.md` | ii-komanda/komanda/zadaniya/016-blok2-sereznoe.md |
 | teacher-workpad `docs/komanda/zadaniya/017-blok3-prostoe.md` | ii-komanda/komanda/zadaniya/017-blok3-prostoe.md |
 | teacher-workpad `docs/komanda/zadaniya/018-blok3-sereznoe.md` | ii-komanda/komanda/zadaniya/018-blok3-sereznoe.md |
-| teacher-workpad `docs/komanda/zadaniya/SHABLON.md` | ii-komanda/komanda/zadaniya/SHABLON.md |
-| teacher-workpad `docs/komanda/zadaniya/TESTY-NAVYKA.md` | ii-komanda/komanda/zadaniya/TESTY-NAVYKA.md |
 | teacher-workpad `docs/komanda/zadaniya/proverki/009-dezhurstvo.cjs` | ii-komanda/komanda/zadaniya/proverki/009-dezhurstvo.cjs |
 | teacher-workpad `docs/komanda/zadaniya/proverki/009-vybor.cjs` | ii-komanda/komanda/zadaniya/proverki/009-vybor.cjs |
 | teacher-workpad `docs/komanda/zadaniya/proverki/011-parol.cjs` | ii-komanda/komanda/zadaniya/proverki/011-parol.cjs |
@@ -266,6 +264,8 @@
 | teacher-workpad `docs/komanda/zadaniya/proverki/obrazcy/chernovik-forth-luna.fs` | ii-komanda/komanda/zadaniya/proverki/obrazcy/chernovik-forth-luna.fs |
 | teacher-workpad `docs/komanda/zadaniya/proverki/obrazcy/chernovik-znaniya-propusk.txt` | ii-komanda/komanda/zadaniya/proverki/obrazcy/chernovik-znaniya-propusk.txt |
 | teacher-workpad `docs/komanda/zadaniya/proverki/stil-fort.cjs` | ii-komanda/komanda/zadaniya/proverki/stil-fort.cjs |
+| teacher-workpad `docs/komanda/zadaniya/SHABLON.md` | ii-komanda/komanda/zadaniya/SHABLON.md |
+| teacher-workpad `docs/komanda/zadaniya/TESTY-NAVYKA.md` | ii-komanda/komanda/zadaniya/TESTY-NAVYKA.md |
 | ii-komanda `algoritm/v9.md` | новые пути |
 | ii-komanda `ii-py/START-0.2.md` | новые пути |
 | ii-komanda `komnata/README.md` | новые пути |
@@ -277,13 +277,13 @@
 | ii-komanda `tools/test-zapusk-list.md` | новые пути |
 | ii-komanda `tools/test-zapusk.bat` | новые пути |
 | ii-komanda `tools/test_koda.py` | новые пути |
+| drakon-graf `docs/литература.md` | новые пути |
 | drakon-graf `NOTICE` | новые пути |
 | drakon-graf `README.md` | новые пути |
-| drakon-graf `docs/литература.md` | новые пути |
 | drakon-graf `site/experiments/forth/README.md` | новые пути |
 | teacher-workpad `.github/workflows/proverka.yml` | новые пути |
-| teacher-workpad `CLAUDE.md` | новые пути |
 | teacher-workpad `chernoviki/OPIS.md` | новые пути |
+| teacher-workpad `CLAUDE.md` | новые пути |
 | teacher-workpad `lib/drakon-shema/zapis.js` | новые пути |
 | teacher-workpad `lib/drakongen/README.md` | новые пути |
 | teacher-workpad `plan/README.md` | новые пути |
@@ -314,10 +314,6 @@
 - ii-komanda `tools/test_koda.py`:290 — `(tw / NAVYK)` → `(KOREN / NAVYK)`
 - ii-komanda `tools/test_koda.py`:291 — `(tw / NAVYK)` → `(KOREN / NAVYK)`
 - ii-komanda `tools/test_koda.py`:291 — ` — склонируйте teacher-workpad рядом или укажите --tw"` → `"`
-- drakon-graf `NOTICE`:43 — `docs/komanda/STORONNIE.md.` → `docs/STORONNIE.md.`
-- drakon-graf `README.md`:47 — `docs/komanda/README.md` → `https://github.com/Scatik146/ii-komanda/blob/main/komanda/README.md`
-- drakon-graf `README.md`:110 — `docs/komanda/STORONNIE.md` → `docs/STORONNIE.md`
-- drakon-graf `README.md`:110 — `docs/komanda/STORONNIE.md` → `docs/STORONNIE.md`
 - drakon-graf `docs/komanda/BRIFING.md`:13 — `docs/komanda/vstavka/den/` → `komanda/vstavka/den/`
 - drakon-graf `docs/komanda/BRIFING.md`:13 — `docs/komanda/BRIFING.md` → `komanda/BRIFING.md`
 - drakon-graf `docs/komanda/BRIFING.md`:13 — `docs/komanda/SOSTOYANIE.md` → `komanda/SOSTOYANIE.md`
@@ -342,8 +338,15 @@
 - drakon-graf `docs/komanda/vstavka/claude/02-rabochij-chat.md`:1 — `docs/komanda/SOSTOYANIE.md` → `komanda/SOSTOYANIE.md`
 - drakon-graf `docs/komanda/vstavka/deepseek.md`:2 — `docs/komanda/zadaniya/NNN-` → `komanda/zadaniya/NNN-`
 - drakon-graf `docs/литература.md`:121 — `docs/komanda/drakonhub-prompt.md` → `ii-komanda/prompty/drakonhub-prompt.md`
+- drakon-graf `NOTICE`:43 — `docs/komanda/STORONNIE.md.` → `docs/STORONNIE.md.`
+- drakon-graf `README.md`:47 — `docs/komanda/README.md` → `https://github.com/Scatik146/ii-komanda/blob/main/komanda/README.md`
+- drakon-graf `README.md`:110 — `docs/komanda/STORONNIE.md` → `docs/STORONNIE.md`
+- drakon-graf `README.md`:110 — `docs/komanda/STORONNIE.md` → `docs/STORONNIE.md`
 - drakon-graf `site/experiments/forth/README.md`:5 — `docs/komanda/README.md` → `ii-komanda/komanda/README.md`
 - teacher-workpad `.github/workflows/proverka.yml`:25 — `docs/komanda/drakon-zapis.md` → `lib/drakon-shema/drakon-zapis.md`
+- teacher-workpad `chernoviki/OPIS.md`:43 — `docs/komanda/zadaniya/003-uchitel-posle-uroka.md` → `ii-komanda/komanda/zadaniya/003-uchitel-posle-uroka.md`
+- teacher-workpad `chernoviki/OPIS.md`:58 — `docs/komanda/zadaniya/003-uchitel-posle-uroka.html` → `ii-komanda/komanda/zadaniya/003-uchitel-posle-uroka.html`
+- teacher-workpad `chernoviki/OPIS.md`:111 — `drakon-graf `docs/komanda/SOSTOYANIE.md` → `ii-komanda `komanda/SOSTOYANIE.md`
 - teacher-workpad `CLAUDE.md`:7 — `docs/komanda/navyki/` → `ii-komanda/rezerv/navyki/`
 - teacher-workpad `CLAUDE.md`:7 — `docs/komanda/README.md` → `ii-komanda/komanda/VHOD-UROKI.md`
 - teacher-workpad `CLAUDE.md`:11 — `docs/komanda/KOD-PO-FORTOVSKI.md` → `ii-komanda/pravila/KOD-PO-FORTOVSKI.md`
@@ -351,28 +354,25 @@
 - teacher-workpad `CLAUDE.md`:12 — `docs/komanda/KOD-PO-PROLOGOVSKI.md` → `ii-komanda/pravila/KOD-PO-PROLOGOVSKI.md`
 - teacher-workpad `CLAUDE.md`:13 — `docs/komanda/navyki/tri-stilya-koda.md` → `ii-komanda/rezerv/navyki/tri-stilya-koda/SKILL.md`
 - teacher-workpad `CLAUDE.md`:13 — `docs/komanda/primery/drakon-list-evklid.md` → `ii-komanda/pravila/primery/drakon-list-evklid.md`
-- teacher-workpad `chernoviki/OPIS.md`:43 — `docs/komanda/zadaniya/003-uchitel-posle-uroka.md` → `ii-komanda/komanda/zadaniya/003-uchitel-posle-uroka.md`
-- teacher-workpad `chernoviki/OPIS.md`:58 — `docs/komanda/zadaniya/003-uchitel-posle-uroka.html` → `ii-komanda/komanda/zadaniya/003-uchitel-posle-uroka.html`
-- teacher-workpad `chernoviki/OPIS.md`:111 — `drakon-graf `docs/komanda/SOSTOYANIE.md` → `ii-komanda `komanda/SOSTOYANIE.md`
 - teacher-workpad `docs/komanda/KOD-PO-GRAFOVSKI.md`:3 — `drakon-graf `docs/komanda/README.md` → `ii-komanda `komanda/README.md`
 - teacher-workpad `docs/komanda/KOD-PO-GRAFOVSKI.md`:47 — `docs/komanda/primery/drakon-list-evklid.md` → `pravila/primery/drakon-list-evklid.md`
 - teacher-workpad `docs/komanda/KOD-PO-PROLOGOVSKI.md`:3 — `drakon-graf `docs/komanda/README.md` → `ii-komanda `komanda/README.md`
+- teacher-workpad `docs/komanda/primery/drakon-list-evklid.md`:38 — `docs/komanda/primery/drakon-list-evklid.md` → `pravila/primery/drakon-list-evklid.md`
 - teacher-workpad `docs/komanda/README.md`:28 — `drakon-graf `docs/komanda/BEZ_CLAUDE.md` → `ii-komanda `komanda/BEZ_CLAUDE.md`
 - teacher-workpad `docs/komanda/README.md`:45 — `docs/komanda/README.md` → `komanda/README.md`
 - teacher-workpad `docs/komanda/TRI-STILYA-ODNIM-TEKSTOM.md`:4 — `teacher-workpad `docs/komanda/`:` → `ii-komanda `pravila/`:`
 - teacher-workpad `docs/komanda/TRI-STILYA-ODNIM-TEKSTOM.md`:4 — `drakon-graf `docs/komanda/README.md` → `ii-komanda `komanda/README.md`
 - teacher-workpad `docs/komanda/TRI-STILYA-ODNIM-TEKSTOM.md`:49 — `teacher-workpad `docs/komanda/drakon-zapis.md` → `teacher-workpad `lib/drakon-shema/drakon-zapis.md`
 - teacher-workpad `docs/komanda/TRI-STILYA-ODNIM-TEKSTOM.md`:53 — `teacher-workpad `docs/komanda/primery/drakon-list-evklid.md` → `ii-komanda `pravila/primery/drakon-list-evklid.md`
-- teacher-workpad `docs/komanda/primery/drakon-list-evklid.md`:38 — `docs/komanda/primery/drakon-list-evklid.md` → `pravila/primery/drakon-list-evklid.md`
-- teacher-workpad `docs/komanda/zadaniya/SHABLON.md`:9 — `docs/komanda/README.md` → `komanda/VHOD-UROKI.md`
-- teacher-workpad `docs/komanda/zadaniya/SHABLON.md`:21 — `docs/komanda/KOD-PO-FORTOVSKI.md` → `pravila/KOD-PO-FORTOVSKI.md`
-- teacher-workpad `docs/komanda/zadaniya/TESTY-NAVYKA.md`:3 — `drakon-graf `docs/komanda/README.md` → `ii-komanda `komanda/README.md`
 - teacher-workpad `docs/komanda/zadaniya/proverki/011-parol.cjs`:11 — `'../../../../tools/drakon-list.mjs'` → `'../../../../teacher-workpad/tools/drakon-list.mjs'`
 - teacher-workpad `docs/komanda/zadaniya/proverki/012-chislo-r.cjs`:12 — `'../../../../tools/drakon-list.mjs'` → `'../../../../teacher-workpad/tools/drakon-list.mjs'`
 - teacher-workpad `docs/komanda/zadaniya/proverki/015-kruzhok.cjs`:150 — `'../../../../../drakon-graf'` → `'../../../../drakon-graf'`
 - teacher-workpad `docs/komanda/zadaniya/proverki/016-peredacha.cjs`:170 — `'../../../../../drakon-graf'` → `'../../../../drakon-graf'`
 - teacher-workpad `docs/komanda/zadaniya/proverki/017-propusk.cjs`:156 — `'../../../../../drakon-graf'` → `'../../../../drakon-graf'`
 - teacher-workpad `docs/komanda/zadaniya/proverki/018-zhurnal.cjs`:228 — `'../../../../../drakon-graf'` → `'../../../../drakon-graf'`
+- teacher-workpad `docs/komanda/zadaniya/SHABLON.md`:9 — `docs/komanda/README.md` → `komanda/VHOD-UROKI.md`
+- teacher-workpad `docs/komanda/zadaniya/SHABLON.md`:21 — `docs/komanda/KOD-PO-FORTOVSKI.md` → `pravila/KOD-PO-FORTOVSKI.md`
+- teacher-workpad `docs/komanda/zadaniya/TESTY-NAVYKA.md`:3 — `drakon-graf `docs/komanda/README.md` → `ii-komanda `komanda/README.md`
 - teacher-workpad `lib/drakon-shema/zapis.js`:4 — `docs/komanda/drakon-zapis.md` → `lib/drakon-shema/drakon-zapis.md`
 - teacher-workpad `lib/drakongen/README.md`:28 — `docs/komanda/drakonhub-prompt.md` → `ii-komanda/prompty/drakonhub-prompt.md`
 - teacher-workpad `plan/README.md`:5 — `docs/komanda/zadaniya/003-uchitel-posle-uroka.html` → `ii-komanda/komanda/zadaniya/003-uchitel-posle-uroka.html`

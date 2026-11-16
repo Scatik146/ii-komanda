@@ -1,6 +1,6 @@
 # Qwen — проект «Команда: исполнитель», поле Instruction (14.11.2026)
 
-Файлы проекта: `teacher-workpad/docs/komanda/zadaniya/SHABLON.md`, `drakon-graf/docs/drakon/текстовая_запись.md`.
+Файлы проекта: `ii-komanda/komanda/zadaniya/SHABLON.md`, `drakon-graf/docs/drakon/текстовая_запись.md`.
 
 ---
 

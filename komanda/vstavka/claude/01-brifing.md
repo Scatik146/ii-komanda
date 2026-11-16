@@ -1,0 +1,2 @@
+<!-- перенесено из drakon-graf@df52353 docs/komanda/vstavka/claude/01-brifing.md -->
+Брифинг. Прочитай в репозитории Scatik146/drakon-graf три файла: `komanda/SOSTOYANIE.md`, `komanda/BRIFING.md` (последняя запись) и оглавление `docs/project/ТЗ_Живой_учебник.md`. Остальное — только по запросу. Работаем по навыку «экономная сессия». В конце брифинга допиши запись в `BRIFING.md`, обнови `SOSTOYANIE.md` и положи стартовые сообщения задач файлами в `komanda/vstavka/den/<дата>/`.

@@ -44,7 +44,7 @@ git add testy
 ```конспект
 тема: Где что лежит
 связка: файл | папка
-задание -> zadaniya/<номер>-….md | teacher-workpad/docs/komanda/
+задание -> zadaniya/<номер>-….md | ii-komanda/komanda/
 ответ GLM -> otvet-glm.md | ii-komanda/
 итог -> itog.md | ii-komanda/testy/<задание>/<модель>/
 ```

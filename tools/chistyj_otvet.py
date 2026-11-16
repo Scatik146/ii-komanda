@@ -1,6 +1,6 @@
 # chistyj_otvet.py: ответ модели без следов копирования из чата — печатает испорченные строки
 #   python tools/chistyj_otvet.py otvet-glm.md      код выхода 0 — чисто, 1 — следы есть
-# Код по-фортовски (teacher-workpad docs/komanda/KOD-PO-FORTOVSKI.md); ДРАКОН-лист — test-zapusk-list.md.
+# Код по-фортовски (ii-komanda pravila/KOD-PO-FORTOVSKI.md); ДРАКОН-лист — test-zapusk-list.md.
 import sys
 
 # Данные. Следы копирования (в 009 у GLM): пробел-сущность и экранированная скобка.

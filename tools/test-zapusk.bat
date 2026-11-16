@@ -18,7 +18,7 @@ set "TEST_ZAPUSK_KOPIYA=" & setlocal & set "TOOLS=%TEST_ZAPUSK_KOPIYA%"
 rem Данные. Папки и файлы (teacher-workpad — рядом с ii-komanda).
 for %%p in ("%TOOLS%..") do set "II=%%~fp"
 for %%p in ("%TOOLS%..\..\teacher-workpad") do set "TW=%%~fp"
-set "ZADANIYA=%TW%\docs\komanda\zadaniya"
+set "ZADANIYA=%II%\komanda\zadaniya"
 set "OTVET_GLM=%II%\otvet-glm.md"
 set "MODEL=%~2"
 

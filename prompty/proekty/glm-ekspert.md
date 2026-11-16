@@ -1,6 +1,6 @@
 # GLM — проект «Команда: эксперт», поле Instruction (14.11.2026)
 
-Файлы проекта: `teacher-workpad/docs/komanda/zadaniya/SHABLON.md`.
+Файлы проекта: `ii-komanda/komanda/zadaniya/SHABLON.md`.
 
 ---
 

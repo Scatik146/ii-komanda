@@ -30,7 +30,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 import ii  # noqa: E402  — словарь проверенных слов: ключи, модели, вызов
 
 KOREN = ii.KOREN
-NAVYK = "docs/komanda/TRI-STILYA-ODNIM-TEKSTOM.md"
+NAVYK = "pravila/TRI-STILYA-ODNIM-TEKSTOM.md"
 KRUGOV = 2
 OGRADA = re.compile(r"^\s*(`{3,}|~{3,})(.*)$")
 IMYA_FAJLA = re.compile(r"[A-Za-zА-Яа-яЁё0-9_-]+\.[A-Za-z0-9]+")
@@ -197,7 +197,7 @@ def proverit_rukami(zadanie, puti, bez_ruk):
 
 # промптЗадания: навык «одним текстом» и текст задания
 def prompt_zadaniya(zadanie, tw):
-    navyk = (tw / NAVYK).read_text(encoding="utf-8")
+    navyk = (KOREN / NAVYK).read_text(encoding="utf-8")
     return ("НАВЫК КОМАНДЫ (прочитай целиком):\n\n" + navyk + "\n\n=== ЗАДАНИЕ ===\n\n" + zadanie
             + "\n\nКаждый файл — целиком, в своём блоке кода; строкой выше — имя файла. "
               "Файл .md, внутри которого есть блоки ```, оберни в ограду из четырёх обратных кавычек.")
@@ -287,8 +287,8 @@ def nastrojki_progona(arg, modeli):
     zadanie = Path(arg.zadanie)
     tw = Path(arg.tw) if arg.tw else KOREN.parent / "teacher-workpad"
     dg = Path(arg.dg) if arg.dg else KOREN.parent / "drakon-graf"
-    if not (tw / NAVYK).exists():
-        raise ii.Oshibka("не найден навык: %s — склонируйте teacher-workpad рядом или укажите --tw" % (tw / NAVYK))
+    if not (KOREN / NAVYK).exists():
+        raise ii.Oshibka("не найден навык: %s" % (KOREN / NAVYK))
     if arg.model not in modeli["modeli"]:
         raise ii.Oshibka("нет модели %s в modeli.json" % arg.model)
     return {"zadanie": zadanie.read_text(encoding="utf-8"), "imya_zadaniya": zadanie.stem, "model": arg.model,

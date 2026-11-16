@@ -1,0 +1,1837 @@
+[
+ {
+  "vid": "zamena",
+  "repo": "ii-komanda",
+  "put": "algoritm/v9.md"
+ },
+ {
+  "vid": "zamena",
+  "repo": "ii-komanda",
+  "put": "ii-py/START-0.2.md"
+ },
+ {
+  "vid": "zamena",
+  "repo": "ii-komanda",
+  "put": "komnata/README.md"
+ },
+ {
+  "vid": "zamena",
+  "repo": "ii-komanda",
+  "put": "prompty/proekty/glm-ekspert.md"
+ },
+ {
+  "vid": "zamena",
+  "repo": "ii-komanda",
+  "put": "prompty/proekty/qwen-ispolnitel.md"
+ },
+ {
+  "vid": "zamena",
+  "repo": "ii-komanda",
+  "put": "rezerv/README.md"
+ },
+ {
+  "vid": "zamena",
+  "repo": "ii-komanda",
+  "put": "tools/chistyj_otvet.py"
+ },
+ {
+  "vid": "zamena",
+  "repo": "ii-komanda",
+  "put": "tools/primer/ii-ib-7-fishing/rezultat-2026-11-15/README.md"
+ },
+ {
+  "vid": "zamena",
+  "repo": "ii-komanda",
+  "put": "tools/test-zapusk-list.md"
+ },
+ {
+  "vid": "zamena",
+  "repo": "ii-komanda",
+  "put": "tools/test-zapusk.bat"
+ },
+ {
+  "vid": "zamena",
+  "repo": "ii-komanda",
+  "put": "tools/test_koda.py"
+ },
+ {
+  "vid": "perenos",
+  "repo": "ii-komanda",
+  "put": "komanda/BEZ_CLAUDE.md",
+  "otkuda": [
+   "drakon-graf",
+   "docs/komanda/BEZ_CLAUDE.md"
+  ]
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "drakon-graf",
+  "put": "docs/komanda/BEZ_CLAUDE.md"
+ },
+ {
+  "vid": "perenos",
+  "repo": "ii-komanda",
+  "put": "komanda/brifing/2026-11-15-noch-itog.md",
+  "otkuda": [
+   "drakon-graf",
+   "docs/komanda/brifing/2026-11-15-noch-itog.md"
+  ]
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "drakon-graf",
+  "put": "docs/komanda/brifing/2026-11-15-noch-itog.md"
+ },
+ {
+  "vid": "perenos",
+  "repo": "ii-komanda",
+  "put": "komanda/brifing/2026-11-15-noch-krug-2.md",
+  "otkuda": [
+   "drakon-graf",
+   "docs/komanda/brifing/2026-11-15-noch-krug-2.md"
+  ]
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "drakon-graf",
+  "put": "docs/komanda/brifing/2026-11-15-noch-krug-2.md"
+ },
+ {
+  "vid": "perenos",
+  "repo": "ii-komanda",
+  "put": "komanda/brifing/2026-11-15-noch-krug-3.md",
+  "otkuda": [
+   "drakon-graf",
+   "docs/komanda/brifing/2026-11-15-noch-krug-3.md"
+  ]
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "drakon-graf",
+  "put": "docs/komanda/brifing/2026-11-15-noch-krug-3.md"
+ },
+ {
+  "vid": "perenos",
+  "repo": "ii-komanda",
+  "put": "komanda/brifing/2026-11-15-utro-start.md",
+  "otkuda": [
+   "drakon-graf",
+   "docs/komanda/brifing/2026-11-15-utro-start.md"
+  ]
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "drakon-graf",
+  "put": "docs/komanda/brifing/2026-11-15-utro-start.md"
+ },
+ {
+  "vid": "perenos",
+  "repo": "ii-komanda",
+  "put": "komanda/BRIFING.md",
+  "otkuda": [
+   "drakon-graf",
+   "docs/komanda/BRIFING.md"
+  ]
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "drakon-graf",
+  "put": "docs/komanda/BRIFING.md"
+ },
+ {
+  "vid": "perenos",
+  "repo": "ii-komanda",
+  "put": "prompty/drakonhub-prompt.md",
+  "otkuda": [
+   "drakon-graf",
+   "docs/komanda/drakonhub-prompt.md"
+  ]
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "drakon-graf",
+  "put": "docs/komanda/drakonhub-prompt.md"
+ },
+ {
+  "vid": "perenos",
+  "repo": "ii-komanda",
+  "put": "komanda/README.md",
+  "otkuda": [
+   "drakon-graf",
+   "docs/komanda/README.md"
+  ]
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "drakon-graf",
+  "put": "docs/komanda/README.md"
+ },
+ {
+  "vid": "perenos",
+  "repo": "ii-komanda",
+  "put": "komanda/SOSTOYANIE.md",
+  "otkuda": [
+   "drakon-graf",
+   "docs/komanda/SOSTOYANIE.md"
+  ]
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "drakon-graf",
+  "put": "docs/komanda/SOSTOYANIE.md"
+ },
+ {
+  "vid": "perenos",
+  "repo": "drakon-graf",
+  "put": "docs/STORONNIE.md",
+  "otkuda": [
+   "drakon-graf",
+   "docs/komanda/STORONNIE.md"
+  ]
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "drakon-graf",
+  "put": "docs/komanda/STORONNIE.md"
+ },
+ {
+  "vid": "perenos",
+  "repo": "ii-komanda",
+  "put": "prompty/roli/alisa-koordinator.md",
+  "otkuda": [
+   "drakon-graf",
+   "docs/komanda/vstavka/alisa-koordinator.md"
+  ]
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "drakon-graf",
+  "put": "docs/komanda/vstavka/alisa-koordinator.md"
+ },
+ {
+  "vid": "perenos",
+  "repo": "ii-komanda",
+  "put": "komanda/vstavka/claude/01-brifing.md",
+  "otkuda": [
+   "drakon-graf",
+   "docs/komanda/vstavka/claude/01-brifing.md"
+  ]
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "drakon-graf",
+  "put": "docs/komanda/vstavka/claude/01-brifing.md"
+ },
+ {
+  "vid": "perenos",
+  "repo": "ii-komanda",
+  "put": "komanda/vstavka/claude/02-rabochij-chat.md",
+  "otkuda": [
+   "drakon-graf",
+   "docs/komanda/vstavka/claude/02-rabochij-chat.md"
+  ]
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "drakon-graf",
+  "put": "docs/komanda/vstavka/claude/02-rabochij-chat.md"
+ },
+ {
+  "vid": "perenos",
+  "repo": "ii-komanda",
+  "put": "prompty/roli/deepseek.md",
+  "otkuda": [
+   "drakon-graf",
+   "docs/komanda/vstavka/deepseek.md"
+  ]
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "drakon-graf",
+  "put": "docs/komanda/vstavka/deepseek.md"
+ },
+ {
+  "vid": "perenos",
+  "repo": "ii-komanda",
+  "put": "komanda/vstavka/den/2026-11-13/0-alisa-start.md",
+  "otkuda": [
+   "drakon-graf",
+   "docs/komanda/vstavka/den/2026-11-13/0-alisa-start.md"
+  ]
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "drakon-graf",
+  "put": "docs/komanda/vstavka/den/2026-11-13/0-alisa-start.md"
+ },
+ {
+  "vid": "perenos",
+  "repo": "ii-komanda",
+  "put": "komanda/vstavka/den/2026-11-13/1-claude-zapis-drakon.md",
+  "otkuda": [
+   "drakon-graf",
+   "docs/komanda/vstavka/den/2026-11-13/1-claude-zapis-drakon.md"
+  ]
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "drakon-graf",
+  "put": "docs/komanda/vstavka/den/2026-11-13/1-claude-zapis-drakon.md"
+ },
+ {
+  "vid": "perenos",
+  "repo": "ii-komanda",
+  "put": "komanda/vstavka/den/2026-11-13/2-claude-tz.md",
+  "otkuda": [
+   "drakon-graf",
+   "docs/komanda/vstavka/den/2026-11-13/2-claude-tz.md"
+  ]
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "drakon-graf",
+  "put": "docs/komanda/vstavka/den/2026-11-13/2-claude-tz.md"
+ },
+ {
+  "vid": "perenos",
+  "repo": "ii-komanda",
+  "put": "komanda/vstavka/den/2026-11-13/3-claude-zadanie-formuly.md",
+  "otkuda": [
+   "drakon-graf",
+   "docs/komanda/vstavka/den/2026-11-13/3-claude-zadanie-formuly.md"
+  ]
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "drakon-graf",
+  "put": "docs/komanda/vstavka/den/2026-11-13/3-claude-zadanie-formuly.md"
+ },
+ {
+  "vid": "perenos",
+  "repo": "ii-komanda",
+  "put": "komanda/vstavka/den/2026-11-13/4-claude-avtomatizaciya.md",
+  "otkuda": [
+   "drakon-graf",
+   "docs/komanda/vstavka/den/2026-11-13/4-claude-avtomatizaciya.md"
+  ]
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "drakon-graf",
+  "put": "docs/komanda/vstavka/den/2026-11-13/4-claude-avtomatizaciya.md"
+ },
+ {
+  "vid": "perenos",
+  "repo": "ii-komanda",
+  "put": "komanda/vstavka/den/2026-11-13/5-claude-perenos-urokov.md",
+  "otkuda": [
+   "drakon-graf",
+   "docs/komanda/vstavka/den/2026-11-13/5-claude-perenos-urokov.md"
+  ]
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "drakon-graf",
+  "put": "docs/komanda/vstavka/den/2026-11-13/5-claude-perenos-urokov.md"
+ },
+ {
+  "vid": "perenos",
+  "repo": "ii-komanda",
+  "put": "komanda/vstavka/den/2026-11-13/6-claude-algoritm-urokov.md",
+  "otkuda": [
+   "drakon-graf",
+   "docs/komanda/vstavka/den/2026-11-13/6-claude-algoritm-urokov.md"
+  ]
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "drakon-graf",
+  "put": "docs/komanda/vstavka/den/2026-11-13/6-claude-algoritm-urokov.md"
+ },
+ {
+  "vid": "perenos",
+  "repo": "ii-komanda",
+  "put": "komanda/vstavka/den/2026-11-13/7-claude-skript-ii.md",
+  "otkuda": [
+   "drakon-graf",
+   "docs/komanda/vstavka/den/2026-11-13/7-claude-skript-ii.md"
+  ]
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "drakon-graf",
+  "put": "docs/komanda/vstavka/den/2026-11-13/7-claude-skript-ii.md"
+ },
+ {
+  "vid": "perenos",
+  "repo": "ii-komanda",
+  "put": "komanda/vstavka/den/2026-11-13/8-claude-perenos-trud-5-6.md",
+  "otkuda": [
+   "drakon-graf",
+   "docs/komanda/vstavka/den/2026-11-13/8-claude-perenos-trud-5-6.md"
+  ]
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "drakon-graf",
+  "put": "docs/komanda/vstavka/den/2026-11-13/8-claude-perenos-trud-5-6.md"
+ },
+ {
+  "vid": "perenos",
+  "repo": "ii-komanda",
+  "put": "komanda/vstavka/den/2026-11-14/00-alisa-vedenie-dnya.md",
+  "otkuda": [
+   "drakon-graf",
+   "docs/komanda/vstavka/den/2026-11-14/00-alisa-vedenie-dnya.md"
+  ]
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "drakon-graf",
+  "put": "docs/komanda/vstavka/den/2026-11-14/00-alisa-vedenie-dnya.md"
+ },
+ {
+  "vid": "perenos",
+  "repo": "ii-komanda",
+  "put": "komanda/vstavka/den/2026-11-14/00b-alisa-itog-i-ochered.md",
+  "otkuda": [
+   "drakon-graf",
+   "docs/komanda/vstavka/den/2026-11-14/00b-alisa-itog-i-ochered.md"
+  ]
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "drakon-graf",
+  "put": "docs/komanda/vstavka/den/2026-11-14/00b-alisa-itog-i-ochered.md"
+ },
+ {
+  "vid": "perenos",
+  "repo": "ii-komanda",
+  "put": "komanda/vstavka/den/2026-11-14/01-claude-opus-brifing.md",
+  "otkuda": [
+   "drakon-graf",
+   "docs/komanda/vstavka/den/2026-11-14/01-claude-opus-brifing.md"
+  ]
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "drakon-graf",
+  "put": "docs/komanda/vstavka/den/2026-11-14/01-claude-opus-brifing.md"
+ },
+ {
+  "vid": "perenos",
+  "repo": "ii-komanda",
+  "put": "komanda/vstavka/den/2026-11-14/02-claude-opus-zadanie-005.md",
+  "otkuda": [
+   "drakon-graf",
+   "docs/komanda/vstavka/den/2026-11-14/02-claude-opus-zadanie-005.md"
+  ]
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "drakon-graf",
+  "put": "docs/komanda/vstavka/den/2026-11-14/02-claude-opus-zadanie-005.md"
+ },
+ {
+  "vid": "perenos",
+  "repo": "ii-komanda",
+  "put": "komanda/vstavka/den/2026-11-14/03-claude-sonnet-zadaniya-pomoshchnikam.md",
+  "otkuda": [
+   "drakon-graf",
+   "docs/komanda/vstavka/den/2026-11-14/03-claude-sonnet-zadaniya-pomoshchnikam.md"
+  ]
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "drakon-graf",
+  "put": "docs/komanda/vstavka/den/2026-11-14/03-claude-sonnet-zadaniya-pomoshchnikam.md"
+ },
+ {
+  "vid": "perenos",
+  "repo": "ii-komanda",
+  "put": "komanda/vstavka/den/2026-11-14/04-claude-FABLE-algoritm-urokov-v9.md",
+  "otkuda": [
+   "drakon-graf",
+   "docs/komanda/vstavka/den/2026-11-14/04-claude-FABLE-algoritm-urokov-v9.md"
+  ]
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "drakon-graf",
+  "put": "docs/komanda/vstavka/den/2026-11-14/04-claude-FABLE-algoritm-urokov-v9.md"
+ },
+ {
+  "vid": "perenos",
+  "repo": "ii-komanda",
+  "put": "komanda/vstavka/den/2026-11-14/05-claude-opus-fork-skulpt.md",
+  "otkuda": [
+   "drakon-graf",
+   "docs/komanda/vstavka/den/2026-11-14/05-claude-opus-fork-skulpt.md"
+  ]
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "drakon-graf",
+  "put": "docs/komanda/vstavka/den/2026-11-14/05-claude-opus-fork-skulpt.md"
+ },
+ {
+  "vid": "perenos",
+  "repo": "ii-komanda",
+  "put": "komanda/vstavka/den/2026-11-14/06-claude-sonnet-perenos-shag-5.md",
+  "otkuda": [
+   "drakon-graf",
+   "docs/komanda/vstavka/den/2026-11-14/06-claude-sonnet-perenos-shag-5.md"
+  ]
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "drakon-graf",
+  "put": "docs/komanda/vstavka/den/2026-11-14/06-claude-sonnet-perenos-shag-5.md"
+ },
+ {
+  "vid": "perenos",
+  "repo": "ii-komanda",
+  "put": "komanda/vstavka/den/2026-11-14/07-claude-FABLE-ii-py-ustrojstvo.md",
+  "otkuda": [
+   "drakon-graf",
+   "docs/komanda/vstavka/den/2026-11-14/07-claude-FABLE-ii-py-ustrojstvo.md"
+  ]
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "drakon-graf",
+  "put": "docs/komanda/vstavka/den/2026-11-14/07-claude-FABLE-ii-py-ustrojstvo.md"
+ },
+ {
+  "vid": "perenos",
+  "repo": "ii-komanda",
+  "put": "komanda/vstavka/den/2026-11-14/08-claude-sonnet-zhivoj-konspekt.md",
+  "otkuda": [
+   "drakon-graf",
+   "docs/komanda/vstavka/den/2026-11-14/08-claude-sonnet-zhivoj-konspekt.md"
+  ]
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "drakon-graf",
+  "put": "docs/komanda/vstavka/den/2026-11-14/08-claude-sonnet-zhivoj-konspekt.md"
+ },
+ {
+  "vid": "perenos",
+  "repo": "ii-komanda",
+  "put": "komanda/vstavka/den/2026-11-14/09-claude-opus-proverka-005.md",
+  "otkuda": [
+   "drakon-graf",
+   "docs/komanda/vstavka/den/2026-11-14/09-claude-opus-proverka-005.md"
+  ]
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "drakon-graf",
+  "put": "docs/komanda/vstavka/den/2026-11-14/09-claude-opus-proverka-005.md"
+ },
+ {
+  "vid": "perenos",
+  "repo": "ii-komanda",
+  "put": "komanda/vstavka/den/2026-11-14/10-claude-opus-ikony-chat-a.md",
+  "otkuda": [
+   "drakon-graf",
+   "docs/komanda/vstavka/den/2026-11-14/10-claude-opus-ikony-chat-a.md"
+  ]
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "drakon-graf",
+  "put": "docs/komanda/vstavka/den/2026-11-14/10-claude-opus-ikony-chat-a.md"
+ },
+ {
+  "vid": "perenos",
+  "repo": "ii-komanda",
+  "put": "komanda/vstavka/den/2026-11-14/11-claude-opus-ii-py-kod.md",
+  "otkuda": [
+   "drakon-graf",
+   "docs/komanda/vstavka/den/2026-11-14/11-claude-opus-ii-py-kod.md"
+  ]
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "drakon-graf",
+  "put": "docs/komanda/vstavka/den/2026-11-14/11-claude-opus-ii-py-kod.md"
+ },
+ {
+  "vid": "perenos",
+  "repo": "ii-komanda",
+  "put": "komanda/vstavka/den/2026-11-14/12-claude-opus-proverka-ege-skulpt.md",
+  "otkuda": [
+   "drakon-graf",
+   "docs/komanda/vstavka/den/2026-11-14/12-claude-opus-proverka-ege-skulpt.md"
+  ]
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "drakon-graf",
+  "put": "docs/komanda/vstavka/den/2026-11-14/12-claude-opus-proverka-ege-skulpt.md"
+ },
+ {
+  "vid": "perenos",
+  "repo": "ii-komanda",
+  "put": "komanda/vstavka/den/2026-11-14/13-claude-haiku-itog-dnya.md",
+  "otkuda": [
+   "drakon-graf",
+   "docs/komanda/vstavka/den/2026-11-14/13-claude-haiku-itog-dnya.md"
+  ]
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "drakon-graf",
+  "put": "docs/komanda/vstavka/den/2026-11-14/13-claude-haiku-itog-dnya.md"
+ },
+ {
+  "vid": "perenos",
+  "repo": "ii-komanda",
+  "put": "komanda/vstavka/den/2026-11-15/01-claude-forth-eksperiment-1.md",
+  "otkuda": [
+   "drakon-graf",
+   "docs/komanda/vstavka/den/2026-11-15/01-claude-forth-eksperiment-1.md"
+  ]
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "drakon-graf",
+  "put": "docs/komanda/vstavka/den/2026-11-15/01-claude-forth-eksperiment-1.md"
+ },
+ {
+  "vid": "perenos",
+  "repo": "ii-komanda",
+  "put": "komanda/vstavka/den/2026-11-15/02-claude-testy-blok3.md",
+  "otkuda": [
+   "drakon-graf",
+   "docs/komanda/vstavka/den/2026-11-15/02-claude-testy-blok3.md"
+  ]
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "drakon-graf",
+  "put": "docs/komanda/vstavka/den/2026-11-15/02-claude-testy-blok3.md"
+ },
+ {
+  "vid": "perenos",
+  "repo": "ii-komanda",
+  "put": "komanda/vstavka/den/2026-11-15/03-claude-testy-blok3-sereznoe.md",
+  "otkuda": [
+   "drakon-graf",
+   "docs/komanda/vstavka/den/2026-11-15/03-claude-testy-blok3-sereznoe.md"
+  ]
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "drakon-graf",
+  "put": "docs/komanda/vstavka/den/2026-11-15/03-claude-testy-blok3-sereznoe.md"
+ },
+ {
+  "vid": "perenos",
+  "repo": "ii-komanda",
+  "put": "komanda/vstavka/den/2026-11-15/04-claude-testy-blok4.md",
+  "otkuda": [
+   "drakon-graf",
+   "docs/komanda/vstavka/den/2026-11-15/04-claude-testy-blok4.md"
+  ]
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "drakon-graf",
+  "put": "docs/komanda/vstavka/den/2026-11-15/04-claude-testy-blok4.md"
+ },
+ {
+  "vid": "perenos",
+  "repo": "ii-komanda",
+  "put": "komanda/vstavka/den/2026-11-15/05-claude-zapusk-na-modelyah.md",
+  "otkuda": [
+   "drakon-graf",
+   "docs/komanda/vstavka/den/2026-11-15/05-claude-zapusk-na-modelyah.md"
+  ]
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "drakon-graf",
+  "put": "docs/komanda/vstavka/den/2026-11-15/05-claude-zapusk-na-modelyah.md"
+ },
+ {
+  "vid": "perenos",
+  "repo": "ii-komanda",
+  "put": "komanda/vstavka/den/2026-11-15/06-claude-zapusk-na-modelyah-2.md",
+  "otkuda": [
+   "drakon-graf",
+   "docs/komanda/vstavka/den/2026-11-15/06-claude-zapusk-na-modelyah-2.md"
+  ]
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "drakon-graf",
+  "put": "docs/komanda/vstavka/den/2026-11-15/06-claude-zapusk-na-modelyah-2.md"
+ },
+ {
+  "vid": "perenos",
+  "repo": "ii-komanda",
+  "put": "komanda/vstavka/den/2026-11-16/01-claude-zapusk-na-modelyah-3.md",
+  "otkuda": [
+   "drakon-graf",
+   "docs/komanda/vstavka/den/2026-11-16/01-claude-zapusk-na-modelyah-3.md"
+  ]
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "drakon-graf",
+  "put": "docs/komanda/vstavka/den/2026-11-16/01-claude-zapusk-na-modelyah-3.md"
+ },
+ {
+  "vid": "perenos",
+  "repo": "ii-komanda",
+  "put": "komanda/vstavka/den/2026-11-16/02-claude-migraciya-1.md",
+  "otkuda": [
+   "drakon-graf",
+   "docs/komanda/vstavka/den/2026-11-16/02-claude-migraciya-1.md"
+  ]
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "drakon-graf",
+  "put": "docs/komanda/vstavka/den/2026-11-16/02-claude-migraciya-1.md"
+ },
+ {
+  "vid": "perenos",
+  "repo": "ii-komanda",
+  "put": "komanda/vstavka/den/2026-11-16/03-claude-migraciya-proba.md",
+  "otkuda": [
+   "drakon-graf",
+   "docs/komanda/vstavka/den/2026-11-16/03-claude-migraciya-proba.md"
+  ]
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "drakon-graf",
+  "put": "docs/komanda/vstavka/den/2026-11-16/03-claude-migraciya-proba.md"
+ },
+ {
+  "vid": "perenos",
+  "repo": "ii-komanda",
+  "put": "komanda/vstavka/den/2026-11-16/04-claude-migraciya-zadanie.md",
+  "otkuda": [
+   "drakon-graf",
+   "docs/komanda/vstavka/den/2026-11-16/04-claude-migraciya-zadanie.md"
+  ]
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "drakon-graf",
+  "put": "docs/komanda/vstavka/den/2026-11-16/04-claude-migraciya-zadanie.md"
+ },
+ {
+  "vid": "perenos",
+  "repo": "ii-komanda",
+  "put": "prompty/roli/glm-recenzent.md",
+  "otkuda": [
+   "drakon-graf",
+   "docs/komanda/vstavka/glm-recenzent.md"
+  ]
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "drakon-graf",
+  "put": "docs/komanda/vstavka/glm-recenzent.md"
+ },
+ {
+  "vid": "perenos",
+  "repo": "ii-komanda",
+  "put": "prompty/roli/qwen-kontent.md",
+  "otkuda": [
+   "drakon-graf",
+   "docs/komanda/vstavka/qwen-kontent.md"
+  ]
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "drakon-graf",
+  "put": "docs/komanda/vstavka/qwen-kontent.md"
+ },
+ {
+  "vid": "perenos",
+  "repo": "ii-komanda",
+  "put": "komanda/vstavka/README.md",
+  "otkuda": [
+   "drakon-graf",
+   "docs/komanda/vstavka/README.md"
+  ]
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "drakon-graf",
+  "put": "docs/komanda/vstavka/README.md"
+ },
+ {
+  "vid": "zamena",
+  "repo": "drakon-graf",
+  "put": "docs/литература.md"
+ },
+ {
+  "vid": "zamena",
+  "repo": "drakon-graf",
+  "put": "NOTICE"
+ },
+ {
+  "vid": "zamena",
+  "repo": "drakon-graf",
+  "put": "README.md"
+ },
+ {
+  "vid": "zamena",
+  "repo": "drakon-graf",
+  "put": "site/experiments/forth/README.md"
+ },
+ {
+  "vid": "zamena",
+  "repo": "teacher-workpad",
+  "put": ".github/workflows/proverka.yml"
+ },
+ {
+  "vid": "zamena",
+  "repo": "teacher-workpad",
+  "put": "chernoviki/OPIS.md"
+ },
+ {
+  "vid": "zamena",
+  "repo": "teacher-workpad",
+  "put": "CLAUDE.md"
+ },
+ {
+  "vid": "perenos",
+  "repo": "teacher-workpad",
+  "put": "lib/drakon-shema/drakon-zapis.md",
+  "otkuda": [
+   "teacher-workpad",
+   "docs/komanda/drakon-zapis.md"
+  ]
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "teacher-workpad",
+  "put": "docs/komanda/drakon-zapis.md"
+ },
+ {
+  "vid": "perenos",
+  "repo": "ii-komanda",
+  "put": "pravila/KOD-PO-FORTOVSKI.md",
+  "otkuda": [
+   "teacher-workpad",
+   "docs/komanda/KOD-PO-FORTOVSKI.md"
+  ]
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "teacher-workpad",
+  "put": "docs/komanda/KOD-PO-FORTOVSKI.md"
+ },
+ {
+  "vid": "perenos",
+  "repo": "ii-komanda",
+  "put": "pravila/KOD-PO-GRAFOVSKI.md",
+  "otkuda": [
+   "teacher-workpad",
+   "docs/komanda/KOD-PO-GRAFOVSKI.md"
+  ]
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "teacher-workpad",
+  "put": "docs/komanda/KOD-PO-GRAFOVSKI.md"
+ },
+ {
+  "vid": "perenos",
+  "repo": "ii-komanda",
+  "put": "pravila/KOD-PO-PROLOGOVSKI.md",
+  "otkuda": [
+   "teacher-workpad",
+   "docs/komanda/KOD-PO-PROLOGOVSKI.md"
+  ]
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "teacher-workpad",
+  "put": "docs/komanda/KOD-PO-PROLOGOVSKI.md"
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "teacher-workpad",
+  "put": "docs/komanda/navyki/brifing.md"
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "teacher-workpad",
+  "put": "docs/komanda/navyki/drakon-shema.md"
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "teacher-workpad",
+  "put": "docs/komanda/navyki/ekonomnaya-sessiya.md"
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "teacher-workpad",
+  "put": "docs/komanda/navyki/graficheskij-konspekt.md"
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "teacher-workpad",
+  "put": "docs/komanda/navyki/komnata.md"
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "teacher-workpad",
+  "put": "docs/komanda/navyki/teacher-workpad-sajt.md"
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "teacher-workpad",
+  "put": "docs/komanda/navyki/tri-stilya-koda.md"
+ },
+ {
+  "vid": "perenos",
+  "repo": "ii-komanda",
+  "put": "pravila/primery/drakon-list-evklid.md",
+  "otkuda": [
+   "teacher-workpad",
+   "docs/komanda/primery/drakon-list-evklid.md"
+  ]
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "teacher-workpad",
+  "put": "docs/komanda/primery/drakon-list-evklid.md"
+ },
+ {
+  "vid": "perenos",
+  "repo": "ii-komanda",
+  "put": "komanda/VHOD-UROKI.md",
+  "otkuda": [
+   "teacher-workpad",
+   "docs/komanda/README.md"
+  ]
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "teacher-workpad",
+  "put": "docs/komanda/README.md"
+ },
+ {
+  "vid": "perenos",
+  "repo": "ii-komanda",
+  "put": "pravila/TRI-STILYA-ODNIM-TEKSTOM.md",
+  "otkuda": [
+   "teacher-workpad",
+   "docs/komanda/TRI-STILYA-ODNIM-TEKSTOM.md"
+  ]
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "teacher-workpad",
+  "put": "docs/komanda/TRI-STILYA-ODNIM-TEKSTOM.md"
+ },
+ {
+  "vid": "perenos",
+  "repo": "ii-komanda",
+  "put": "komanda/zadaniya/001-shag-cikla.md",
+  "otkuda": [
+   "teacher-workpad",
+   "docs/komanda/zadaniya/001-shag-cikla.md"
+  ]
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "teacher-workpad",
+  "put": "docs/komanda/zadaniya/001-shag-cikla.md"
+ },
+ {
+  "vid": "perenos",
+  "repo": "ii-komanda",
+  "put": "komanda/zadaniya/002-formuly.md",
+  "otkuda": [
+   "teacher-workpad",
+   "docs/komanda/zadaniya/002-formuly.md"
+  ]
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "teacher-workpad",
+  "put": "docs/komanda/zadaniya/002-formuly.md"
+ },
+ {
+  "vid": "perenos",
+  "repo": "ii-komanda",
+  "put": "komanda/zadaniya/003-uchitel-posle-uroka.html",
+  "otkuda": [
+   "teacher-workpad",
+   "docs/komanda/zadaniya/003-uchitel-posle-uroka.html"
+  ]
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "teacher-workpad",
+  "put": "docs/komanda/zadaniya/003-uchitel-posle-uroka.html"
+ },
+ {
+  "vid": "perenos",
+  "repo": "ii-komanda",
+  "put": "komanda/zadaniya/003-uchitel-posle-uroka.md",
+  "otkuda": [
+   "teacher-workpad",
+   "docs/komanda/zadaniya/003-uchitel-posle-uroka.md"
+  ]
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "teacher-workpad",
+  "put": "docs/komanda/zadaniya/003-uchitel-posle-uroka.md"
+ },
+ {
+  "vid": "perenos",
+  "repo": "ii-komanda",
+  "put": "komanda/zadaniya/004-razborshchik-zapisi.md",
+  "otkuda": [
+   "teacher-workpad",
+   "docs/komanda/zadaniya/004-razborshchik-zapisi.md"
+  ]
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "teacher-workpad",
+  "put": "docs/komanda/zadaniya/004-razborshchik-zapisi.md"
+ },
+ {
+  "vid": "perenos",
+  "repo": "ii-komanda",
+  "put": "komanda/zadaniya/004b-razborshchik-dorabotka.md",
+  "otkuda": [
+   "teacher-workpad",
+   "docs/komanda/zadaniya/004b-razborshchik-dorabotka.md"
+  ]
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "teacher-workpad",
+  "put": "docs/komanda/zadaniya/004b-razborshchik-dorabotka.md"
+ },
+ {
+  "vid": "perenos",
+  "repo": "ii-komanda",
+  "put": "komanda/zadaniya/005-podklyuchenie-razborshchika.md",
+  "otkuda": [
+   "teacher-workpad",
+   "docs/komanda/zadaniya/005-podklyuchenie-razborshchika.md"
+  ]
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "teacher-workpad",
+  "put": "docs/komanda/zadaniya/005-podklyuchenie-razborshchika.md"
+ },
+ {
+  "vid": "perenos",
+  "repo": "ii-komanda",
+  "put": "komanda/zadaniya/005b-ogrady-i-melochi.md",
+  "otkuda": [
+   "teacher-workpad",
+   "docs/komanda/zadaniya/005b-ogrady-i-melochi.md"
+  ]
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "teacher-workpad",
+  "put": "docs/komanda/zadaniya/005b-ogrady-i-melochi.md"
+ },
+ {
+  "vid": "perenos",
+  "repo": "ii-komanda",
+  "put": "komanda/zadaniya/005v-zapustit-kod.md",
+  "otkuda": [
+   "teacher-workpad",
+   "docs/komanda/zadaniya/005v-zapustit-kod.md"
+  ]
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "teacher-workpad",
+  "put": "docs/komanda/zadaniya/005v-zapustit-kod.md"
+ },
+ {
+  "vid": "perenos",
+  "repo": "ii-komanda",
+  "put": "komanda/zadaniya/006-ege-resheniya.md",
+  "otkuda": [
+   "teacher-workpad",
+   "docs/komanda/zadaniya/006-ege-resheniya.md"
+  ]
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "teacher-workpad",
+  "put": "docs/komanda/zadaniya/006-ege-resheniya.md"
+ },
+ {
+  "vid": "perenos",
+  "repo": "ii-komanda",
+  "put": "komanda/zadaniya/007-ipaddress-opisanie.md",
+  "otkuda": [
+   "teacher-workpad",
+   "docs/komanda/zadaniya/007-ipaddress-opisanie.md"
+  ]
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "teacher-workpad",
+  "put": "docs/komanda/zadaniya/007-ipaddress-opisanie.md"
+ },
+ {
+  "vid": "perenos",
+  "repo": "ii-komanda",
+  "put": "komanda/zadaniya/007-itog-ipaddress-spisok.md",
+  "otkuda": [
+   "teacher-workpad",
+   "docs/komanda/zadaniya/007-itog-ipaddress-spisok.md"
+  ]
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "teacher-workpad",
+  "put": "docs/komanda/zadaniya/007-itog-ipaddress-spisok.md"
+ },
+ {
+  "vid": "perenos",
+  "repo": "ii-komanda",
+  "put": "komanda/zadaniya/007b-ipaddress-vtoroe-reshenie.md",
+  "otkuda": [
+   "teacher-workpad",
+   "docs/komanda/zadaniya/007b-ipaddress-vtoroe-reshenie.md"
+  ]
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "teacher-workpad",
+  "put": "docs/komanda/zadaniya/007b-ipaddress-vtoroe-reshenie.md"
+ },
+ {
+  "vid": "perenos",
+  "repo": "ii-komanda",
+  "put": "komanda/zadaniya/008-generator-formuly-razmer.md",
+  "otkuda": [
+   "teacher-workpad",
+   "docs/komanda/zadaniya/008-generator-formuly-razmer.md"
+  ]
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "teacher-workpad",
+  "put": "docs/komanda/zadaniya/008-generator-formuly-razmer.md"
+ },
+ {
+  "vid": "perenos",
+  "repo": "ii-komanda",
+  "put": "komanda/zadaniya/009-blok1-vybor-stilya.md",
+  "otkuda": [
+   "teacher-workpad",
+   "docs/komanda/zadaniya/009-blok1-vybor-stilya.md"
+  ]
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "teacher-workpad",
+  "put": "docs/komanda/zadaniya/009-blok1-vybor-stilya.md"
+ },
+ {
+  "vid": "perenos",
+  "repo": "ii-komanda",
+  "put": "komanda/zadaniya/010-prolog-testovoe.md",
+  "otkuda": [
+   "teacher-workpad",
+   "docs/komanda/zadaniya/010-prolog-testovoe.md"
+  ]
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "teacher-workpad",
+  "put": "docs/komanda/zadaniya/010-prolog-testovoe.md"
+ },
+ {
+  "vid": "perenos",
+  "repo": "ii-komanda",
+  "put": "komanda/zadaniya/011-blok6-prostoe.md",
+  "otkuda": [
+   "teacher-workpad",
+   "docs/komanda/zadaniya/011-blok6-prostoe.md"
+  ]
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "teacher-workpad",
+  "put": "docs/komanda/zadaniya/011-blok6-prostoe.md"
+ },
+ {
+  "vid": "perenos",
+  "repo": "ii-komanda",
+  "put": "komanda/zadaniya/012-blok6-sereznoe.md",
+  "otkuda": [
+   "teacher-workpad",
+   "docs/komanda/zadaniya/012-blok6-sereznoe.md"
+  ]
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "teacher-workpad",
+  "put": "docs/komanda/zadaniya/012-blok6-sereznoe.md"
+ },
+ {
+  "vid": "perenos",
+  "repo": "ii-komanda",
+  "put": "komanda/zadaniya/013-blok5-prostoe.md",
+  "otkuda": [
+   "teacher-workpad",
+   "docs/komanda/zadaniya/013-blok5-prostoe.md"
+  ]
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "teacher-workpad",
+  "put": "docs/komanda/zadaniya/013-blok5-prostoe.md"
+ },
+ {
+  "vid": "perenos",
+  "repo": "ii-komanda",
+  "put": "komanda/zadaniya/014-blok5-sereznoe.md",
+  "otkuda": [
+   "teacher-workpad",
+   "docs/komanda/zadaniya/014-blok5-sereznoe.md"
+  ]
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "teacher-workpad",
+  "put": "docs/komanda/zadaniya/014-blok5-sereznoe.md"
+ },
+ {
+  "vid": "perenos",
+  "repo": "ii-komanda",
+  "put": "komanda/zadaniya/015-blok2-prostoe.md",
+  "otkuda": [
+   "teacher-workpad",
+   "docs/komanda/zadaniya/015-blok2-prostoe.md"
+  ]
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "teacher-workpad",
+  "put": "docs/komanda/zadaniya/015-blok2-prostoe.md"
+ },
+ {
+  "vid": "perenos",
+  "repo": "ii-komanda",
+  "put": "komanda/zadaniya/016-blok2-sereznoe.md",
+  "otkuda": [
+   "teacher-workpad",
+   "docs/komanda/zadaniya/016-blok2-sereznoe.md"
+  ]
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "teacher-workpad",
+  "put": "docs/komanda/zadaniya/016-blok2-sereznoe.md"
+ },
+ {
+  "vid": "perenos",
+  "repo": "ii-komanda",
+  "put": "komanda/zadaniya/017-blok3-prostoe.md",
+  "otkuda": [
+   "teacher-workpad",
+   "docs/komanda/zadaniya/017-blok3-prostoe.md"
+  ]
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "teacher-workpad",
+  "put": "docs/komanda/zadaniya/017-blok3-prostoe.md"
+ },
+ {
+  "vid": "perenos",
+  "repo": "ii-komanda",
+  "put": "komanda/zadaniya/018-blok3-sereznoe.md",
+  "otkuda": [
+   "teacher-workpad",
+   "docs/komanda/zadaniya/018-blok3-sereznoe.md"
+  ]
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "teacher-workpad",
+  "put": "docs/komanda/zadaniya/018-blok3-sereznoe.md"
+ },
+ {
+  "vid": "perenos",
+  "repo": "ii-komanda",
+  "put": "komanda/zadaniya/proverki/009-dezhurstvo.cjs",
+  "otkuda": [
+   "teacher-workpad",
+   "docs/komanda/zadaniya/proverki/009-dezhurstvo.cjs"
+  ]
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "teacher-workpad",
+  "put": "docs/komanda/zadaniya/proverki/009-dezhurstvo.cjs"
+ },
+ {
+  "vid": "perenos",
+  "repo": "ii-komanda",
+  "put": "komanda/zadaniya/proverki/009-vybor.cjs",
+  "otkuda": [
+   "teacher-workpad",
+   "docs/komanda/zadaniya/proverki/009-vybor.cjs"
+  ]
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "teacher-workpad",
+  "put": "docs/komanda/zadaniya/proverki/009-vybor.cjs"
+ },
+ {
+  "vid": "perenos",
+  "repo": "ii-komanda",
+  "put": "komanda/zadaniya/proverki/011-parol.cjs",
+  "otkuda": [
+   "teacher-workpad",
+   "docs/komanda/zadaniya/proverki/011-parol.cjs"
+  ]
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "teacher-workpad",
+  "put": "docs/komanda/zadaniya/proverki/011-parol.cjs"
+ },
+ {
+  "vid": "perenos",
+  "repo": "ii-komanda",
+  "put": "komanda/zadaniya/proverki/012-chislo-r.cjs",
+  "otkuda": [
+   "teacher-workpad",
+   "docs/komanda/zadaniya/proverki/012-chislo-r.cjs"
+  ]
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "teacher-workpad",
+  "put": "docs/komanda/zadaniya/proverki/012-chislo-r.cjs"
+ },
+ {
+  "vid": "perenos",
+  "repo": "ii-komanda",
+  "put": "komanda/zadaniya/proverki/013-opisanie.cjs",
+  "otkuda": [
+   "teacher-workpad",
+   "docs/komanda/zadaniya/proverki/013-opisanie.cjs"
+  ]
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "teacher-workpad",
+  "put": "docs/komanda/zadaniya/proverki/013-opisanie.cjs"
+ },
+ {
+  "vid": "perenos",
+  "repo": "ii-komanda",
+  "put": "komanda/zadaniya/proverki/014-pereskladka.cjs",
+  "otkuda": [
+   "teacher-workpad",
+   "docs/komanda/zadaniya/proverki/014-pereskladka.cjs"
+  ]
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "teacher-workpad",
+  "put": "docs/komanda/zadaniya/proverki/014-pereskladka.cjs"
+ },
+ {
+  "vid": "perenos",
+  "repo": "ii-komanda",
+  "put": "komanda/zadaniya/proverki/015-kruzhok.cjs",
+  "otkuda": [
+   "teacher-workpad",
+   "docs/komanda/zadaniya/proverki/015-kruzhok.cjs"
+  ]
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "teacher-workpad",
+  "put": "docs/komanda/zadaniya/proverki/015-kruzhok.cjs"
+ },
+ {
+  "vid": "perenos",
+  "repo": "ii-komanda",
+  "put": "komanda/zadaniya/proverki/016-peredacha.cjs",
+  "otkuda": [
+   "teacher-workpad",
+   "docs/komanda/zadaniya/proverki/016-peredacha.cjs"
+  ]
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "teacher-workpad",
+  "put": "docs/komanda/zadaniya/proverki/016-peredacha.cjs"
+ },
+ {
+  "vid": "perenos",
+  "repo": "ii-komanda",
+  "put": "komanda/zadaniya/proverki/017-propusk.cjs",
+  "otkuda": [
+   "teacher-workpad",
+   "docs/komanda/zadaniya/proverki/017-propusk.cjs"
+  ]
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "teacher-workpad",
+  "put": "docs/komanda/zadaniya/proverki/017-propusk.cjs"
+ },
+ {
+  "vid": "perenos",
+  "repo": "ii-komanda",
+  "put": "komanda/zadaniya/proverki/018-zhurnal.cjs",
+  "otkuda": [
+   "teacher-workpad",
+   "docs/komanda/zadaniya/proverki/018-zhurnal.cjs"
+  ]
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "teacher-workpad",
+  "put": "docs/komanda/zadaniya/proverki/018-zhurnal.cjs"
+ },
+ {
+  "vid": "perenos",
+  "repo": "ii-komanda",
+  "put": "komanda/zadaniya/proverki/obrazcy/009-obrazec-claude.md",
+  "otkuda": [
+   "teacher-workpad",
+   "docs/komanda/zadaniya/proverki/obrazcy/009-obrazec-claude.md"
+  ]
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "teacher-workpad",
+  "put": "docs/komanda/zadaniya/proverki/obrazcy/009-obrazec-claude.md"
+ },
+ {
+  "vid": "perenos",
+  "repo": "ii-komanda",
+  "put": "komanda/zadaniya/proverki/obrazcy/011-obrazec-claude.md",
+  "otkuda": [
+   "teacher-workpad",
+   "docs/komanda/zadaniya/proverki/obrazcy/011-obrazec-claude.md"
+  ]
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "teacher-workpad",
+  "put": "docs/komanda/zadaniya/proverki/obrazcy/011-obrazec-claude.md"
+ },
+ {
+  "vid": "perenos",
+  "repo": "ii-komanda",
+  "put": "komanda/zadaniya/proverki/obrazcy/012-obrazec-claude.md",
+  "otkuda": [
+   "teacher-workpad",
+   "docs/komanda/zadaniya/proverki/obrazcy/012-obrazec-claude.md"
+  ]
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "teacher-workpad",
+  "put": "docs/komanda/zadaniya/proverki/obrazcy/012-obrazec-claude.md"
+ },
+ {
+  "vid": "perenos",
+  "repo": "ii-komanda",
+  "put": "komanda/zadaniya/proverki/obrazcy/013-obrazec-claude.md",
+  "otkuda": [
+   "teacher-workpad",
+   "docs/komanda/zadaniya/proverki/obrazcy/013-obrazec-claude.md"
+  ]
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "teacher-workpad",
+  "put": "docs/komanda/zadaniya/proverki/obrazcy/013-obrazec-claude.md"
+ },
+ {
+  "vid": "perenos",
+  "repo": "ii-komanda",
+  "put": "komanda/zadaniya/proverki/obrazcy/014-obrazec-claude.md",
+  "otkuda": [
+   "teacher-workpad",
+   "docs/komanda/zadaniya/proverki/obrazcy/014-obrazec-claude.md"
+  ]
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "teacher-workpad",
+  "put": "docs/komanda/zadaniya/proverki/obrazcy/014-obrazec-claude.md"
+ },
+ {
+  "vid": "perenos",
+  "repo": "ii-komanda",
+  "put": "komanda/zadaniya/proverki/obrazcy/015-obrazec-claude.md",
+  "otkuda": [
+   "teacher-workpad",
+   "docs/komanda/zadaniya/proverki/obrazcy/015-obrazec-claude.md"
+  ]
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "teacher-workpad",
+  "put": "docs/komanda/zadaniya/proverki/obrazcy/015-obrazec-claude.md"
+ },
+ {
+  "vid": "perenos",
+  "repo": "ii-komanda",
+  "put": "komanda/zadaniya/proverki/obrazcy/016-obrazec-claude.md",
+  "otkuda": [
+   "teacher-workpad",
+   "docs/komanda/zadaniya/proverki/obrazcy/016-obrazec-claude.md"
+  ]
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "teacher-workpad",
+  "put": "docs/komanda/zadaniya/proverki/obrazcy/016-obrazec-claude.md"
+ },
+ {
+  "vid": "perenos",
+  "repo": "ii-komanda",
+  "put": "komanda/zadaniya/proverki/obrazcy/017-obrazec-claude.md",
+  "otkuda": [
+   "teacher-workpad",
+   "docs/komanda/zadaniya/proverki/obrazcy/017-obrazec-claude.md"
+  ]
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "teacher-workpad",
+  "put": "docs/komanda/zadaniya/proverki/obrazcy/017-obrazec-claude.md"
+ },
+ {
+  "vid": "perenos",
+  "repo": "ii-komanda",
+  "put": "komanda/zadaniya/proverki/obrazcy/018-isporchennye/1-dvojnik/zhurnal-list.md",
+  "otkuda": [
+   "teacher-workpad",
+   "docs/komanda/zadaniya/proverki/obrazcy/018-isporchennye/1-dvojnik/zhurnal-list.md"
+  ]
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "teacher-workpad",
+  "put": "docs/komanda/zadaniya/proverki/obrazcy/018-isporchennye/1-dvojnik/zhurnal-list.md"
+ },
+ {
+  "vid": "perenos",
+  "repo": "ii-komanda",
+  "put": "komanda/zadaniya/proverki/obrazcy/018-isporchennye/1-dvojnik/zhurnal.fs",
+  "otkuda": [
+   "teacher-workpad",
+   "docs/komanda/zadaniya/proverki/obrazcy/018-isporchennye/1-dvojnik/zhurnal.fs"
+  ]
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "teacher-workpad",
+  "put": "docs/komanda/zadaniya/proverki/obrazcy/018-isporchennye/1-dvojnik/zhurnal.fs"
+ },
+ {
+  "vid": "perenos",
+  "repo": "ii-komanda",
+  "put": "komanda/zadaniya/proverki/obrazcy/018-isporchennye/2-cepochka/zhurnal-list.md",
+  "otkuda": [
+   "teacher-workpad",
+   "docs/komanda/zadaniya/proverki/obrazcy/018-isporchennye/2-cepochka/zhurnal-list.md"
+  ]
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "teacher-workpad",
+  "put": "docs/komanda/zadaniya/proverki/obrazcy/018-isporchennye/2-cepochka/zhurnal-list.md"
+ },
+ {
+  "vid": "perenos",
+  "repo": "ii-komanda",
+  "put": "komanda/zadaniya/proverki/obrazcy/018-isporchennye/2-cepochka/zhurnal.fs",
+  "otkuda": [
+   "teacher-workpad",
+   "docs/komanda/zadaniya/proverki/obrazcy/018-isporchennye/2-cepochka/zhurnal.fs"
+  ]
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "teacher-workpad",
+  "put": "docs/komanda/zadaniya/proverki/obrazcy/018-isporchennye/2-cepochka/zhurnal.fs"
+ },
+ {
+  "vid": "perenos",
+  "repo": "ii-komanda",
+  "put": "komanda/zadaniya/proverki/obrazcy/018-isporchennye/3-porog/zhurnal-list.md",
+  "otkuda": [
+   "teacher-workpad",
+   "docs/komanda/zadaniya/proverki/obrazcy/018-isporchennye/3-porog/zhurnal-list.md"
+  ]
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "teacher-workpad",
+  "put": "docs/komanda/zadaniya/proverki/obrazcy/018-isporchennye/3-porog/zhurnal-list.md"
+ },
+ {
+  "vid": "perenos",
+  "repo": "ii-komanda",
+  "put": "komanda/zadaniya/proverki/obrazcy/018-isporchennye/3-porog/zhurnal.fs",
+  "otkuda": [
+   "teacher-workpad",
+   "docs/komanda/zadaniya/proverki/obrazcy/018-isporchennye/3-porog/zhurnal.fs"
+  ]
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "teacher-workpad",
+  "put": "docs/komanda/zadaniya/proverki/obrazcy/018-isporchennye/3-porog/zhurnal.fs"
+ },
+ {
+  "vid": "perenos",
+  "repo": "ii-komanda",
+  "put": "komanda/zadaniya/proverki/obrazcy/018-isporchennye/4-ne-obnulen/zhurnal-list.md",
+  "otkuda": [
+   "teacher-workpad",
+   "docs/komanda/zadaniya/proverki/obrazcy/018-isporchennye/4-ne-obnulen/zhurnal-list.md"
+  ]
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "teacher-workpad",
+  "put": "docs/komanda/zadaniya/proverki/obrazcy/018-isporchennye/4-ne-obnulen/zhurnal-list.md"
+ },
+ {
+  "vid": "perenos",
+  "repo": "ii-komanda",
+  "put": "komanda/zadaniya/proverki/obrazcy/018-isporchennye/4-ne-obnulen/zhurnal.fs",
+  "otkuda": [
+   "teacher-workpad",
+   "docs/komanda/zadaniya/proverki/obrazcy/018-isporchennye/4-ne-obnulen/zhurnal.fs"
+  ]
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "teacher-workpad",
+  "put": "docs/komanda/zadaniya/proverki/obrazcy/018-isporchennye/4-ne-obnulen/zhurnal.fs"
+ },
+ {
+  "vid": "perenos",
+  "repo": "ii-komanda",
+  "put": "komanda/zadaniya/proverki/obrazcy/018-isporchennye/5-lishnee/zhurnal-list.md",
+  "otkuda": [
+   "teacher-workpad",
+   "docs/komanda/zadaniya/proverki/obrazcy/018-isporchennye/5-lishnee/zhurnal-list.md"
+  ]
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "teacher-workpad",
+  "put": "docs/komanda/zadaniya/proverki/obrazcy/018-isporchennye/5-lishnee/zhurnal-list.md"
+ },
+ {
+  "vid": "perenos",
+  "repo": "ii-komanda",
+  "put": "komanda/zadaniya/proverki/obrazcy/018-isporchennye/5-lishnee/zhurnal.fs",
+  "otkuda": [
+   "teacher-workpad",
+   "docs/komanda/zadaniya/proverki/obrazcy/018-isporchennye/5-lishnee/zhurnal.fs"
+  ]
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "teacher-workpad",
+  "put": "docs/komanda/zadaniya/proverki/obrazcy/018-isporchennye/5-lishnee/zhurnal.fs"
+ },
+ {
+  "vid": "perenos",
+  "repo": "ii-komanda",
+  "put": "komanda/zadaniya/proverki/obrazcy/018-isporchennye/6-strochnye/zhurnal-list.md",
+  "otkuda": [
+   "teacher-workpad",
+   "docs/komanda/zadaniya/proverki/obrazcy/018-isporchennye/6-strochnye/zhurnal-list.md"
+  ]
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "teacher-workpad",
+  "put": "docs/komanda/zadaniya/proverki/obrazcy/018-isporchennye/6-strochnye/zhurnal-list.md"
+ },
+ {
+  "vid": "perenos",
+  "repo": "ii-komanda",
+  "put": "komanda/zadaniya/proverki/obrazcy/018-isporchennye/6-strochnye/zhurnal.fs",
+  "otkuda": [
+   "teacher-workpad",
+   "docs/komanda/zadaniya/proverki/obrazcy/018-isporchennye/6-strochnye/zhurnal.fs"
+  ]
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "teacher-workpad",
+  "put": "docs/komanda/zadaniya/proverki/obrazcy/018-isporchennye/6-strochnye/zhurnal.fs"
+ },
+ {
+  "vid": "perenos",
+  "repo": "ii-komanda",
+  "put": "komanda/zadaniya/proverki/obrazcy/018-isporchennye/README.md",
+  "otkuda": [
+   "teacher-workpad",
+   "docs/komanda/zadaniya/proverki/obrazcy/018-isporchennye/README.md"
+  ]
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "teacher-workpad",
+  "put": "docs/komanda/zadaniya/proverki/obrazcy/018-isporchennye/README.md"
+ },
+ {
+  "vid": "perenos",
+  "repo": "ii-komanda",
+  "put": "komanda/zadaniya/proverki/obrazcy/018-obrazec-claude.md",
+  "otkuda": [
+   "teacher-workpad",
+   "docs/komanda/zadaniya/proverki/obrazcy/018-obrazec-claude.md"
+  ]
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "teacher-workpad",
+  "put": "docs/komanda/zadaniya/proverki/obrazcy/018-obrazec-claude.md"
+ },
+ {
+  "vid": "perenos",
+  "repo": "ii-komanda",
+  "put": "komanda/zadaniya/proverki/obrazcy/chernovik-drakon-luna.md",
+  "otkuda": [
+   "teacher-workpad",
+   "docs/komanda/zadaniya/proverki/obrazcy/chernovik-drakon-luna.md"
+  ]
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "teacher-workpad",
+  "put": "docs/komanda/zadaniya/proverki/obrazcy/chernovik-drakon-luna.md"
+ },
+ {
+  "vid": "perenos",
+  "repo": "ii-komanda",
+  "put": "komanda/zadaniya/proverki/obrazcy/chernovik-forth-luna.fs",
+  "otkuda": [
+   "teacher-workpad",
+   "docs/komanda/zadaniya/proverki/obrazcy/chernovik-forth-luna.fs"
+  ]
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "teacher-workpad",
+  "put": "docs/komanda/zadaniya/proverki/obrazcy/chernovik-forth-luna.fs"
+ },
+ {
+  "vid": "perenos",
+  "repo": "ii-komanda",
+  "put": "komanda/zadaniya/proverki/obrazcy/chernovik-znaniya-propusk.txt",
+  "otkuda": [
+   "teacher-workpad",
+   "docs/komanda/zadaniya/proverki/obrazcy/chernovik-znaniya-propusk.txt"
+  ]
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "teacher-workpad",
+  "put": "docs/komanda/zadaniya/proverki/obrazcy/chernovik-znaniya-propusk.txt"
+ },
+ {
+  "vid": "perenos",
+  "repo": "ii-komanda",
+  "put": "komanda/zadaniya/proverki/stil-fort.cjs",
+  "otkuda": [
+   "teacher-workpad",
+   "docs/komanda/zadaniya/proverki/stil-fort.cjs"
+  ]
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "teacher-workpad",
+  "put": "docs/komanda/zadaniya/proverki/stil-fort.cjs"
+ },
+ {
+  "vid": "perenos",
+  "repo": "ii-komanda",
+  "put": "komanda/zadaniya/SHABLON.md",
+  "otkuda": [
+   "teacher-workpad",
+   "docs/komanda/zadaniya/SHABLON.md"
+  ]
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "teacher-workpad",
+  "put": "docs/komanda/zadaniya/SHABLON.md"
+ },
+ {
+  "vid": "perenos",
+  "repo": "ii-komanda",
+  "put": "komanda/zadaniya/TESTY-NAVYKA.md",
+  "otkuda": [
+   "teacher-workpad",
+   "docs/komanda/zadaniya/TESTY-NAVYKA.md"
+  ]
+ },
+ {
+  "vid": "ukazatel",
+  "repo": "teacher-workpad",
+  "put": "docs/komanda/zadaniya/TESTY-NAVYKA.md"
+ },
+ {
+  "vid": "zamena",
+  "repo": "teacher-workpad",
+  "put": "lib/drakon-shema/zapis.js"
+ },
+ {
+  "vid": "zamena",
+  "repo": "teacher-workpad",
+  "put": "lib/drakongen/README.md"
+ },
+ {
+  "vid": "zamena",
+  "repo": "teacher-workpad",
+  "put": "plan/README.md"
+ },
+ {
+  "vid": "zamena",
+  "repo": "teacher-workpad",
+  "put": "tools/drakon-list.mjs"
+ },
+ {
+  "vid": "zamena",
+  "repo": "teacher-workpad",
+  "put": "tools/drakon-zapis-test.mjs"
+ },
+ {
+  "vid": "zamena",
+  "repo": "memory_maryam_ai",
+  "put": "README.md"
+ }
+]
