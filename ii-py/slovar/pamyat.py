@@ -1,5 +1,5 @@
 # Псевдопамять словаря «Форто-Пролог».
-# Адрес слова — номер по порядку первого появления при сборке:
+# Адрес слова — номер по порядку первого появления при сборке (опора и части раньше целого):
 # сначала части, потом целое; повторно встреченное слово адрес не получает.
 # Как sys.modules в Python: модуль загружается при первом import и дальше переиспользуется.
 # Адреса не хранятся в карточках; выгрузка пересобирается при каждом запуске.
@@ -46,25 +46,42 @@ def prochitat(put):
         "номер": int(ident.split("-")[0]),
         "id": ident,
         "тип": pole(blok, "тип"),
-        "состав": nomera_sostava(pole(blok, "состав")),
+        "связи": nomera_sostava(pole(blok, "опирается")) + nomera_sostava(pole(blok, "состав")),
     }
     return kartochka
 
 
-# slovar: все карточки папки по номерам
+# papki: основной словарь и его кандидаты
+def papki(papka):
+    spisok = [papka]
+    kandidaty = os.path.join(papka, "kandidaty")
+    if os.path.isdir(kandidaty):
+        spisok.append(kandidaty)
+    return spisok
+
+
+# kartochki_papki: карточки одной папки по номерам
+def kartochki_papki(mesto):
+    vse = {}
+    for imya in sorted(os.listdir(mesto)):
+        if imya[:4].isdigit() and imya.endswith(".md"):
+            kartochka = prochitat(os.path.join(mesto, imya))
+            vse[kartochka["номер"]] = kartochka
+    return vse
+
+
+# slovar: все карточки словаря и кандидатов по номерам
 def slovar(papka):
     vse = {}
-    for imya in sorted(os.listdir(papka)):
-        if imya[:4].isdigit() and imya.endswith(".md"):
-            kartochka = prochitat(os.path.join(papka, imya))
-            vse[kartochka["номер"]] = kartochka
+    for mesto in papki(papka):
+        vse.update(kartochki_papki(mesto))
     return vse
 
 
 # razmestit: разместить слово и его части; части раньше целого
 def razmestit(nomer, vse, pamyat, put):
     if nomer not in pamyat and nomer not in put and nomer in vse:
-        for chast in vse[nomer]["состав"]:
+        for chast in vse[nomer]["связи"]:
             razmestit(chast, vse, pamyat, put + [nomer])
         pamyat[nomer] = len(pamyat) + 1
     return pamyat
