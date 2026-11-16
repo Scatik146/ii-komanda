@@ -537,6 +537,16 @@ def lishnie_osobye(pravila, zametki):
     return [f"- особая {o['repo']} `{o['fajl']}`: `{o['bylo']}`" for o in pravila.get("osobye", []) if (o["repo"], o["bylo"]) not in byli]
 
 
+# razdely_proby: перенос, указатели, замены путей, пути в навыках — строками отчёта
+def razdely_proby(dejstviya, zametki):
+    chasti = ["", "## Перенос", "", "| откуда | куда |", "|---|---|"] + stroki_dejstvij(dejstviya, "perenos")
+    chasti += ["", "## Указатели и файлы с заменой", "", "| файл | куда |", "|---|---|"]
+    chasti += stroki_dejstvij(dejstviya, "ukazatel") + stroki_dejstvij(dejstviya, "zamena")
+    chasti += ["", "## Замены путей", ""] + stroki_zamen(zametki, False)
+    chasti += ["", "## Навыки — по карточке (скрипт копии не меняет)", ""]
+    return chasti + stroki_zamen(zametki, False, True) + stroki_zamen(zametki, True, True)
+
+
 # napisat_probu: план и проверку — в komanda/migraciya/proba.md; коротко — на экран
 def napisat_probu():
     pravila = prochitat_pravila()
@@ -548,13 +558,7 @@ def napisat_probu():
             f"замен {sum(1 for z in zametki if z['stalo'] and not z.get('navyk'))}, путей в навыках {sum(1 for z in zametki if z.get('navyk'))}, руками {len(ruchnye)}, битых ссылок после замены {len(bitye)}")
     chasti = ["# Проба миграции: что будет сделано", "", "Создано `tools/migraciya.py` (проба, ничего не меняет). " + itog + ".", "",
               "## Битые ссылки после замены", ""] + (bitye or ["нет"]) + ["", "## Руками (не заменено)", ""] + (ruchnye or ["нет"])
-    chasti += ["", "## Перенос", "", "| откуда | куда |", "|---|---|"] + stroki_dejstvij(dejstviya, "perenos")
-    chasti += ["", "## Указатели и файлы с заменой", "", "| файл | куда |", "|---|---|"]
-    chasti += stroki_dejstvij(dejstviya, "ukazatel") + stroki_dejstvij(dejstviya, "zamena")
-    chasti += ["", "## Замены путей", ""] + stroki_zamen(zametki, False)
-    chasti += ["", "## Навыки — по карточке (скрипт копии не меняет)", ""]
-    chasti += stroki_zamen(zametki, False, True) + stroki_zamen(zametki, True, True)
-    PROBA.write_text("\n".join(chasti) + "\n", encoding="utf-8")
+    PROBA.write_text("\n".join(chasti + razdely_proby(dejstviya, zametki)) + "\n", encoding="utf-8")
     print(f"Проба: {PROBA}\n{itog}")
 
 
@@ -634,15 +638,20 @@ def sdelat():
     if prichiny:
         print("Не делаю:\n" + "\n".join("- " + p for p in prichiny))
     else:
-        koncy = [konec_strok(*d.get("otkuda", (d["repo"], d["put"]))) for d in dejstviya]
-        for d, konec in zip(dejstviya, koncy):
-            zapisat(d, konec)
-        zapisat_sled(dejstviya)
+        zapisat_vse(dejstviya)
         for repo in REPOZITORII:
             puti = [d["put"] for d in dejstviya if d["repo"] == repo]
             puti += [SVOJ_SLED + "proba.md", SVOJ_SLED + "sdelano.json"] if repo == "ii-komanda" else []
             print(f"{repo}: {zakommitit(repo, puti, soobshchenie(repo, dejstviya, kommity))}" if puti else f"{repo}: нечего")
         print("Готово. Дальше: python tools/migraciya.py --proverit, потом push в каждом репозитории.")
+
+
+# zapisat_vse: все действия — на диск (концы строк берутся до записи: исходник может стать указателем) и след
+def zapisat_vse(dejstviya):
+    koncy = [konec_strok(*d.get("otkuda", (d["repo"], d["put"]))) for d in dejstviya]
+    for d, konec in zip(dejstviya, koncy):
+        zapisat(d, konec)
+    zapisat_sled(dejstviya)
 
 
 # zapisat_sled: что сделано — в komanda/migraciya/sdelano.json (для --proverit и отката)
