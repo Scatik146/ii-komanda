@@ -373,3 +373,28 @@ DeepSeek API — предоплаченный баланс на platform.deepsee
 - «Поднять модель до Fable?» — ответ: не нужно, проба ловит ошибки; учитель продолжил на Opus 5.5.
 
 Для Алисы: Марьям (архитектор), миграция в ii-komanda: скрипт пробы и переноса — частично — `migraciya.py` умеет пробу, перенос с коммитами и проверку, всё проверено на копии; пакетный файл, ДРАКОН-лист и задание для Haiku — в новом чате.
+
+## Передаточная записка: миграция сделана — bat, ДРАКОН-лист, задание 019 (Марьям, 16.11.2026, 03:50)
+- **Сделано:** ii-komanda `tools/migraciya.bat` (CRLF, chcp 65001, по образцу `test-zapusk.bat`, запуск с копии в `%TEMP%`): четыре репозитория рядом (нет memory_maryam_ai — подсказка `git clone`) → `pull --rebase` во всех → проба → Блокнот с `proba.md`, выбор 1/2 → `--sdelat` → `--proverit` → push в каждом (отклонён — догнать и ещё раз); упал шаг — стоп. `migraciya.py`: отказ `--sdelat`, находки `--proverit` и `--proverit` без `sdelano.json` — код выхода 1; `proba.md`, `opis.md`, `sdelano.json` пишутся байтами с LF (на Windows `write_text` ставил CRLF). ДРАКОН-лист `tools/migraciya-list.md` (4 «дракон»: `glavnoe`, `napisat_probu`, `sdelat`, `proverit_posle`; 3 «конспект» — правила; тест 2 + 4; `drakon-list.mjs --strogo` — ошибок нет). `ne_chitat` += `migraciya.bat`, `migraciya-list.md`. `.gitignore`: ii-komanda — `otvet-glm.md`, drakon-graf — `package-lock.json`. **Перенос сделал учитель на ноутбуке** (03:44, второй запуск bat): коммиты ii-komanda `1999075`, drakon-graf `a41d6a5`, teacher-workpad `5e84915`, memory_maryam_ai `ea97e79`; у Марьям на свежих клонах `--proverit` — 271 файл, 0/0/0, «Всё цело»; `drakon-zapis-test` ✓. Задание `komanda/zadaniya/019-navyki-posle-migracii.md` (Haiku 5.5) — карточки шести навыков и копии; учитель запустил 03:48.
+- **Не сделано:** итог 019 (карточки → «сохранил» → копии `rezerv/navyki`, `memory_maryam_ai/navyki`); удалить `docs/komanda` в drakon-graf и teacher-workpad — на брифинге; архив комнаты 011–014 → `komnata/arhiv/2026-11/` — 17.11.
+- **Найдено:** первый запуск bat — «Не делаю: не закоммичено» из-за неотслеживаемых `otvet-glm.md` и `package-lock.json`; отказ сработал как задумано, ничего не записано. Старый путь даже в комментарии нового файла `tools/` дал пробе «руками 1» (шапка bat). В `tools/test-zapusk-list.md` контрпример кончается «→ следы найдены» — по смыслу «не найдены», не правлено.
+
+### Пополнение словаря (16.11, 03:50) — `ii-komanda/tools/migraciya.bat`, `migraciya.py`
+- `proverit_papki` — нижнее — четыре репозитория рядом; нет memory_maryam_ai — строка `git clone`.
+- `obnovit` — нижнее — `git pull --rebase` одного репозитория.
+- `shag` — нижнее — один запуск `migraciya.py` с ключом; код не 0 — стоп.
+- `sverit` — нижнее — Блокнот с `proba.md` и `choice` 1/2.
+- `otpravit` — нижнее — push одного репозитория, отклонён — `pull --rebase` и ещё раз.
+- верх bat (без метки) — `proverit_papki`, `obnovit` ×4, `shag` «Проба», `sverit`, `shag` `--sdelat`, `shag` `--proverit`, `otpravit` ×4.
+- Изменено: `sdelat`, `proverit_posle`, `glavnoe` — код выхода 1 при отказе и находках; `napisat_opis`, `napisat_probu`, `zapisat_sled` — `write_bytes` (LF на любой системе).
+
+### Кандидаты в словарь «реальности» и словарь «учитель» (16.11, 03:50)
+Только сказанное учителем; данных учеников нет. В словарь — после его просмотра.
+**Реальность:**
+- На ноутбуке в ii-komanda лежит неотслеживаемый `otvet-glm.md`, в drakon-graf — `package-lock.json` (вывод `git status`, 03:40).
+- «Миграция сделана и отправлена во все четыре репозитория.» (вывод bat, 03:44).
+**Учитель:**
+- «Я сам запущу. Открою второй чат и запущу на ноуте»; затем: «Команду — даю, здесь продолжай, новый чат не создаю».
+- «запустил. продолжай» — задание 019 у Haiku.
+
+Для Алисы: Марьям (архитектор), миграция в ii-komanda: bat, ДРАКОН-лист, задание для Haiku — сделано — перенос прошёл на ноутбуке учителя и проверен (271 файл, всё цело), задание 019 про навыки уже у Haiku.
