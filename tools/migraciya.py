@@ -231,7 +231,7 @@ def napisat_opis():
     chasti += stroki_ssylok(pravila, po_fajlam) + ["", "## Неясные ссылки в живых файлах", ""]
     chasti += stroki_neyasnyh(pravila, po_fajlam) or ["нет"]
     OPIS.parent.mkdir(parents=True, exist_ok=True)
-    OPIS.write_text("\n".join(chasti) + "\n", encoding="utf-8")
+    OPIS.write_bytes(("\n".join(chasti) + "\n").encode("utf-8"))
     print(f"Опись: {OPIS} — файлов {sum(len(v) for v in est.values())}, ссылок {vsego} в {len(po_fajlam)} файлах")
 
 # --- Проба: план «что будет сделано» и проверка ссылок после замены. Образец действия:
@@ -558,7 +558,7 @@ def napisat_probu():
             f"замен {sum(1 for z in zametki if z['stalo'] and not z.get('navyk'))}, путей в навыках {sum(1 for z in zametki if z.get('navyk'))}, руками {len(ruchnye)}, битых ссылок после замены {len(bitye)}")
     chasti = ["# Проба миграции: что будет сделано", "", "Создано `tools/migraciya.py` (проба, ничего не меняет). " + itog + ".", "",
               "## Битые ссылки после замены", ""] + (bitye or ["нет"]) + ["", "## Руками (не заменено)", ""] + (ruchnye or ["нет"])
-    PROBA.write_text("\n".join(chasti + razdely_proby(dejstviya, zametki)) + "\n", encoding="utf-8")
+    PROBA.write_bytes(("\n".join(chasti + razdely_proby(dejstviya, zametki)) + "\n").encode("utf-8"))
     print(f"Проба: {PROBA}\n{itog}")
 
 
@@ -657,7 +657,7 @@ def zapisat_vse(dejstviya):
 # zapisat_sled: что сделано — в komanda/migraciya/sdelano.json (для --proverit и отката)
 def zapisat_sled(dejstviya):
     sled = [{k: d[k] for k in ("vid", "repo", "put", "otkuda") if k in d} for d in dejstviya]
-    SDELANO.write_text(json.dumps(sled, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
+    SDELANO.write_bytes((json.dumps(sled, ensure_ascii=False, indent=1) + "\n").encode("utf-8"))
 
 
 # ostalis_starye: старые пути docs/komanda в живой части файла после --sdelat

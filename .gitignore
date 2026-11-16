@@ -2,3 +2,4 @@
 *.env
 !*.env.primer
 __pycache__/
+otvet-glm.md
