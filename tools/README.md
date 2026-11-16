@@ -25,6 +25,8 @@
 | приёмка | `python tools\ii.py vernut <урок> prilozhenie "что не так"` | старая версия → `proverka\starye\`, новая + проверка |
 | выдача | `python tools\ii.py vydacha <урок>` | картинки из `assets\` вшиты, строгая проверка → `vydacha\` (нет картинки — «НЕТ КАРТИНКИ: имя, где стоит» в `proverka\vydacha.md`) |
 
+После приёмки: `python tools\ii.py analiz <урок>` — кандидаты в словари из `<урок>\analiz\kandidaty.md` → разметчик (DeepSeek) → `analiz\ochered-uchitelyu.md`; одной командой с отправкой в GitHub — `tools\analiz.bat <урок>`. Правила — `forto-prolog/srez-1/postanovka.md`.
+
 Ещё: `klyuchi` — какие ключи найдены и какие модели отвечают; `status <урок>` — какие файлы есть, вердикты стража; `proverka <урок> [код]` — только проверка; `zapros --rol kanva --prompt вход.md --vyhod выход.md` — один промпт в одну роль.
 
 `sborka` идёт подряд, сама; принятая канва (после `vernut kanva`) заново не собирается. Учитель нужен, когда:

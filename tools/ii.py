@@ -17,7 +17,7 @@ import urllib.error
 import urllib.request
 from pathlib import Path
 
-VERSIYA = "0.2.5 (15.11.2026)"
+VERSIYA = "0.2.6 (16.11.2026)"
 TOOLS = Path(__file__).resolve().parent
 KOREN = TOOLS.parent
 PROMPTY = KOREN / "algoritm" / "prompty"
@@ -1093,6 +1093,19 @@ def ne_sdelano(arg):
 
 # ---------- разбор команд ----------
 
+# komanda_analiz: кандидаты урока → разметчик → очередь учителю; работу делает tools/analiz.py
+def komanda_analiz(arg):
+    import analiz  # здесь, а не наверху: analiz.py сам берёт слова из ii.py
+    argumenty = ["razmetka", str(arg.urok), "--model", arg.model]
+    if arg.podstavit:
+        argumenty += ["--podstavit", arg.podstavit]
+    if arg.bez_seti:
+        argumenty.append("--bez-seti")
+    if arg.modeli:
+        argumenty += ["--modeli", arg.modeli]
+    return analiz.main(argumenty)
+
+
 def razbor(argv=None):
     p = argparse.ArgumentParser(prog="ii.py", description="Сборка урока командой ИИ (v9). Версия " + VERSIYA)
     obshchie = argparse.ArgumentParser(add_help=False)
@@ -1124,6 +1137,11 @@ def razbor(argv=None):
     s.add_argument("urok")
     s.add_argument("kod", nargs="?", choices=KODY)
     s.set_defaults(f=komanda_proverka)
+    s = k.add_parser("analiz", parents=[obshchie], help="после приёмки: кандидаты в словари → разметчик → вопросы учителю")
+    s.add_argument("urok")
+    s.add_argument("--model", default="deepseek", help="кто размечает (не тот, кто извлекал)")
+    s.add_argument("--podstavit", help="ответ разметчика файлом (GLM через чат)")
+    s.set_defaults(f=komanda_analiz)
     s = k.add_parser("zapros", parents=[obshchie], help="один промпт в одну роль")
     s.add_argument("--rol", required=True)
     s.add_argument("--prompt", required=True)
