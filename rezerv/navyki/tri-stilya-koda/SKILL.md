@@ -1,11 +1,11 @@
 ---
-name: tri-stilya-koda
-description: Три стиля кода команды учителя для любой ИИ (JS, Python, Forth, Prolog, HTML, CSS, JSON, Markdown и наши блоки `дракон` и `конспект`) — по-фортовски (как разложить), по-прологовски (как описать), по-графовски (как нарисовать) — и ДРАКОН-лист к каждой работе. Читать перед тем, как писать или переделывать код.
+name: "tri-stilya-koda"
+description: "Три стиля кода команды учителя (по-фортовски, по-прологовски, по-графовски) для JS, Python, Forth, Prolog, HTML, CSS, JSON, Markdown и блоков дракон и конспект; ДРАКОН-лист к каждой работе. Читать перед тем, как писать или переделывать код."
 ---
 
 # Три стиля кода и ДРАКОН-лист
 
-Решение учителя 15.11.2026 (журнал drakon-graf `docs/komanda/README.md` § 4). Правила целиком — teacher-workpad `docs/komanda/`: `KOD-PO-FORTOVSKI.md`, `KOD-PO-PROLOGOVSKI.md`, `KOD-PO-GRAFOVSKI.md`. Нет доступа к репозиторию — всё одним текстом: `docs/komanda/TRI-STILYA-ODNIM-TEKSTOM.md`.
+Решение учителя 15.11.2026 (журнал ii-komanda `komanda/README.md` § 4). Правила целиком — ii-komanda `pravila/`: `KOD-PO-FORTOVSKI.md`, `KOD-PO-PROLOGOVSKI.md`, `KOD-PO-GRAFOVSKI.md`. Нет доступа к репозиторию — всё одним текстом: ii-komanda `pravila/TRI-STILYA-ODNIM-TEKSTOM.md`.
 
 ## Какой стиль когда
 
@@ -50,11 +50,11 @@ description: Три стиля кода команды учителя для л�
 
 Обычный Markdown-файл рядом с кодом. В нём по порядку:
 
-- блок ```` ```дракон ```` — порядок действий (текстовая запись схем: drakon-graf `docs/drakon/текстовая_запись.md`, копия — teacher-workpad `docs/komanda/drakon-zapis.md`);
+- блок ```` ```дракон ```` — порядок действий (текстовая запись схем: drakon-graf `docs/drakon/текстовая_запись.md`, копия — teacher-workpad `lib/drakon-shema/drakon-zapis.md`);
 - блок ```` ```конспект ```` (английское имя — `drakon-graf`) — данные, факты и правила на языке ДРАКОН-ГРАФ;
 - тест — строки `пример:` (что должно получаться) и `контрпример:` (что не должно).
 
-Образец — teacher-workpad `docs/komanda/primery/drakon-list-evklid.md`. Текст в иконах пиши на целевом языке (как в образце): тогда из блока `дракон` получается работающий код.
+Образец — ii-komanda `pravila/primery/drakon-list-evklid.md`. Текст в иконах пиши на целевом языке (как в образце): тогда из блока `дракон` получается работающий код.
 
 ## Что сдавать в конце работы
 

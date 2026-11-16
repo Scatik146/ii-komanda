@@ -14,7 +14,7 @@ description: "Дракон-схемы (DrakonWidget) в уроках teacher-wor
 - Шрифты и вид как у ДРАКОН-ГРАФ (PT Serif / PT Mono из `lib/drakon-graf/fonts`, обводка `#993300`, жёлтое `#FFFF99` — заголовок, конец, ветки, комментарии, текст по центру). Папка `lib/drakon-graf` должна быть рядом.
 
 ## Код
-Код вокруг схем (обёртка, генераторы кода, приложение урока) — «по-фортовски»: `teacher-workpad/docs/komanda/KOD-PO-FORTOVSKI.md`. Каждое слово кода — будущая дракон-схема: один вход, один выход, простые развилки и циклы. В конце — «пополнение словаря».
+Код вокруг схем (обёртка, генераторы кода, приложение урока) — «по-фортовски»: ii-komanda `pravila/KOD-PO-FORTOVSKI.md`. Каждое слово кода — будущая дракон-схема: один вход, один выход, простые развилки и циклы. В конце — «пополнение словаря».
 
 ## Встроить
 ```html
@@ -50,7 +50,7 @@ description: "Дракон-схемы (DrakonWidget) в уроках teacher-wor
 
 ## Псевдокод, маршруты, ИИ-формат, код
 - `lib/drakongen/drakongen.js` и `ai-ast.js` (Митькин, public domain) подключать до обёртки. `pokazat(el, shema, {knopki:true})` — кнопки «Псевдокод», «Маршруты», «Код» (`yazykKoda` — язык по умолчанию); `DrakonShema.psevdokod(shema,'ru')`, `marshruty(shema)`.
-- `pokazat` принимает ИИ-формат DrakonHub `{name, stages:[{name, steps:[{type:'action'|'question'|'select'|'loop'|'break'|'address'|'pause'|'insertion'|'process'|'simpleinput'|'simpleoutput'|'concurrent'|'controlperiod', …}]}]}` — его пишет нейросеть по промпту `drakon-graf/docs/komanda/drakonhub-prompt.md`.
+- `pokazat` принимает ИИ-формат DrakonHub `{name, stages:[{name, steps:[{type:'action'|'question'|'select'|'loop'|'break'|'address'|'pause'|'insertion'|'process'|'simpleinput'|'simpleoutput'|'concurrent'|'controlperiod', …}]}]}` — его пишет нейросеть по промпту ii-komanda `prompty/drakonhub-prompt.md`.
 - `DrakonShema.kod(shema, 'python'|'kumir'|'c'|'1c')` → Promise `{kod, oshibki}`. Python и КуМир — свои генераторы в стиле ОГЭ (`нц пока условие`, `нц для i от 1 до n`, `кц при`); C и 1С — `lib/drakongen/drakontechgen.js`. Текст в блоках — на целевом языке. КуМир: имя `алг` чистится от цифр и служебных слов, `использовать Робот` — в начало, «к следующему шагу» → `далее` (только qumir.dev, обёртка предупреждает). Тест: `node tools/drakon-kod-test.mjs`.
 - КуМир проверять запуском на qumir.dev (`document.querySelector('.CodeMirror').CodeMirror.setValue(код)`, ввод — `#stdin`, «Запустить», вывод — `#stdout`). qumir.dev компилирует на сервере — только онлайн; в офлайн-версии кнопок qumir.dev нет.
 - Заготовка для сборки: пустой блок — `''` или `'…'`, помечать `/*заготовка*/`. Кнопка `cikl` вставляет только for; циклы «пока» давать готовыми в заготовке.

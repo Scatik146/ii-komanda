@@ -47,3 +47,4 @@
 - в разделе «Итог» этого файла — то же коротко, с датой
 
 ## Итог
+16.11.2026. Пп. 1–6 — Haiku 5.5: карточки шести навыков (brifing, drakon-shema, ekonomnaya-sessiya, graficheskij-konspekt, teacher-workpad-sajt, tri-stilya-koda), учитель сохранил в 03:54; спорные места (tri-stilya-koda «Решение учителя 15.11», teacher-workpad-sajt п. 3) легли как в задании; в ekonomnaya-sessiya п. 3 убрано «копии в teacher-workpad» — верно. komnata — без карточки (старых путей нет). Пп. 7–8 Haiku не сделал (ждал «сохранил»), доделала Марьям (Opus 5.5): все семь копий — текст навыка аккаунта целиком, в обеих папках; `grep docs/komanda` — пусто, `diff -r` — пусто, каждая копия = аккаунт.

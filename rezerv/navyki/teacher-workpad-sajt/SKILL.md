@@ -10,7 +10,7 @@ description: "Публикация уроков, приложений и мат�
 ## Начало работы
 1. `add_repo` (owner `Scatik146`, repo `teacher-workpad`, access `push`), затем `git clone --depth 1 https://github.com/Scatik146/teacher-workpad /home/claude/teacher-workpad`.
 2. Прочитать `CLAUDE.md` репозитория — там действующие правила. Он главнее этого навыка.
-3. Для помощников ИИ — `docs/komanda/README.md`; копии навыков — `docs/komanda/navyki/` (при правке навыка обновить копию). Журнал решений по ДРАКОН-ГРАФ и дракон-схемам — `Scatik146/drakon-graf`, `docs/komanda/README.md`.
+3. Для помощников ИИ — ii-komanda `komanda/VHOD-UROKI.md`; копии навыков — ii-komanda `rezerv/navyki/` (при правке навыка обновить копию). Журнал решений по ДРАКОН-ГРАФ и дракон-схемам — `Scatik146/ii-komanda`, `komanda/README.md`.
 
 ## Правила приложений
 - Папка `<класс>-klass/<имя>/` (для нескольких предметов — `obshchie/<имя>/`), приложение — `index.html`, рядом другие файлы.
@@ -21,7 +21,7 @@ description: "Публикация уроков, приложений и мат�
 - Материалы учителя — HTML в папке урока в стиле `*/kanva.html` (.pptx/.docx переводить в HTML; Claude Docs у учителя не открывается).
 - Варианты ответов перемешивать (верный не всегда первый); в парах — роли «за пультом / штурман».
 - Конспекты и схемы — навыки `graficheskij-konspekt` и `drakon-shema`.
-- Код приложений — «по-фортовски» (`docs/komanda/KOD-PO-FORTOVSKI.md`): маленькие слова с комментарием «слово: что делает», слои снизу вверх, данные отдельно; в конце работы — «пополнение словаря».
+- Код приложений — «по-фортовски» (ii-komanda `pravila/KOD-PO-FORTOVSKI.md`): маленькие слова с комментарием «слово: что делает», слои снизу вверх, данные отдельно; в конце работы — «пополнение словаря».
 
 ## Каталог и списки
 - Урок — объект в `LESSONS` в `lessons.js` (`where:[{s:'iiib'|'inf'|'mat'|'trud', g:класс}]`, title, topic, about, format, path, teacher:[{label, href, kind:'slides'|'print'|'guide'|'tool'}]; `ready:false` — скрыт) и строка в таблице `README.md`.
