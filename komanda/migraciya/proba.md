@@ -1,6 +1,6 @@
 # Проба миграции: что будет сделано
 
-Создано `tools/migraciya.py` (проба, ничего не меняет). переносов 119, указателей 126, файлов с заменой путей 24, замен 89, путей в навыках 50, руками 0, битых ссылок после замены 0.
+Создано `tools/migraciya.py` (проба, ничего не меняет). переносов 120, указателей 127, файлов с заменой путей 24, замен 89, путей в навыках 50, руками 0, битых ссылок после замены 0.
 
 ## Битые ссылки после замены
 
@@ -62,6 +62,7 @@
 | drakon-graf `docs/komanda/vstavka/den/2026-11-16/01-claude-zapusk-na-modelyah-3.md` | ii-komanda `komanda/vstavka/den/2026-11-16/01-claude-zapusk-na-modelyah-3.md` |
 | drakon-graf `docs/komanda/vstavka/den/2026-11-16/02-claude-migraciya-1.md` | ii-komanda `komanda/vstavka/den/2026-11-16/02-claude-migraciya-1.md` |
 | drakon-graf `docs/komanda/vstavka/den/2026-11-16/03-claude-migraciya-proba.md` | ii-komanda `komanda/vstavka/den/2026-11-16/03-claude-migraciya-proba.md` |
+| drakon-graf `docs/komanda/vstavka/den/2026-11-16/04-claude-migraciya-zadanie.md` | ii-komanda `komanda/vstavka/den/2026-11-16/04-claude-migraciya-zadanie.md` |
 | drakon-graf `docs/komanda/vstavka/glm-recenzent.md` | ii-komanda `prompty/roli/glm-recenzent.md` |
 | drakon-graf `docs/komanda/vstavka/qwen-kontent.md` | ii-komanda `prompty/roli/qwen-kontent.md` |
 | teacher-workpad `docs/komanda/KOD-PO-FORTOVSKI.md` | ii-komanda `pravila/KOD-PO-FORTOVSKI.md` |
@@ -186,6 +187,7 @@
 | drakon-graf `docs/komanda/vstavka/den/2026-11-16/01-claude-zapusk-na-modelyah-3.md` | ii-komanda/komanda/vstavka/den/2026-11-16/01-claude-zapusk-na-modelyah-3.md |
 | drakon-graf `docs/komanda/vstavka/den/2026-11-16/02-claude-migraciya-1.md` | ii-komanda/komanda/vstavka/den/2026-11-16/02-claude-migraciya-1.md |
 | drakon-graf `docs/komanda/vstavka/den/2026-11-16/03-claude-migraciya-proba.md` | ii-komanda/komanda/vstavka/den/2026-11-16/03-claude-migraciya-proba.md |
+| drakon-graf `docs/komanda/vstavka/den/2026-11-16/04-claude-migraciya-zadanie.md` | ii-komanda/komanda/vstavka/den/2026-11-16/04-claude-migraciya-zadanie.md |
 | drakon-graf `docs/komanda/vstavka/glm-recenzent.md` | ii-komanda/prompty/roli/glm-recenzent.md |
 | drakon-graf `docs/komanda/vstavka/qwen-kontent.md` | ii-komanda/prompty/roli/qwen-kontent.md |
 | teacher-workpad `docs/komanda/KOD-PO-FORTOVSKI.md` | ii-komanda/pravila/KOD-PO-FORTOVSKI.md |
