@@ -1,6 +1,6 @@
 # Проба миграции: что будет сделано
 
-Создано `tools/migraciya.py` (проба, ничего не меняет). переносов 119, указателей 126, файлов с заменой путей 24, замен 88, путей в навыках 50, руками 0, битых ссылок после замены 0.
+Создано `tools/migraciya.py` (проба, ничего не меняет). переносов 119, указателей 126, файлов с заменой путей 24, замен 89, путей в навыках 50, руками 0, битых ссылок после замены 0.
 
 ## Битые ссылки после замены
 
@@ -329,7 +329,7 @@
 - drakon-graf `docs/komanda/README.md`:44 — `docs/komanda/navyki/` → `rezerv/navyki/`
 - drakon-graf `docs/komanda/SOSTOYANIE.md`:98 — `docs/komanda/README.md` → `komanda/README.md`
 - drakon-graf `docs/komanda/SOSTOYANIE.md`:209 — `teacher-workpad `docs/komanda/zadaniya/` → `ii-komanda `komanda/zadaniya/`
-- drakon-graf `docs/komanda/SOSTOYANIE.md`:228 — `teacher-workpad `docs/komanda/navyki/` → `ii-komanda `rezerv/navyki/`
+- drakon-graf `docs/komanda/SOSTOYANIE.md`:230 — `teacher-workpad `docs/komanda/navyki/` → `ii-komanda `rezerv/navyki/`
 - drakon-graf `docs/komanda/vstavka/alisa-koordinator.md`:4 — `raw.githubusercontent.com/Scatik146/drakon-graf/main/docs/komanda/SOSTOYANIE.md` → `raw.githubusercontent.com/Scatik146/ii-komanda/main/komanda/SOSTOYANIE.md`
 - drakon-graf `docs/komanda/vstavka/alisa-koordinator.md`:5 — `raw.githubusercontent.com/Scatik146/drakon-graf/main/docs/komanda/BRIFING.md` → `raw.githubusercontent.com/Scatik146/ii-komanda/main/komanda/BRIFING.md`
 - drakon-graf `docs/komanda/vstavka/alisa-koordinator.md`:6 — `raw.githubusercontent.com/Scatik146/drakon-graf/main/docs/komanda/BEZ_CLAUDE.md` → `raw.githubusercontent.com/Scatik146/ii-komanda/main/komanda/BEZ_CLAUDE.md`
@@ -351,6 +351,7 @@
 - teacher-workpad `CLAUDE.md`:13 — `docs/komanda/primery/drakon-list-evklid.md` → `ii-komanda/pravila/primery/drakon-list-evklid.md`
 - teacher-workpad `chernoviki/OPIS.md`:43 — `docs/komanda/zadaniya/003-uchitel-posle-uroka.md` → `ii-komanda/komanda/zadaniya/003-uchitel-posle-uroka.md`
 - teacher-workpad `chernoviki/OPIS.md`:58 — `docs/komanda/zadaniya/003-uchitel-posle-uroka.html` → `ii-komanda/komanda/zadaniya/003-uchitel-posle-uroka.html`
+- teacher-workpad `chernoviki/OPIS.md`:111 — `drakon-graf `docs/komanda/SOSTOYANIE.md` → `ii-komanda `komanda/SOSTOYANIE.md`
 - teacher-workpad `docs/komanda/KOD-PO-GRAFOVSKI.md`:3 — `drakon-graf `docs/komanda/README.md` → `ii-komanda `komanda/README.md`
 - teacher-workpad `docs/komanda/KOD-PO-GRAFOVSKI.md`:47 — `docs/komanda/primery/drakon-list-evklid.md` → `pravila/primery/drakon-list-evklid.md`
 - teacher-workpad `docs/komanda/KOD-PO-PROLOGOVSKI.md`:3 — `drakon-graf `docs/komanda/README.md` → `ii-komanda `komanda/README.md`

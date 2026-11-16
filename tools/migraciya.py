@@ -3,6 +3,8 @@
 # Запуск из папки ii-komanda (соседние репозитории — рядом):
 #   python tools/migraciya.py          — проба: komanda/migraciya/proba.md, ничего больше не меняет
 #   python tools/migraciya.py --opis   — опись: komanda/migraciya/opis.md, ничего больше не меняет
+#   python tools/migraciya.py --sdelat — по-настоящему: файлы по плану пробы и коммит в каждом репозитории (без push)
+#   python tools/migraciya.py --proverit — после --sdelat: старых путей в живой части нет, ссылки перенесённого целы
 # Код по-фортовски: над каждым словом строка «слово: что делает».
 import json
 import posixpath
@@ -25,6 +27,8 @@ SSYLKA = re.compile(
 )
 TEKSTOVYE = {".md", ".txt", ".py", ".js", ".mjs", ".cjs", ".json", ".bat", ".html", ".yml", ".fs", ""}
 PROBA = OPIS.parent / "proba.md"
+SDELANO = OPIS.parent / "sdelano.json"
+SVOJ_SLED = "komanda/migraciya/"
 REPOZITORII = ("ii-komanda", "drakon-graf", "teacher-workpad", "memory_maryam_ai")
 GITHUB = "https://github.com/Scatik146/"
 # код: в нём ссылку «репозиторий/путь» не напишешь — только путь внутри своего репозитория
@@ -414,7 +418,8 @@ def dejstviya_komandy(k, tekst, zametki):
     kuda = mesto(novyj_put(p, k["fajl"][len(STAROE) + 1:]))
     dejstviya = [{"vid": "ukazatel", "repo": k["repo"], "put": k["fajl"], "tekst": tekst_ukazatelya(rassh, kuda), "kuda": kuda}]
     if p["dejstvie"] in ("perenos", "v_repo"):
-        shapka = kommentarij(rassh, f"перенесено из {k['repo']}@{k['kommit'][k['repo']]} {k['fajl']}")
+        # внутри своего репозитория (v_repo) строки нет: история — в git, номера строк не сдвигаются (тест drakon-zapis)
+        shapka = kommentarij(rassh, f"перенесено из {k['repo']}@{k['kommit'][k['repo']]} {k['fajl']}") if p["dejstvie"] == "perenos" else ""
         novyj = s_shapkoj(zamenit_v_fajle(k, tekst, zametki), shapka)
         dejstviya.insert(0, {"vid": "perenos", "repo": kuda[0], "put": kuda[1], "tekst": novyj, "otkuda": (k["repo"], k["fajl"])})
     return dejstviya
@@ -553,12 +558,143 @@ def napisat_probu():
     print(f"Проба: {PROBA}\n{itog}")
 
 
+# --- По-настоящему (--sdelat) и проверка после (--proverit). Образец строки sdelano.json:
+#   {"vid": "perenos", "repo": "ii-komanda", "put": "komanda/BRIFING.md", "otkuda": ["drakon-graf", "docs/komanda/BRIFING.md"]}
+
+
+# git: выполнить git в репозитории, вернуть вывод
+def git(repo, *kluchi, vvod=None):
+    r = subprocess.run(["git", "-C", str(KOREN / repo)] + list(kluchi), input=vvod,
+                       capture_output=True, text=True, encoding="utf-8", check=True)
+    return r.stdout
+
+
+# gryaznye: репозитории с незакоммиченными изменениями (свой след миграции — не в счёт)
+def gryaznye():
+    spisok = []
+    for r in REPOZITORII:
+        stroki = [s for s in git(r, "status", "--porcelain").splitlines() if SVOJ_SLED not in s]
+        spisok += [r] if stroki else []
+    return spisok
+
+
+# uzhe_est: цели переноса, которые уже лежат на месте (миграция уже была?)
+def uzhe_est(dejstviya):
+    return [d["repo"] + "/" + d["put"] for d in dejstviya if d["vid"] == "perenos" and (KOREN / d["repo"] / d["put"]).exists()]
+
+
+# konec_strok: конец строк исходного файла — "\r\n", если в нём есть CRLF (.bat), иначе "\n"
+def konec_strok(repo, put):
+    f = KOREN / repo / put
+    return "\r\n" if f.exists() and b"\r\n" in f.read_bytes() else "\n"
+
+
+# zapisat: одно действие — на диск, с концами строк исходного файла
+def zapisat(d, konec):
+    f = KOREN / d["repo"] / d["put"]
+    f.parent.mkdir(parents=True, exist_ok=True)
+    f.write_bytes(d["tekst"].replace("\n", konec).encode("utf-8"))
+
+
+# soobshchenie: текст коммита по-русски для одного репозитория
+def soobshchenie(repo, dejstviya, kommity):
+    schet = {v: sum(1 for d in dejstviya if d["repo"] == repo and d["vid"] == v) for v in ("perenos", "ukazatel", "zamena")}
+    otkuda = ", ".join(f"{r}@{kommity[r]}" for r in ("drakon-graf", "teacher-workpad"))
+    zagolovok = {"ii-komanda": "Миграция: docs/komanda из drakon-graf и teacher-workpad — в ii-komanda",
+                 "memory_maryam_ai": "Память: пути docs/komanda — на новые места в ii-komanda"}
+    return (zagolovok.get(repo, "Миграция: docs/komanda переехало в ii-komanda — указатели и новые пути") + "\n\n"
+            + f"Перенесено файлов {schet['perenos']}, указателей {schet['ukazatel']}, файлов с новыми путями {schet['zamena']}.\n"
+            + f"Из {otkuda}. Сделано tools/migraciya.py --sdelat (ii-komanda), план — komanda/migraciya/proba.md.\n"
+            + "docs/komanda не удалять до брифинга после миграции (окно отката).\n")
+
+
+# zakommitit: коммит одного репозитория — только свои пути (без git add -A)
+def zakommitit(repo, puti, tekst):
+    git(repo, "add", "--pathspec-from-file=-", vvod="\n".join(puti) + "\n")
+    git(repo, "commit", "-q", "-F", "-", vvod=tekst)
+    return git(repo, "rev-parse", "--short", "HEAD").strip()
+
+
+# mozhno_li: причины не запускать (пусто — можно): грязные репозитории, уже перенесено, проба не чиста
+def mozhno_li(pravila, dejstviya, zametki):
+    prichiny = [f"не закоммичено: {r}" for r in gryaznye()]
+    prichiny += [f"уже есть: {p}" for p in uzhe_est(dejstviya)]
+    prichiny += ["битые ссылки после замены — смотри пробу"] if proverit_ssylki(pravila, dejstviya, zametki) else []
+    prichiny += ["есть замены «руками» — смотри пробу"] if stroki_zamen(zametki, True) + lishnie_osobye(pravila, zametki) else []
+    return prichiny
+
+
+# sdelat: проба → проверки → запись всех действий → sdelano.json → коммит в каждом репозитории
+def sdelat():
+    pravila = prochitat_pravila()
+    napisat_probu()
+    dejstviya, zametki = plan(pravila)
+    prichiny = mozhno_li(pravila, dejstviya, zametki)
+    kommity = {r: kommit(r) for r in REPOZITORII}
+    if prichiny:
+        print("Не делаю:\n" + "\n".join("- " + p for p in prichiny))
+    else:
+        koncy = [konec_strok(*d.get("otkuda", (d["repo"], d["put"]))) for d in dejstviya]
+        for d, konec in zip(dejstviya, koncy):
+            zapisat(d, konec)
+        zapisat_sled(dejstviya)
+        for repo in REPOZITORII:
+            puti = [d["put"] for d in dejstviya if d["repo"] == repo]
+            puti += [SVOJ_SLED + "proba.md", SVOJ_SLED + "sdelano.json"] if repo == "ii-komanda" else []
+            print(f"{repo}: {zakommitit(repo, puti, soobshchenie(repo, dejstviya, kommity))}" if puti else f"{repo}: нечего")
+        print("Готово. Дальше: python tools/migraciya.py --proverit, потом push в каждом репозитории.")
+
+
+# zapisat_sled: что сделано — в komanda/migraciya/sdelano.json (для --proverit и отката)
+def zapisat_sled(dejstviya):
+    sled = [{k: d[k] for k in ("vid", "repo", "put", "otkuda") if k in d} for d in dejstviya]
+    SDELANO.write_text(json.dumps(sled, ensure_ascii=False, indent=1) + "\n", encoding="utf-8")
+
+
+# ostalis_starye: старые пути docs/komanda в живой части файла после --sdelat
+def ostalis_starye(pravila, d):
+    otkuda = tuple(d.get("otkuda", (d["repo"], d["put"])))
+    k = {"pravila": pravila, "repo": otkuda[0], "fajl": otkuda[1]}
+    stroki = (KOREN / d["repo"] / d["put"]).read_text(encoding="utf-8").split("\n")
+    istoriya = stroki_istorii(stroki, pravilo_fajla(pravila, *otkuda))
+    ostavit = [o["tekst"] for o in svoi(k, "ostavit")]
+    return [f"- {d['repo']} `{d['put']}`:{i + 1} — `{s.strip()[:80]}`" for i, s in enumerate(stroki)
+            if i not in istoriya and STAROE in s and "перенесено из " not in s and not any(o in s for o in ostavit)]
+
+
+# proverit_posle: после --sdelat: файлы на месте, старых путей в живой части нет, относительные ссылки .md целы
+def proverit_posle():
+    pravila = prochitat_pravila()
+    sled = json.loads(SDELANO.read_text(encoding="utf-8"))
+    nabor = vse_fajly()
+    net = [f"- нет файла: {d['repo']}/{d['put']}" for d in sled if (d["repo"], d["put"]) not in nabor]
+    starye, bitye = [], []
+    for d in sled:
+        if d["vid"] != "ukazatel" and (d["repo"], d["put"]) in nabor:
+            starye += ostalis_starye(pravila, d)
+            bitye += [f"- {d['repo']} `{d['put']}` — `{a}`" for a in bitye_posle(pravila, d, nabor)]
+    print(f"Проверка после --sdelat: файлов {len(sled)}, нет на месте {len(net)}, старых путей {len(starye)}, битых ссылок {len(bitye)}")
+    print("\n".join(net + starye + bitye) or "Всё цело.")
+
+
+# bitye_posle: битые относительные ссылки перенесённого или изменённого живого .md (на диске сейчас)
+def bitye_posle(pravila, d, nabor):
+    otkuda = tuple(d.get("otkuda", (d["repo"], d["put"])))
+    zhivoj = d["vid"] == "zamena" or pravilo_fajla(pravila, *otkuda)["vnutri"] == "zhivoj"
+    tekst = (KOREN / d["repo"] / d["put"]).read_text(encoding="utf-8") if zhivoj and d["put"].endswith(".md") else ""
+    return [a for a in otnositelnye(tekst) if not est_li(nabor, *razreshit(d["repo"], d["put"], a))]
+
+
 # glavnoe: разобрать ключ запуска
 def glavnoe():
     if "--opis" in sys.argv:
         napisat_opis()
     elif "--sdelat" in sys.argv:
-        print("--sdelat — следующим шагом; сейчас есть проба (без ключа) и опись (--opis)")
+        sdelat()
+    elif "--proverit" in sys.argv and not SDELANO.exists():
+        print("Нет komanda/migraciya/sdelano.json — сначала python tools/migraciya.py --sdelat")
+    elif "--proverit" in sys.argv:
+        proverit_posle()
     else:
         napisat_probu()
 
