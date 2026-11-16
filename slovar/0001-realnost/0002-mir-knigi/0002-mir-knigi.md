@@ -7,7 +7,6 @@ id: 0002-mir-knigi
 вход: нет
 выход: календарная система как набор решений автора
 изменяет: нет
-опирается: 0001
 истинность: 0001 = -1
 проверено: нет
 источник: [Н] komi-perm-game-calendar/docs/istochniki.md; komi-perm-game-calendar/docs/ekspertiza-itog.md
