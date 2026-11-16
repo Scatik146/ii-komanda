@@ -47,3 +47,5 @@
 - в разделе «Итог» этого файла — то же коротко, с датой
 
 ## Итог
+
+16.11.2026. Карточки навыков показаны и сохранены учителем (шесть навыков; komnata — без карточки, старых путей нет). Копии в `rezerv/navyki` и `memory_maryam_ai/navyki` приведены к тексту навыков аккаунта: `grep docs/komanda` пусто, `diff -r` пусто. Ветка `navyki-posle-migracii` запушена в ii-komanda и memory_maryam_ai, PR не открыт. Открыто: `komanda/VHOD-UROKI.md` устарел (журнал и путь к drakon-graf); в ekonomnaya-sessiya остался `teacher-workpad/CLAUDE.md` (в таблице его не было).
