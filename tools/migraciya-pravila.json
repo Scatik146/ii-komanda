@@ -2,7 +2,7 @@
   "_opisanie": "Правила миграции docs/komanda в ii-komanda (комната 2026-11-15-migraciya, реплики 1б и 6). Данные для tools/migraciya.py. perenos: куда переносится (префикс, длиннее — главнее); dejstvie: perenos | ostaetsya | ukazatel (копия уже есть); vnutri: zhivoj — пути внутри меняются, istoriya — не трогаются. klass: какие файлы четырёх репозиториев живые, какие — история (для замены ссылок).",
   "repozitorii": ["ii-komanda", "drakon-graf", "teacher-workpad", "memory_maryam_ai"],
   "ne_trogat": ["max-class-bot"],
-  "ne_chitat": ["tools/migraciya.py", "tools/migraciya-pravila.json", "komanda/migraciya/"],
+  "ne_chitat": ["tools/migraciya.py", "tools/migraciya-pravila.json", "tools/migraciya.bat", "tools/migraciya-list.md", "komanda/migraciya/"],
   "podskazki": {"_opisanie": "чей docs/komanda в файле, если ссылка неясна (README.md есть в обоих)", "navyki/teacher-workpad-sajt/": "teacher-workpad", "rezerv/navyki/teacher-workpad-sajt/": "teacher-workpad", "navyki/tri-stilya-koda/": "teacher-workpad", "rezerv/navyki/tri-stilya-koda/": "teacher-workpad"},
   "perenos": {
     "drakon-graf": [
