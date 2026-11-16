@@ -24,7 +24,7 @@
       {"iz": "primery/", "v": "pravila/primery/", "dejstvie": "perenos", "vnutri": "zhivoj"},
       {"iz": "README.md", "v": "komanda/VHOD-UROKI.md", "dejstvie": "perenos", "vnutri": "zhivoj"},
       {"iz": "drakon-zapis.md", "v": "teacher-workpad:lib/drakon-shema/drakon-zapis.md", "dejstvie": "v_repo", "vnutri": "zhivoj", "pochemu": "продукт, не работа команды: копия drakon-graf docs/drakon/текстовая_запись.md рядом с библиотекой zapis.js; на неё смотрят tools/drakon-zapis-test.mjs и .github/workflows/proverka.yml"},
-      {"iz": "navyki/", "v": "rezerv/navyki/", "dejstvie": "ukazatel", "vnutri": "zhivoj", "pochemu": "копия в ii-komanda/rezerv/navyki/ совпадает байт в байт"},
+      {"iz": "navyki/", "v": "rezerv/navyki/", "imya_fajla": "{imya}/SKILL.md", "dejstvie": "ukazatel", "vnutri": "zhivoj", "pochemu": "копия в ii-komanda/rezerv/navyki/ совпадает байт в байт; там навык — папка: navyki/komnata.md → rezerv/navyki/komnata/SKILL.md"},
       {"iz": "zadaniya/", "v": "komanda/zadaniya/", "dejstvie": "perenos", "vnutri": "istoriya", "pochemu": "работа команды; в proverki/*.cjs пути ../../../../tools/drakon-list.mjs → ../../../../teacher-workpad/tools/drakon-list.mjs, ../../../../../drakon-graf → ../../../../drakon-graf; в test-zapusk.bat и test_koda.py — путь к заданиям"},
       {"iz": "zadaniya/SHABLON.md", "v": "komanda/zadaniya/SHABLON.md", "dejstvie": "perenos", "vnutri": "zhivoj"},
       {"iz": "zadaniya/TESTY-NAVYKA.md", "v": "komanda/zadaniya/TESTY-NAVYKA.md", "dejstvie": "perenos", "vnutri": "zhivoj"},
@@ -32,6 +32,23 @@
       {"iz": "zadaniya/proverki/obrazcy/", "v": "komanda/zadaniya/proverki/obrazcy/", "dejstvie": "perenos", "vnutri": "istoriya"}
     ]
   },
+  "_navyk": "klass navyk: копия навыка аккаунта — скрипт её не меняет, пути из неё идут в таблицу для карточек (propose_skills), копии потом — по карточке",
+  "ostavit": [
+    {"repo": "drakon-graf", "fajl": "docs/komanda/README.md", "tekst": "удалить `docs/komanda` в drakon-graf и teacher-workpad", "pochemu": "речь о старой папке, путь верный"}
+  ],
+  "osobye": [
+    {"repo": "teacher-workpad", "fajl": "docs/komanda/zadaniya/proverki/*.cjs", "bylo": "'../../../../tools/drakon-list.mjs'", "stalo": "'../../../../teacher-workpad/tools/drakon-list.mjs'", "pochemu": "путь от __dirname: из ii-komanda/komanda/zadaniya/proverki до teacher-workpad"},
+    {"repo": "teacher-workpad", "fajl": "docs/komanda/zadaniya/proverki/*.cjs", "bylo": "'../../../../../drakon-graf'", "stalo": "'../../../../drakon-graf'", "pochemu": "путь от папки proverki: на уровень меньше"},
+    {"repo": "ii-komanda", "fajl": "tools/test-zapusk.bat", "bylo": "set \"ZADANIYA=%TW%\\docs\\komanda\\zadaniya\"", "stalo": "set \"ZADANIYA=%II%\\komanda\\zadaniya\"", "pochemu": "задания теперь в ii-komanda"},
+    {"repo": "ii-komanda", "fajl": "tools/test_koda.py", "bylo": "NAVYK = \"docs/komanda/TRI-STILYA-ODNIM-TEKSTOM.md\"", "stalo": "NAVYK = \"pravila/TRI-STILYA-ODNIM-TEKSTOM.md\"", "pochemu": "навык одним текстом теперь в ii-komanda"},
+    {"repo": "ii-komanda", "fajl": "tools/test_koda.py", "bylo": "(tw / NAVYK)", "stalo": "(KOREN / NAVYK)", "pochemu": "путь от корня ii-komanda, не от teacher-workpad"},
+    {"repo": "ii-komanda", "fajl": "komnata/README.md", "bylo": "(drakon-graf `docs/komanda/`)", "stalo": "(`komanda/`)", "pochemu": "SOSTOYANIE.md теперь в ii-komanda"},
+    {"repo": "ii-komanda", "fajl": "tools/test-zapusk-list.md", "bylo": "teacher-workpad/docs/komanda/", "stalo": "ii-komanda/komanda/", "pochemu": "задания теперь в ii-komanda komanda/zadaniya/"},
+    {"repo": "drakon-graf", "fajl": "docs/komanda/README.md", "bylo": "навыки в `docs/komanda/navyki/`", "stalo": "копии навыков — в ii-komanda `rezerv/navyki/`", "pochemu": "в строке позже стоит lib/drakon-graf — разбор принял ссылку за drakon-graf"},
+    {"repo": "teacher-workpad", "fajl": "docs/komanda/TRI-STILYA-ODNIM-TEKSTOM.md", "bylo": "teacher-workpad `docs/komanda/`:", "stalo": "ii-komanda `pravila/`:", "pochemu": "папка целиком: правила кода теперь в pravila/"},
+    {"repo": "teacher-workpad", "fajl": "tools/drakon-list.mjs", "bylo": "// Правило: docs/komanda/KOD-PO-GRAFOVSKI.md, п. 4. Образец: docs/komanda/primery/drakon-list-evklid.md.", "stalo": "// Правило: ii-komanda pravila/KOD-PO-GRAFOVSKI.md, п. 4. Образец: ii-komanda pravila/primery/drakon-list-evklid.md.", "pochemu": "комментарий в коде: путь в чужой репозиторий словами"},
+    {"repo": "ii-komanda", "fajl": "tools/test_koda.py", "bylo": " — склонируйте teacher-workpad рядом или укажите --tw\"", "stalo": "\"", "pochemu": "навык больше не в teacher-workpad"}
+  ],
   "klass": {
     "ii-komanda": [
       {"iz": "", "klass": "?"},
@@ -42,6 +59,7 @@
       {"iz": "ii-py/", "klass": "zhivoj"},
       {"iz": "tools/", "klass": "zhivoj"},
       {"iz": "rezerv/", "klass": "zhivoj"},
+      {"iz": "rezerv/navyki/", "klass": "navyk"},
       {"iz": "komnata/README.md", "klass": "zhivoj"},
       {"iz": "komnata/", "klass": "istoriya"},
       {"iz": "testy/", "klass": "istoriya"},
@@ -68,7 +86,7 @@
     "memory_maryam_ai": [
       {"iz": "", "klass": "?"},
       {"iz": "README.md", "klass": "zhivoj"},
-      {"iz": "navyki/", "klass": "zhivoj"},
+      {"iz": "navyki/", "klass": "navyk"},
       {"iz": "pamyat/", "klass": "istoriya"}
     ]
   }

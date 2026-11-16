@@ -2,7 +2,7 @@
 
 Создано `tools/migraciya.py --opis`; правила — `tools/migraciya-pravila.json`.
 
-## Файлы drakon-graf/docs/komanda (49)
+## Файлы drakon-graf/docs/komanda (50)
 
 | старый путь | новый путь в ii-komanda | действие | внутри |
 |---|---|---|---|
@@ -53,6 +53,7 @@
 | `vstavka/den/2026-11-15/06-claude-zapusk-na-modelyah-2.md` | `komanda/vstavka/den/2026-11-15/06-claude-zapusk-na-modelyah-2.md` | perenos | istoriya |
 | `vstavka/den/2026-11-16/01-claude-zapusk-na-modelyah-3.md` | `komanda/vstavka/den/2026-11-16/01-claude-zapusk-na-modelyah-3.md` | perenos | istoriya |
 | `vstavka/den/2026-11-16/02-claude-migraciya-1.md` | `komanda/vstavka/den/2026-11-16/02-claude-migraciya-1.md` | perenos | istoriya |
+| `vstavka/den/2026-11-16/03-claude-migraciya-proba.md` | `komanda/vstavka/den/2026-11-16/03-claude-migraciya-proba.md` | perenos | istoriya |
 | `vstavka/glm-recenzent.md` | `prompty/roli/glm-recenzent.md` | perenos | zhivoj |
 | `vstavka/qwen-kontent.md` | `prompty/roli/qwen-kontent.md` | perenos | zhivoj |
 
@@ -137,15 +138,15 @@
 | `zadaniya/proverki/obrazcy/chernovik-znaniya-propusk.txt` | `komanda/zadaniya/proverki/obrazcy/chernovik-znaniya-propusk.txt` | perenos | istoriya |
 | `zadaniya/proverki/stil-fort.cjs` | `komanda/zadaniya/proverki/stil-fort.cjs` | perenos | zhivoj |
 
-## Ссылки: 363 в 125 файлах
+## Ссылки: 382 в 126 файлах
 
 | репозиторий | файл | класс | ссылок | неясных |
 |---|---|---|---|---|
 | drakon-graf | `NOTICE` | zhivoj | 1 | 0 |
 | drakon-graf | `README.md` | zhivoj | 3 | 0 |
-| drakon-graf | `docs/komanda/BEZ_CLAUDE.md` | istoriya | 10 | 0 |
-| drakon-graf | `docs/komanda/BRIFING.md` | zhivoj | 16 | 0 |
-| drakon-graf | `docs/komanda/README.md` | zhivoj | 27 | 0 |
+| drakon-graf | `docs/komanda/BEZ_CLAUDE.md` | istoriya | 17 | 0 |
+| drakon-graf | `docs/komanda/BRIFING.md` | zhivoj | 18 | 0 |
+| drakon-graf | `docs/komanda/README.md` | zhivoj | 30 | 0 |
 | drakon-graf | `docs/komanda/SOSTOYANIE.md` | zhivoj | 3 | 0 |
 | drakon-graf | `docs/komanda/brifing/2026-11-15-noch-krug-2.md` | istoriya | 1 | 0 |
 | drakon-graf | `docs/komanda/brifing/2026-11-15-noch-krug-3.md` | istoriya | 1 | 0 |
@@ -181,6 +182,7 @@
 | drakon-graf | `docs/komanda/vstavka/den/2026-11-15/06-claude-zapusk-na-modelyah-2.md` | istoriya | 3 | 0 |
 | drakon-graf | `docs/komanda/vstavka/den/2026-11-16/01-claude-zapusk-na-modelyah-3.md` | istoriya | 4 | 0 |
 | drakon-graf | `docs/komanda/vstavka/den/2026-11-16/02-claude-migraciya-1.md` | istoriya | 9 | 0 |
+| drakon-graf | `docs/komanda/vstavka/den/2026-11-16/03-claude-migraciya-proba.md` | istoriya | 7 | 0 |
 | drakon-graf | `docs/research/09_Митькин_ДраконТех.md` | istoriya | 1 | 0 |
 | drakon-graf | `docs/литература.md` | zhivoj | 1 | 0 |
 | drakon-graf | `site/experiments/forth/README.md` | zhivoj | 1 | 0 |
