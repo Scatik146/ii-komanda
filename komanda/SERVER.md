@@ -14,7 +14,7 @@
 | 9 | версии | gforth 0.7.3 · SWI-Prolog 9.2.9 · Python 3.14.4 · git 2.53.0 (скрипт, 17.11) |
 | 10 | `gforth -e "wordlist drop …"` → `WORDLIST ok` | **WORDLIST ok** |
 | 11 | клон ii-komanda в `~/ii-komanda` | есть |
-| 12 | OpenSSH-сервер Windows | поставлен, автозапуск, но **служба не стартует** — разбираем (`sshd.exe -d`) |
+| 12 | OpenSSH-сервер Windows | поставлен, автозапуск, но **служба не стартует**: sshd.exe из System32 падает с кодом 0xC0000139 (нет точки входа в DLL) → замена на winget `Microsoft.OpenSSH.Preview`, `tools/server-ssh-pochinka.ps1` |
 | 13–14 | адрес, вход с ноутбука | не сделаны |
 
 Вне инструкции Алиса завела `~/teacher-workpad/{templates_v6,ideas_v9,drakon,speech_9class}` и черновик ДРАКОН-листа
