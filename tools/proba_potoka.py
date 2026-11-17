@@ -11,7 +11,7 @@ import urllib.request
 
 import ii
 
-VOPROS = "Сколько будет 17*23? Подумай и ответь одним числом."
+VOPROS = "Реши по шагам: в классе 28 учеников, 3/7 из них — девочки; сколько мальчиков? Ответь числом."
 STROK = 20
 
 
@@ -36,6 +36,7 @@ def pechatat_stroki(otvet, nachalo):
     nomer = 0
     for stroka in otvet:
         tekst = stroka.decode("utf-8", "replace").rstrip()
+        tekst = tekst[tekst.find('"choices"'):] if '"choices"' in tekst else tekst
         if tekst and nomer < STROK:
             nomer += 1
             print("%6.1f с | %s" % (time.time() - nachalo, tekst[:160]), flush=True)
