@@ -398,6 +398,49 @@ def prochitat_prompt_iz(put):
     return chasti[-1].strip() + "\n"
 
 
+SLOVAR = KOREN / "slovar"
+
+
+def fajl_slova(nomer):
+    """Слово: файл слова словаря по номеру. Нет — Oshibka."""
+    najdeno = sorted(SLOVAR.rglob("%s-*.md" % nomer))
+    if not najdeno:
+        raise Oshibka("слой {{SLOI}}: нет слова %s в slovar/" % nomer)
+    return najdeno[0]
+
+
+def pole_slova(tekst, imya):
+    """Слово: значение поля «имя: …» из атома; нет поля — пустая строка."""
+    mt = re.search(r"^%s:\s*(.*)$" % imya, tekst, flags=re.M)
+    return mt.group(1).strip() if mt else ""
+
+
+def stroka_slova(nomer):
+    """Слово: «номер имя — описание» одной строкой."""
+    tekst = fajl_slova(nomer).read_text(encoding="utf-8")
+    return "%s — %s" % (pole_slova(tekst, "id"), pole_slova(tekst, "описание"))
+
+
+def raskryt_sloj(nomer):
+    """Слово: слой — его строка и строки слов из поля «состав» по порядку."""
+    tekst = fajl_slova(nomer).read_text(encoding="utf-8")
+    sostav = re.findall(r"\d+", pole_slova(tekst, "состав"))
+    if not sostav:
+        raise Oshibka("слой %s: пустое поле «состав»" % nomer)
+    stroki = ["### " + stroka_slova(nomer)]
+    for i, n in enumerate(sostav, 1):
+        stroki.append("%d. %s" % (i, stroka_slova(n)))
+    return "\n".join(stroki)
+
+
+def sloi_tekst(spisok):
+    """Слово: {{SLOI:9151,9142}} — слои в заданном порядке, через пустую строку."""
+    nomera = re.findall(r"\d+", spisok or "")
+    if not nomera:
+        raise Oshibka("подстановка {{SLOI}} без номеров слоёв")
+    return "\n\n".join(raskryt_sloj(n) for n in nomera)
+
+
 def podstavit(tekst, urok, dop=None):
     """Заменяет {{ИМЯ}}. Не найдено или пусто — Oshibka, а не пустая строка."""
     dop = dop or {}
@@ -406,6 +449,9 @@ def podstavit(tekst, urok, dop=None):
         imya = mt.group(1)
         if imya in dop:
             znach = dop[imya]
+        elif imya == "SLOI":
+            # слои словаря: состав раскрывается в описания слов (решение учителя 17.11)
+            znach = sloi_tekst(mt.group(2))
         elif imya == "STILI":
             # стили: три стиля кода команды — навык tri-stilya-koda без шапки (решение учителя 17.11)
             znach = prochitat_prompt_iz(KOREN / "rezerv" / "navyki" / "tri-stilya-koda" / "SKILL.md")
@@ -429,7 +475,7 @@ def podstavit(tekst, urok, dop=None):
             raise Oshibka("подстановка {{%s}}: в файле нерабочий ответ — сначала переделать" % imya)
         return str(znach).strip()
 
-    return re.sub(r"\{\{([A-Z_]+)\}\}", zamena, tekst)
+    return re.sub(r"\{\{([A-Z_]+)(?::([0-9, ]+))?\}\}", zamena, tekst)
 
 
 def nabor_iz_zayavki(urok):

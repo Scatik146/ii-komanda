@@ -116,6 +116,16 @@ class TestUrok(unittest.TestCase):
         with self.assertRaises(ii.Oshibka):
             ii.podstavit("{{NETAKOJ}}", self.urok)
 
+    def test_sloi(self):
+        t = ii.podstavit("{{SLOI:9151, 9142}}", self.urok)
+        self.assertTrue(t.startswith("### 9151-"), t[:40])
+        self.assertIn("\n1. 9078-", t)
+        self.assertIn("\n\n### 9142-", t)
+        with self.assertRaises(ii.Oshibka):
+            ii.podstavit("{{SLOI:1}}", self.urok)
+        with self.assertRaises(ii.Oshibka):
+            ii.podstavit("{{SLOI}}", self.urok)
+
     def test_vse_prompty_sobirayutsya(self):
         for f in ("kanva.md", "ekspertiza.md", "so-analiz.md"):
             (self.urok / f).write_text("x", encoding="utf-8")
