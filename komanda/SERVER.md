@@ -37,8 +37,12 @@ teacher-workpad; черновик лежит только на сервере �
 
 С ноутбука в той же домашней сети: `ssh <пользователь Windows>@<адрес сервера>`, затем `wsl`. Адрес и имя — в `memory_maryam_ai`.
 
-## Следующие шаги (по одному, после «дальше» учителя)
+## Шаги а–в (17.11) — все сделаны
+
+Дальше — по решению учителя: зеркала SourceCraft/Китай, холодный архив (пока хватает GitHub, 17.11); закрепить адрес в роутере; проверить «Сон — Никогда».
+
+### Как было
 
 а) git → GitHub: **17.11** ключ ed25519 сервера добавлен в GitHub (`Server-scatikwork`, отдельный от ноутбука), `ssh -T git@github.com` — успешно; имя Serge Vesnin, почта gmail, для `~/max-class-bot*` — yandex (`~/.gitconfig-max-bot`). Алиса вне плана поставила `xclip` (безвредно). ii-komanda переведена на SSH, пробный push — **прошёл**. Шаг «а» закрыт.
 б) **сделано 17.11**: `~/.ii-komanda.env` (600) перенесён `tools/server-klyuchi.sh`, ключи YANDEX_API_KEY и YANDEX_FOLDER_ID; `ii.py klyuchi` — alisa, alisa_flash, deepseek, qwen работают. venv не нужен: ii.py без пакетов.
-в) резервные копии: **все** репозитории Scatik146 — полные зеркала (`git clone --mirror`) в `~/rezerv/github/`, `tools/server-rezerv.sh`; публичные — сам по API GitHub, приватные — список в `~/.ii-rezerv-privatnye` (вне репозитория); журнал `~/rezerv/zhurnal.txt`; расписание Windows 03:00 и при входе — `tools/server-rezerv-raspisanie.ps1`. Дальше по решению 13.11: зеркала SourceCraft и Китай, холодный архив.
+в) **сделано 17.11** (первый прогон 22:38: 11 репозиториев, 254 МБ, без ошибок; задача Windows «ii-komanda rezerv» создана): **все** репозитории Scatik146 — полные зеркала (`git clone --mirror`) в `~/rezerv/github/`, `tools/server-rezerv.sh`; публичные — сам по API GitHub, приватные — список в `~/.ii-rezerv-privatnye` (вне репозитория); журнал `~/rezerv/zhurnal.txt`; расписание Windows 03:00 и при входе — `tools/server-rezerv-raspisanie.ps1`. Дальше по решению 13.11: зеркала SourceCraft и Китай, холодный архив.
