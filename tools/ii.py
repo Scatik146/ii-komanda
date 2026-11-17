@@ -441,6 +441,22 @@ def sloi_tekst(spisok):
     return "\n\n".join(raskryt_sloj(n) for n in nomera)
 
 
+def sloi_iz_reshenij(urok, artefakt):
+    """Слово: номера слоёв из строки «Слои <артефакт>: …» в resheniya.md урока; нет строки — пусто."""
+    p = urok / "resheniya.md"
+    tekst = p.read_text(encoding="utf-8") if p.exists() else ""
+    mt = re.search(r"^\s*(?:[-*]\s*)?Слои %s\s*:\s*(.+)$" % artefakt, tekst, flags=re.M)
+    return mt.group(1) if mt else ""
+
+
+def sloi_dlya(urok, arg):
+    """Слово: {{SLOI:9151,9142}} — номера прямо; {{SLOI:prilozhenie}} — из решений урока."""
+    if arg and re.search(r"[a-z]", arg):
+        nomera = sloi_iz_reshenij(urok, arg.strip())
+        return sloi_tekst(nomera) if nomera else "(слоёв нет — делай по канве)"
+    return sloi_tekst(arg)
+
+
 def podstavit(tekst, urok, dop=None):
     """Заменяет {{ИМЯ}}. Не найдено или пусто — Oshibka, а не пустая строка."""
     dop = dop or {}
@@ -451,7 +467,7 @@ def podstavit(tekst, urok, dop=None):
             znach = dop[imya]
         elif imya == "SLOI":
             # слои словаря: состав раскрывается в описания слов (решение учителя 17.11)
-            znach = sloi_tekst(mt.group(2))
+            znach = sloi_dlya(urok, mt.group(2))
         elif imya == "STILI":
             # стили: три стиля кода команды — навык tri-stilya-koda без шапки (решение учителя 17.11)
             znach = prochitat_prompt_iz(KOREN / "rezerv" / "navyki" / "tri-stilya-koda" / "SKILL.md")
@@ -475,7 +491,7 @@ def podstavit(tekst, urok, dop=None):
             raise Oshibka("подстановка {{%s}}: в файле нерабочий ответ — сначала переделать" % imya)
         return str(znach).strip()
 
-    return re.sub(r"\{\{([A-Z_]+)(?::([0-9, ]+))?\}\}", zamena, tekst)
+    return re.sub(r"\{\{([A-Z_]+)(?::([a-z0-9, ]+))?\}\}", zamena, tekst)
 
 
 def nabor_iz_zayavki(urok):

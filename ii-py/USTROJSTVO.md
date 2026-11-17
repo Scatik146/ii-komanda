@@ -126,3 +126,10 @@ ii-komanda/
 - Проверено 17.11 на уроке 23.11 (Chrome в облаке): приложение — 6 нарушений (цвета вне `:root`, 8 функций с несколькими `return`, нет «Новая пара», `rech-9-v1`, «станции звука», Ctrl+Alt+M); консоль чистая; 14 снимков.
 
 Пополнение словаря (`tools/avto.py`): нижние — `stili_v_stroke`, `bloki_stilej`, `bez_root`, `propustit_stroku`, `propustit_kommentarij`, `parnaya_skobka`, `odno_pravilo`, `est_ctrl_alt_m`, `eto_wsl`, `est_brauzer`, `s_perehvatchikom`, `zapustit_brauzer`, `otchet_iz_dom`; средние — `cveta_vne_root`, `ochistit_kod`, `nachala_funkcij`, `funkcii`, `hozyain`, `vozvraty_po_funkciyam`, `lishnie_vozvraty`, `prochitat_pravila`, `najti_brauzer`, `put_dlya_brauzera`, `adres_fajla`, `rabochaya_papka`, `flagi_brauzera`, `snimok`, `snimki`; верхние — `proverit_stil`, `proverit_resheniya`, `zapisat_avto`, `progon`, `zapisat_progon`; в ii.py — `html_kody`, `pravila_uroka`, `komanda_avto`, `komanda_progon`.
+
+## 12. Слои словаря в промптах (17.11, решения учителя 23:28–23:31)
+
+- **Подстановка `{{SLOI:…}}`** (`tools/ii.py`: `fajl_slova`, `pole_slova`, `stroka_slova`, `raskryt_sloj`, `sloi_tekst`, `sloi_iz_reshenij`, `sloi_dlya`). `{{SLOI:9151,9142}}` — номера прямо; `{{SLOI:prilozhenie}}` — номера из строки «Слои prilozhenie: …» в `resheniya.md` урока (промпты общие для всех уроков, номера — в уроке). Слой раскрывается: «### id — описание», затем слова поля «состав» по порядку с описаниями. Нет слова — `Oshibka`; нет строки в решениях — «(слоёв нет — делай по канве)».
+- **Блок «НОВОЕ»** в `prilozhenie.md` и `prezentaciya.md`: всё, что помощник придумал сверх слоёв, — списком после результата; лучшее — новыми кандидатами в `slovar/…/kandidaty/`.
+- **Роли:** приложение — пара проходит этапы; презентация — открытие нового (9147) до ноутбуков и на каждый этап два слайда: «Этап N» и «Проверка этапа N» (образец тот же, что в приложении).
+- Урок 23.11: строки слоёв и требования «Чего нет» — в `resheniya.md`, раздел «СЛОИ И «ЧЕГО НЕТ»». Тесты: `test_sloi`, `test_sloi_iz_reshenij` (37 из 37).

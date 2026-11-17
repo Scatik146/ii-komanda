@@ -126,6 +126,12 @@ class TestUrok(unittest.TestCase):
         with self.assertRaises(ii.Oshibka):
             ii.podstavit("{{SLOI}}", self.urok)
 
+    def test_sloi_iz_reshenij(self):
+        self.assertEqual(ii.podstavit("{{SLOI:prilozhenie}}", self.urok), "(слоёв нет — делай по канве)")
+        (self.urok / "resheniya.md").write_text("Решения\n- Слои prilozhenie: 9151, 9142\n", encoding="utf-8")
+        t = ii.podstavit("{{SLOI:prilozhenie}}", self.urok)
+        self.assertTrue(t.startswith("### 9151-") and "### 9142-" in t, t[:40])
+
     def test_vse_prompty_sobirayutsya(self):
         for f in ("kanva.md", "ekspertiza.md", "so-analiz.md"):
             (self.urok / f).write_text("x", encoding="utf-8")
