@@ -1,0 +1,1213 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Распознавание и синтез речи — практика</title>
+  <style>
+    :root {
+      --bg: #f5f5f5;
+      --text: #222;
+      --accent: #2a6fdb;
+      --correct: #1e7e34;
+      --wrong: #c82333;
+      --border: #ccc;
+      --mono: "Courier New", Courier, monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      font-size: 20px;
+      line-height: 1.4;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    .screen {
+      padding: 16px;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    #start-screen {
+      max-width: 700px;
+      margin: 40px auto;
+      background: #fff;
+      padding: 24px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    #start-screen h1 {
+      font-size: 32px;
+      margin-top: 0;
+    }
+
+    #start-steps {
+      font-size: 22px;
+      line-height: 1.6;
+    }
+
+    #start-button {
+      font-size: 22px;
+      padding: 12px 24px;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    #work-screen {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+
+    #header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 8px 16px;
+      background: #fff;
+      border-bottom: 2px solid var(--border);
+      flex-wrap: wrap;
+    }
+
+    #header h1 {
+      font-size: 24px;
+      margin: 0;
+    }
+
+    #header-stats {
+      display: flex;
+      gap: 16px;
+      font-size: 20px;
+      font-weight: bold;
+    }
+
+    #summary-button {
+      margin-left: auto;
+      font-size: 20px;
+      padding: 8px 16px;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    #work-layout {
+      display: grid;
+      grid-template-columns: 240px 1fr 320px;
+      gap: 16px;
+      padding: 16px;
+      flex: 1;
+      overflow: auto;
+    }
+
+    #task-list {
+      background: #fff;
+      padding: 12px;
+      border-radius: 8px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+    }
+
+    #task-list h2 {
+      font-size: 22px;
+      margin-top: 0;
+    }
+
+    #task-list-items {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    #task-list-items li {
+      margin-bottom: 8px;
+    }
+
+    .task-button {
+      width: 100%;
+      text-align: left;
+      font-size: 20px;
+      padding: 8px 12px;
+      background: #f0f0f0;
+      border: 2px solid transparent;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .task-button.active {
+      border-color: var(--accent);
+      background: #e6f0ff;
+    }
+
+    #task-area {
+      background: #fff;
+      padding: 16px;
+      border-radius: 8px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+    }
+
+    .task-card h2 {
+      margin-top: 0;
+      font-size: 26px;
+    }
+
+    .phrase {
+      font-family: var(--mono);
+      font-size: 22px;
+      background: #f9f9f9;
+      padding: 8px 12px;
+      border-left: 4px solid var(--accent);
+      margin: 8px 0;
+    }
+
+    .choice-block {
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      padding: 12px;
+      margin: 12px 0;
+    }
+
+    .choice-block legend {
+      font-weight: bold;
+      font-size: 20px;
+      padding: 0 4px;
+    }
+
+    .choice-block label {
+      display: block;
+      margin: 6px 0;
+      font-size: 20px;
+      cursor: pointer;
+    }
+
+    .choice-block input[type="radio"] {
+      width: 22px;
+      height: 22px;
+      margin-right: 8px;
+      vertical-align: middle;
+    }
+
+    #answer-button {
+      font-size: 22px;
+      padding: 10px 24px;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-top: 12px;
+    }
+
+    #answer-button:disabled {
+      background: #aaa;
+      cursor: not-allowed;
+    }
+
+    .result-title {
+      font-size: 32px;
+      font-weight: bold;
+      margin: 16px 0 8px;
+    }
+
+    .result-title.correct {
+      color: var(--correct);
+    }
+
+    .result-title.wrong {
+      color: var(--wrong);
+    }
+
+    .result-details {
+      font-size: 20px;
+    }
+
+    .result-details ul {
+      padding-left: 20px;
+    }
+
+    #reference {
+      background: #fff;
+      padding: 12px;
+      border-radius: 8px;
+      box-shadow: 0 1px 4px rgba(0,0,0,0.1);
+    }
+
+    #reference h2 {
+      font-size: 22px;
+      margin-top: 0;
+    }
+
+    #pipeline ol {
+      padding-left: 20px;
+      font-size: 20px;
+    }
+
+    #pipeline li {
+      margin: 4px 0;
+    }
+
+    #hints p {
+      font-size: 20px;
+      margin: 8px 0;
+    }
+
+    #counter {
+      margin-top: 16px;
+      font-size: 20px;
+    }
+
+    #summary-screen {
+      max-width: 800px;
+      margin: 40px auto;
+      background: #fff;
+      padding: 24px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    #summary-screen h1 {
+      font-size: 32px;
+      margin-top: 0;
+    }
+
+    #summary-content ul {
+      font-size: 20px;
+    }
+
+    #final-answer {
+      width: 100%;
+      font-size: 20px;
+      padding: 8px;
+      margin: 8px 0;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      font-family: inherit;
+    }
+
+    #summary-content button {
+      font-size: 20px;
+      padding: 8px 16px;
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      margin: 8px 0;
+    }
+
+    #back-to-work {
+      font-size: 20px;
+      padding: 8px 16px;
+      background: #666;
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      margin-top: 16px;
+    }
+
+    .sample-item {
+      display: block;
+      margin: 8px 0;
+      font-size: 20px;
+      cursor: pointer;
+    }
+
+    .sample-item input[type="checkbox"] {
+      width: 22px;
+      height: 22px;
+      margin-right: 8px;
+      vertical-align: middle;
+    }
+
+    @media (max-width: 900px) {
+      #work-layout {
+        grid-template-columns: 1fr;
+      }
+      #work-screen {
+        height: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <section id="start-screen" class="screen">
+      <h1>Распознавание и синтез речи</h1>
+      <p>Практика по конвейеру</p>
+      <ol id="start-steps"></ol>
+      <button id="start-button">Начать</button>
+    </section>
+
+    <section id="work-screen" class="screen hidden">
+      <header id="header">
+        <h1>Распознавание и синтез речи</h1>
+        <div id="header-stats">
+          <span id="stat-done">сделано 0 из 7</span>
+          <span id="stat-correct">верно 0</span>
+        </div>
+        <button id="summary-button">Итог</button>
+      </header>
+      <div id="work-layout">
+        <nav id="task-list">
+          <h2>Задания</h2>
+          <ul id="task-list-items"></ul>
+        </nav>
+        <main id="task-area"></main>
+        <aside id="reference">
+          <h2>Опора</h2>
+          <div id="pipeline"></div>
+          <div id="hints"></div>
+          <div id="counter"></div>
+        </aside>
+      </div>
+    </section>
+
+    <section id="summary-screen" class="screen hidden">
+      <h1>Итог</h1>
+      <div id="summary-content"></div>
+      <button id="back-to-work">Вернуться к заданиям</button>
+    </section>
+  </div>
+
+  <script>
+    // Данные приложения: тексты, задания, ответы, разборы.
+    var DATA = {
+      steps: [
+        "Рассмотри каркас конвейера справа.",
+        "Для каждой фразы отметь: Алиса поняла или переспросила, и на какой станции сбой.",
+        "Нажми «Ответить» — увидишь разбор. В конце — итог и финальный вопрос."
+      ],
+      stations: [
+        { code: "sound", name: "Звук" },
+        { code: "phonemes", name: "Фонемы" },
+        { code: "letters", name: "Буквы/подслова (гипотезы)" },
+        { code: "words", name: "Слова" },
+        { code: "sentence", name: "Предложение" }
+      ],
+      tasks: [
+        {
+          type: "recognition",
+          phrase: "Включи музыку",
+          answer: "Включила музыку.",
+          result: "understood",
+          station: "none",
+          analysis: [
+            "Алиса поняла команду и выполнила её.",
+            "Все станции конвейера сработали верно.",
+            "Сбоя нет."
+          ],
+          falseRule: ""
+        },
+        {
+          type: "recognition",
+          phrase: "Мы пришли на луг",
+          answer: "Переспросила: «Луг или лук?»",
+          result: "asked",
+          station: "words",
+          analysis: [
+            "Алиса переспросила из-за омофона: «луг» и «лук» звучат одинаково.",
+            "Это не значит, что она не знает слово.",
+            "На станции слов модель выбирает по вероятности, а звучание неоднозначно.",
+            "Это опровергает правило «если переспросила — слово не знает»."
+          ],
+          falseRule: "если Алиса переспросила — слово не знает"
+        },
+        {
+          type: "recognition",
+          phrase: "Я купил плод",
+          answer: "Распознала: «Я купил плот».",
+          result: "understood",
+          station: "words",
+          analysis: [
+            "Топ-1 гипотеза была «плот», топ-2 — «плод».",
+            "Модель выбрала по вероятности, но ошиблась.",
+            "Первая гипотеза не всегда верная.",
+            "Это опровергает правило «первая гипотеза всегда верная»."
+          ],
+          falseRule: "первая гипотеза всегда верная"
+        },
+        {
+          type: "synthesis",
+          phrase1: "Маша пришла домой",
+          phrase2: "Маша, пришла домой?",
+          question: "Что изменилось?",
+          variants: ["Ничего", "Пауза и интонация", "Только громкость", "Не знаю"],
+          correct: 1,
+          analysis: [
+            "Запятая задаёт паузу после «Маша».",
+            "Вопросительный знак задаёт вопросительную интонацию.",
+            "Знаки препинания меняют паузы и интонацию синтеза.",
+            "Это опровергает правило «знаки препинания не влияют на синтез»."
+          ],
+          falseRule: "знаки препинания не влияют на синтез"
+        },
+        {
+          type: "recognition",
+          phrase: "Открой браузер",
+          answer: "Открыла браузер.",
+          result: "understood",
+          station: "none",
+          analysis: [
+            "Алиса поняла команду и выполнила её.",
+            "Все станции конвейера сработали верно.",
+            "Сбоя нет."
+          ],
+          falseRule: ""
+        },
+        {
+          type: "recognition",
+          phrase: "Свет",
+          answer: "Распознала: «Цвет».",
+          result: "understood",
+          station: "phonemes",
+          analysis: [
+            "Звуки [с] и [ц] похожи, модель ошиблась на станции фонем.",
+            "Она поняла слово, но не то.",
+            "Сбой на станции фонем."
+          ],
+          falseRule: ""
+        },
+        {
+          type: "recognition",
+          phrase: "Казнить нельзя помиловать",
+          answer: "Распознала: «Казнить, нельзя помиловать».",
+          result: "understood",
+          station: "sentence",
+          analysis: [
+            "Алиса неверно расставила паузу: после «казнить» вместо после «нельзя».",
+            "Смысл изменился.",
+            "Сбой на станции предложения."
+          ],
+          falseRule: ""
+        }
+      ],
+      finalQuestion: "Почему модель выбирает слово по вероятности, а не «понимает» его? Приведи пример.",
+      sample: [
+        "Модель не знает смысла, она выбирает наиболее вероятное слово по статистике.",
+        "Если звучание неоднозначно (омофон), вероятность может распределиться между словами.",
+        "Поэтому Алиса может переспросить, даже если слово ей знакомо.",
+        "Пример: «луг» и «лук» звучат одинаково, модель выбирает по контексту.",
+        "Знаки препинания помогают синтезу задать паузы и интонацию."
+      ]
+    };
+
+    // Состояние ученика.
+    var state = {
+      screen: "start",
+      currentTask: 0,
+      answers: [],
+      finalAnswer: ""
+    };
+
+    // Хранилище с запасным вариантом в памяти.
+    var storage = (function() {
+      var memory = {};
+      function isAvailable() {
+        try {
+          var key = "__test__";
+          localStorage.setItem(key, "1");
+          localStorage.removeItem(key);
+          return true;
+        } catch (e) {
+          return false;
+        }
+      }
+      var available = isAvailable();
+      function save(key, value) {
+        if (available) {
+          try {
+            localStorage.setItem(key, JSON.stringify(value));
+          } catch (e) {
+            memory[key] = value;
+          }
+        } else {
+          memory[key] = value;
+        }
+      }
+      function load(key) {
+        if (available) {
+          try {
+            var str = localStorage.getItem(key);
+            if (str) {
+              return JSON.parse(str);
+            }
+          } catch (e) {
+            return memory[key] || null;
+          }
+        }
+        return memory[key] || null;
+      }
+      return {
+        save: save,
+        load: load
+      };
+    })();
+
+    // слово: создаёт пустые ответы для всех заданий
+    function createAnswers() {
+      var answers = [];
+      for (var i = 0; i < DATA.tasks.length; i++) {
+        answers.push({
+          result: "",
+          station: "",
+          variant: null,
+          checked: false,
+          correct: false
+        });
+      }
+      return answers;
+    }
+
+    // слово: сохраняет состояние в хранилище
+    function saveState() {
+      storage.save("lesson_state", state);
+    }
+
+    // слово: загружает состояние из хранилища
+    function loadState() {
+      var loaded = storage.load("lesson_state");
+      if (loaded && loaded.answers && loaded.answers.length === DATA.tasks.length) {
+        state = loaded;
+      } else {
+        state.answers = createAnswers();
+      }
+    }
+
+    // слово: показывает нужный экран
+    function showScreen(name) {
+      var screens = document.querySelectorAll(".screen");
+      for (var i = 0; i < screens.length; i++) {
+        screens[i].classList.add("hidden");
+      }
+      var target = document.getElementById(name + "-screen");
+      if (target) {
+        target.classList.remove("hidden");
+      }
+      state.screen = name;
+      saveState();
+    }
+
+    // слово: заполняет стартовый экран шагами
+    function renderStart() {
+      var list = document.getElementById("start-steps");
+      list.innerHTML = "";
+      for (var i = 0; i < DATA.steps.length; i++) {
+        var item = document.createElement("li");
+        item.textContent = DATA.steps[i];
+        list.appendChild(item);
+      }
+    }
+
+    // слово: показывает рабочий экран и отрисовывает его части
+    function renderWork() {
+      showScreen("work");
+      renderTaskList();
+      renderReference();
+      renderTask(state.currentTask);
+      updateHeader();
+    }
+
+    // слово: создаёт список заданий слева
+    function renderTaskList() {
+      var list = document.getElementById("task-list-items");
+      list.innerHTML = "";
+      for (var i = 0; i < DATA.tasks.length; i++) {
+        var item = document.createElement("li");
+        var button = document.createElement("button");
+        button.className = "task-button";
+        button.textContent = "Задание " + (i + 1);
+        button.setAttribute("data-index", i);
+        button.addEventListener("click", switchTask);
+        item.appendChild(button);
+        list.appendChild(item);
+      }
+      updateTaskMarks();
+    }
+
+    // слово: переключает текущее задание
+    function switchTask(event) {
+      var index = parseInt(event.currentTarget.getAttribute("data-index"), 10);
+      state.currentTask = index;
+      saveState();
+      renderTask(index);
+      updateTaskMarks();
+    }
+
+    // слово: возвращает знак для задания
+    function taskMark(answer) {
+      if (!answer.checked) {
+        return "○";
+      }
+      if (answer.correct) {
+        return "✔";
+      }
+      return "✘";
+    }
+
+    // слово: обновляет отметки в списке заданий
+    function updateTaskMarks() {
+      var buttons = document.querySelectorAll(".task-button");
+      for (var i = 0; i < buttons.length; i++) {
+        var answer = state.answers[i];
+        buttons[i].textContent = "Задание " + (i + 1) + " " + taskMark(answer);
+        if (i === state.currentTask) {
+          buttons[i].classList.add("active");
+        } else {
+          buttons[i].classList.remove("active");
+        }
+      }
+    }
+
+    // слово: рисует выбранное задание в центре
+    function renderTask(index) {
+      var area = document.getElementById("task-area");
+      area.innerHTML = "";
+      var task = DATA.tasks[index];
+      var answer = state.answers[index];
+
+      var card = document.createElement("div");
+      card.className = "task-card";
+
+      var title = document.createElement("h2");
+      title.textContent = "Задание " + (index + 1);
+      card.appendChild(title);
+
+      if (task.type === "recognition") {
+        renderRecognition(card, task, answer, index);
+      } else {
+        renderSynthesis(card, task, answer, index);
+      }
+
+      area.appendChild(card);
+    }
+
+    // слово: рисует фразы задания на распознавание
+    function drawRecognitionPhrases(card, task) {
+      var phrase = document.createElement("p");
+      phrase.className = "phrase";
+      phrase.textContent = "Ученик произнёс: " + task.phrase;
+      card.appendChild(phrase);
+
+      var answer = document.createElement("p");
+      answer.className = "phrase";
+      answer.textContent = "Алиса: " + task.answer;
+      card.appendChild(answer);
+    }
+
+    // слово: создаёт одну радиокнопку с подписью
+    function createRadio(name, value, text, checked, handler) {
+      var label = document.createElement("label");
+      var radio = document.createElement("input");
+      radio.type = "radio";
+      radio.name = name;
+      radio.value = value;
+      radio.checked = checked;
+      radio.addEventListener("change", handler);
+      label.appendChild(radio);
+      label.appendChild(document.createTextNode(" " + text));
+      return label;
+    }
+
+    // слово: создаёт блок выбора результата
+    function createResultBlock(answer, index) {
+      var block = document.createElement("fieldset");
+      block.className = "choice-block";
+      var legend = document.createElement("legend");
+      legend.textContent = "Алиса поняла или переспросила?";
+      block.appendChild(legend);
+
+      var variants = [
+        { value: "understood", text: "Поняла" },
+        { value: "asked", text: "Переспросила" },
+        { value: "unknown", text: "Не знаю" }
+      ];
+      for (var i = 0; i < variants.length; i++) {
+        block.appendChild(createRadio("result_" + index, variants[i].value, variants[i].text, answer.result === variants[i].value, handleResultChange));
+      }
+      return block;
+    }
+
+    // слово: создаёт блок выбора станции
+    function createStationBlock(answer, index) {
+      var block = document.createElement("fieldset");
+      block.className = "choice-block";
+      var legend = document.createElement("legend");
+      legend.textContent = "На какой станции сбой?";
+      block.appendChild(legend);
+
+      for (var i = 0; i < DATA.stations.length; i++) {
+        var station = DATA.stations[i];
+        block.appendChild(createRadio("station_" + index, station.code, station.name, answer.station === station.code, handleStationChange));
+      }
+      block.appendChild(createRadio("station_" + index, "none", "Сбоя нет", answer.station === "none", handleStationChange));
+      block.appendChild(createRadio("station_" + index, "unknown", "Не знаю", answer.station === "unknown", handleStationChange));
+      return block;
+    }
+
+    // слово: создаёт кнопку ответа
+    function createAnswerButton() {
+      var button = document.createElement("button");
+      button.id = "answer-button";
+      button.textContent = "Ответить";
+      button.addEventListener("click", checkAnswer);
+      return button;
+    }
+
+    // слово: создаёт контейнер для результата проверки
+    function createResultContainer() {
+      var block = document.createElement("div");
+      block.id = "answer-result";
+      return block;
+    }
+
+    // слово: рисует задание на распознавание
+    function renderRecognition(card, task, answer, index) {
+      drawRecognitionPhrases(card, task);
+      card.appendChild(createResultBlock(answer, index));
+      card.appendChild(createStationBlock(answer, index));
+      var button = createAnswerButton();
+      card.appendChild(button);
+      var resultBlock = createResultContainer();
+      card.appendChild(resultBlock);
+      if (answer.checked) {
+        button.disabled = true;
+        showResult(resultBlock, task, answer, index);
+      } else {
+        updateAnswerButton();
+      }
+    }
+
+    // слово: рисует фразы задания на синтез
+    function drawSynthesisPhrases(card, task) {
+      var phrase1 = document.createElement("p");
+      phrase1.className = "phrase";
+      phrase1.textContent = "Фраза 1: " + task.phrase1;
+      card.appendChild(phrase1);
+
+      var phrase2 = document.createElement("p");
+      phrase2.className = "phrase";
+      phrase2.textContent = "Фраза 2: " + task.phrase2;
+      card.appendChild(phrase2);
+
+      var question = document.createElement("p");
+      question.textContent = task.question;
+      card.appendChild(question);
+    }
+
+    // слово: создаёт блок выбора варианта для синтеза
+    function createVariantBlock(task, answer, index) {
+      var block = document.createElement("fieldset");
+      block.className = "choice-block";
+      var legend = document.createElement("legend");
+      legend.textContent = "Выбери ответ";
+      block.appendChild(legend);
+
+      for (var i = 0; i < task.variants.length; i++) {
+        block.appendChild(createRadio("variant_" + index, i, task.variants[i], answer.variant === i, handleVariantChange));
+      }
+      return block;
+    }
+
+    // слово: рисует задание на синтез
+    function renderSynthesis(card, task, answer, index) {
+      drawSynthesisPhrases(card, task);
+      card.appendChild(createVariantBlock(task, answer, index));
+      var button = createAnswerButton();
+      card.appendChild(button);
+      var resultBlock = createResultContainer();
+      card.appendChild(resultBlock);
+      if (answer.checked) {
+        button.disabled = true;
+        showResult(resultBlock, task, answer, index);
+      } else {
+        updateAnswerButton();
+      }
+    }
+
+    // слово: проверяет, выбран ли результат
+    function isResultSelected(index) {
+      var radios = document.querySelectorAll('input[name="result_' + index + '"]');
+      for (var i = 0; i < radios.length; i++) {
+        if (radios[i].checked) {
+          return true;
+        }
+      }
+      return false;
+    }
+
+    // слово: проверяет, выбрана ли станция
+    function isStationSelected(index) {
+      var radios = document.querySelectorAll('input[name="station_' + index + '"]');
+      for (var i = 0; i < radios.length; i++) {
+        if (radios[i].checked) {
+          return true;
+        }
+      }
+      return false;
+    }
+
+    // слово: проверяет, выбран ли вариант синтеза
+    function isVariantSelected(index) {
+      var radios = document.querySelectorAll('input[name="variant_' + index + '"]');
+      for (var i = 0; i < radios.length; i++) {
+        if (radios[i].checked) {
+          return true;
+        }
+      }
+      return false;
+    }
+
+    // слово: обновляет доступность кнопки ответа
+    function updateAnswerButton() {
+      var button = document.getElementById("answer-button");
+      if (!button) {
+        return;
+      }
+      var index = state.currentTask;
+      var task = DATA.tasks[index];
+      var answer = state.answers[index];
+      if (answer.checked) {
+        button.disabled = true;
+        return;
+      }
+      if (task.type === "recognition") {
+        button.disabled = !(isResultSelected(index) && isStationSelected(index));
+      } else {
+        button.disabled = !isVariantSelected(index);
+      }
+    }
+
+    // слово: сохраняет выбранный результат
+    function handleResultChange(event) {
+      var index = state.currentTask;
+      state.answers[index].result = event.target.value;
+      saveState();
+      updateAnswerButton();
+      updateCounter();
+    }
+
+    // слово: сохраняет выбранную станцию
+    function handleStationChange(event) {
+      var index = state.currentTask;
+      state.answers[index].station = event.target.value;
+      saveState();
+      updateAnswerButton();
+    }
+
+    // слово: сохраняет выбранный вариант синтеза
+    function handleVariantChange(event) {
+      var index = state.currentTask;
+      state.answers[index].variant = parseInt(event.target.value, 10);
+      saveState();
+      updateAnswerButton();
+    }
+
+    // слово: проверяет ответ на распознавание
+    function checkRecognition(answer, task) {
+      var resultOk = answer.result === task.result;
+      var stationOk = answer.station === task.station;
+      return resultOk && stationOk;
+    }
+
+    // слово: проверяет ответ на синтез
+    function checkSynthesis(answer, task) {
+      return answer.variant === task.correct;
+    }
+
+    // слово: проверяет ответ и показывает результат
+    function checkAnswer() {
+      var index = state.currentTask;
+      var task = DATA.tasks[index];
+      var answer = state.answers[index];
+      if (answer.checked) {
+        return;
+      }
+      if (task.type === "recognition") {
+        answer.correct = checkRecognition(answer, task);
+      } else {
+        answer.correct = checkSynthesis(answer, task);
+      }
+      answer.checked = true;
+      saveState();
+      renderTask(index);
+      updateTaskMarks();
+      updateHeader();
+      updateCounter();
+    }
+
+    // слово: создаёт заголовок результата
+    function createResultTitle(correct) {
+      var title = document.createElement("p");
+      title.className = "result-title";
+      if (correct) {
+        title.textContent = "Верно";
+        title.classList.add("correct");
+      } else {
+        title.textContent = "Неверно";
+        title.classList.add("wrong");
+      }
+      return title;
+    }
+
+    // слово: возвращает имя станции по коду
+    function stationName(code) {
+      if (code === "none") {
+        return "сбоя нет";
+      }
+      if (code === "unknown") {
+        return "не знаю";
+      }
+      for (var i = 0; i < DATA.stations.length; i++) {
+        if (DATA.stations[i].code === code) {
+          return DATA.stations[i].name;
+        }
+      }
+      return "неизвестно";
+    }
+
+    // слово: создаёт пояснение к ответу
+    function createExplanation(task, answer) {
+      var explanation = document.createElement("div");
+      explanation.className = "result-details";
+
+      if (task.type === "recognition") {
+        if (answer.result !== task.result) {
+          var p1 = document.createElement("p");
+          p1.textContent = "Правильный результат: " + (task.result === "understood" ? "поняла" : "переспросила") + ".";
+          explanation.appendChild(p1);
+        }
+        if (answer.station !== task.station) {
+          var p2 = document.createElement("p");
+          p2.textContent = "Правильная станция: " + stationName(task.station) + ".";
+          explanation.appendChild(p2);
+        }
+      } else {
+        if (answer.variant !== task.correct) {
+          var p3 = document.createElement("p");
+          p3.textContent = "Правильный ответ: " + task.variants[task.correct] + ".";
+          explanation.appendChild(p3);
+        }
+      }
+
+      var list = document.createElement("ul");
+      for (var i = 0; i < task.analysis.length; i++) {
+        var item = document.createElement("li");
+        item.textContent = task.analysis[i];
+        list.appendChild(item);
+      }
+      explanation.appendChild(list);
+      return explanation;
+    }
+
+    // слово: показывает результат проверки
+    function showResult(block, task, answer, index) {
+      block.innerHTML = "";
+      block.appendChild(createResultTitle(answer.correct));
+      block.appendChild(createExplanation(task, answer));
+    }
+
+    // слово: считает сделано и верно
+    function countTotals() {
+      var done = 0;
+      var correct = 0;
+      for (var i = 0; i < state.answers.length; i++) {
+        if (state.answers[i].checked) {
+          done++;
+          if (state.answers[i].correct) {
+            correct++;
+          }
+        }
+      }
+      return { done: done, correct: correct };
+    }
+
+    // слово: обновляет шапку со счётчиками
+    function updateHeader() {
+      var totals = countTotals();
+      document.getElementById("stat-done").textContent = "сделано " + totals.done + " из " + DATA.tasks.length;
+      document.getElementById("stat-correct").textContent = "верно " + totals.correct;
+    }
+
+    // слово: считает понял и переспросил
+    function countCounter() {
+      var understood = 0;
+      var asked = 0;
+      for (var i = 0; i < state.answers.length; i++) {
+        var task = DATA.tasks[i];
+        if (task.type === "recognition") {
+          var answer = state.answers[i];
+          if (answer.result === "understood") {
+            understood++;
+          } else if (answer.result === "asked") {
+            asked++;
+          }
+        }
+      }
+      return { understood: understood, asked: asked };
+    }
+
+    // слово: обновляет счётчик понял/переспросил
+    function updateCounter() {
+      var count = countCounter();
+      var block = document.getElementById("counter");
+      if (block) {
+        block.innerHTML = "<h3>Твой счёт</h3><p>Понял: " + count.understood + "</p><p>Переспросил: " + count.asked + "</p>";
+      }
+    }
+
+    // слово: рисует опору справа
+    function renderReference() {
+      var pipeline = document.getElementById("pipeline");
+      pipeline.innerHTML = "<h3>Каркас конвейера</h3>";
+      var list = document.createElement("ol");
+      for (var i = 0; i < DATA.stations.length; i++) {
+        var item = document.createElement("li");
+        item.textContent = DATA.stations[i].name;
+        list.appendChild(item);
+      }
+      pipeline.appendChild(list);
+
+      var hints = document.getElementById("hints");
+      hints.innerHTML = "<h3>Подсказка</h3><p>Смотри, на какой станции гипотезы разошлись.</p><p>Чем ниже станция — тем позже она работает.</p>";
+
+      updateCounter();
+    }
+
+    // слово: создаёт статистику итога
+    function createSummaryStats() {
+      var totals = countTotals();
+      var stats = document.createElement("p");
+      stats.textContent = "Сделано " + totals.done + " из " + DATA.tasks.length + ", верно " + totals.correct + ".";
+      return stats;
+    }
+
+    // слово: создаёт список заданий с отметками
+    function createSummaryList() {
+      var list = document.createElement("ul");
+      for (var i = 0; i < DATA.tasks.length; i++) {
+        var item = document.createElement("li");
+        item.textContent = "Задание " + (i + 1) + " " + taskMark(state.answers[i]);
+        list.appendChild(item);
+      }
+      return list;
+    }
+
+    // слово: создаёт поле для финального ответа
+    function createFinalField() {
+      var field = document.createElement("textarea");
+      field.id = "final-answer";
+      field.rows = 4;
+      field.value = state.finalAnswer;
+      field.addEventListener("input", saveFinalAnswer);
+      return field;
+    }
+
+    // слово: создаёт кнопку сравнения с образцом
+    function createCompareButton() {
+      var button = document.createElement("button");
+      button.textContent = "Сравнить с образцом";
+      button.addEventListener("click", showSample);
+      return button;
+    }
+
+    // слово: создаёт блок для образца
+    function createSampleBlock() {
+      var block = document.createElement("div");
+      block.id = "sample-block";
+      block.className = "hidden";
+      return block;
+    }
+
+    // слово: рисует экран итога
+    function renderSummary() {
+      showScreen("summary");
+      var content = document.getElementById("summary-content");
+      content.innerHTML = "";
+      content.appendChild(createSummaryStats());
+      content.appendChild(createSummaryList());
+
+      var question = document.createElement("h2");
+      question.textContent = "Финальный вопрос";
+      content.appendChild(question);
+
+      var questionText = document.createElement("p");
+      questionText.textContent = DATA.finalQuestion;
+      content.appendChild(questionText);
+
+      content.appendChild(createFinalField());
+      content.appendChild(createCompareButton());
+      content.appendChild(createSampleBlock());
+    }
+
+    // слово: сохраняет финальный ответ
+    function saveFinalAnswer(event) {
+      state.finalAnswer = event.target.value;
+      saveState();
+    }
+
+    // слово: показывает образец ответа с пунктами для сравнения
+    function showSample() {
+      var block = document.getElementById("sample-block");
+      if (!block) {
+        return;
+      }
+      block.classList.remove("hidden");
+      block.innerHTML = "<h3>Образец ответа</h3><p>Отметь, что есть в твоём ответе:</p>";
+      for (var i = 0; i < DATA.sample.length; i++) {
+        var label = document.createElement("label");
+        label.className = "sample-item";
+        var checkbox = document.createElement("input");
+        checkbox.type = "checkbox";
+        label.appendChild(checkbox);
+        label.appendChild(document.createTextNode(" " + DATA.sample[i]));
+        block.appendChild(label);
+      }
+    }
+
+    // слово: возвращает к рабочему экрану
+    function backToWork() {
+      showScreen("work");
+      renderWork();
+    }
+
+    // слово: начинает работу с первого задания
+    function startWork() {
+      state.screen = "work";
+      state.currentTask = 0;
+      saveState();
+      renderWork();
+    }
+
+    // слово: запускает приложение
+    function init() {
+      loadState();
+      renderStart();
+      if (state.screen === "work") {
+        renderWork();
+      } else if (state.screen === "summary") {
+        renderSummary();
+      } else {
+        showScreen("start");
+      }
+      document.getElementById("start-button").addEventListener("click", startWork);
+      document.getElementById("summary-button").addEventListener("click", renderSummary);
+      document.getElementById("back-to-work").addEventListener("click", backToWork);
+    }
+
+    init();
+  </script>
+</body>
+</html>
