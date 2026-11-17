@@ -8,13 +8,13 @@
 
 | шаг | что | итог |
 |---|---|---|
-| 1–4 | Windows ≥ 2004, виртуализация, частная сеть, без сна | не в сводке → проверит `tools/server-windows.ps1` |
-| 5–6 | WSL + Ubuntu, пользователь Linux | есть: Ubuntu 22.04 (по сводке) |
+| 1–4 | Windows ≥ 2004, виртуализация, частная сеть, без сна | 22H2 (19045) · виртуализация работает (WSL2; CIM пишет False — норма) · сеть частная · сон: скрипт не прочёл, проверить вручную |
+| 5–6 | WSL + Ubuntu, пользователь Linux | есть: **Ubuntu 26.04.1 LTS** (Алиса писала 22.04 — ошибка), ядро WSL2 6.18 |
 | 7–8 | пакеты gforth, swi-prolog, python3, venv, git, curl (+ tree) | поставлены |
-| 9 | версии | gforth 0.7.3 · SWI-Prolog 9.2.9 · Python 3.14.4 · git 2.53.0 — **сверить**: для Ubuntu 22.04 Python 3.14 и git 2.53 не типичны |
-| 10 | `gforth -e "wordlist drop …"` → `WORDLIST ok` | не сделан (Алиса проверила `words`, это другое) |
-| 11 | клон ii-komanda в `~/ii-komanda` | не сделан |
-| 12 | OpenSSH-сервер Windows | не сделан |
+| 9 | версии | gforth 0.7.3 · SWI-Prolog 9.2.9 · Python 3.14.4 · git 2.53.0 (скрипт, 17.11) |
+| 10 | `gforth -e "wordlist drop …"` → `WORDLIST ok` | **WORDLIST ok** |
+| 11 | клон ii-komanda в `~/ii-komanda` | есть |
+| 12 | OpenSSH-сервер Windows | поставлен, автозапуск, но **служба не стартует** — разбираем (`sshd.exe -d`) |
 | 13–14 | адрес, вход с ноутбука | не сделаны |
 
 Вне инструкции Алиса завела `~/teacher-workpad/{templates_v6,ideas_v9,drakon,speech_9class}` и черновик ДРАКОН-листа
