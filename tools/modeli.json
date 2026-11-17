@@ -3,7 +3,7 @@
   "roli": {
     "kanva": ["deepseek", "qwen"],
     "prilozhenie": ["qwen", "deepseek"],
-    "kontent": ["deepseek", "qwen"],
+    "kontent": ["qwen", "deepseek"],
     "vizual": ["alisa_flash", "deepseek"],
     "strazh": ["alisa", "alisa_flash"],
     "so_analiz": ["alisa", "alisa_flash"],
