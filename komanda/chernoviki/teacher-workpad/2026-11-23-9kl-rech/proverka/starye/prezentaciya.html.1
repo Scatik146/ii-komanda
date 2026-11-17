@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Распознавание и синтез речи — 9 класс</title>
+<style>
+:root {
+  --fon: #f6f4ee;
+  --tekst: #1c1c1c;
+  --akcent: #1a5fb4;
+  --belyj: #ffffff;
+  --zheltyj: #f5c518;
+  --ramka: #c9c4b8;
+  --seryj: #6b6459;
+  --razmer-tezisa: clamp(28px, 3.4vw, 50px);
+  --razmer-otveta: clamp(22px, 2.3vw, 34px);
+  --razmer-podpisi: clamp(16px, 1.4vw, 22px);
+  --razmer-stancii: clamp(18px, 1.7vw, 28px);
+  --razmer-etapa: clamp(18px, 1.6vw, 26px);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  background: var(--fon);
+  color: var(--tekst);
+  font-family: "Segoe UI", "PT Sans", Arial, sans-serif;
+}
+
+.slajd {
+  display: none;
+  position: relative;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2.2vh;
+  min-height: 100vh;
+  padding: 6vh 7vw 14vh;
+}
+
+.slajd--aktivnyj {
+  display: flex;
+}
+
+.etap {
+  position: absolute;
+  top: 2.5vh;
+  right: 2.5vw;
+  padding: 0.35em 0.8em;
+  border-radius: 0.5em;
+  background: var(--akcent);
+  color: var(--belyj);
+  font-size: var(--razmer-etapa);
+  font-weight: 700;
+  letter-spacing: 0.02em;
+}
+
+.metka {
+  margin: 0;
+  font-size: var(--razmer-podpisi);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--seryj);
+}
+
+.tezis {
+  margin: 0;
+  max-width: 24em;
+  font-size: var(--razmer-tezisa);
+  line-height: 1.2;
+  font-weight: 700;
+}
+
+.slajd--vopros .tezis {
+  color: var(--akcent);
+}
+
+.podskazka {
+  margin: 0;
+  font-size: var(--razmer-podpisi);
+  color: var(--seryj);
+}
+
+.podskazka--skryta {
+  display: none;
+}
+
+.otvet {
+  display: none;
+  max-width: 26em;
+  padding: 0.6em 1em;
+  border-left: 0.25em solid var(--akcent);
+  background: var(--belyj);
+  font-size: var(--razmer-otveta);
+  line-height: 1.3;
+}
+
+.otvet--otkryt {
+  display: block;
+}
+
+.vopros {
+  margin-top: 0.8em;
+}
+
+.vopros__tekst {
+  margin: 0 0 0.3em;
+  font-size: var(--razmer-otveta);
+  font-weight: 600;
+  color: var(--akcent);
+}
+
+.konvejer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5em;
+}
+
+.stanciya {
+  padding: 0.5em 0.8em;
+  border: 0.12em solid var(--akcent);
+  border-radius: 0.6em;
+  background: var(--belyj);
+  font-size: var(--razmer-stancii);
+  font-weight: 600;
+}
+
+.strelka {
+  font-size: var(--razmer-stancii);
+  color: var(--akcent);
+  font-weight: 700;
+}
+
+.dva-napravleniya {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.2em;
+}
+
+.napravlenie {
+  flex: 1 1 16em;
+  padding: 1em 1.2em;
+  border: 0.12em solid var(--ramka);
+  border-radius: 0.8em;
+  background: var(--belyj);
+}
+
+.napravlenie__nazvanie {
+  margin: 0 0 0.3em;
+  font-size: var(--razmer-podpisi);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--seryj);
+}
+
+.napravlenie__formula {
+  margin: 0;
+  font-size: var(--razmer-otveta);
+  font-weight: 700;
+}
+
+.spisok-stancij {
+  margin: 0.4em 0 0;
+  padding-left: 1.2em;
+  font-size: var(--razmer-otveta);
+}
+
+.zagotovki {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4em;
+  margin: 0.4em 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.zagotovka {
+  padding: 0.4em 0.8em;
+  border: 0.1em solid var(--ramka);
+  border-radius: 0.5em;
+  background: var(--belyj);
+  font-size: var(--razmer-otveta);
+}
+
+.zheltoe {
+  background: var(--zheltyj);
+  padding: 0 0.2em;
+  border-radius: 0.2em;
+}
+
+.upravlenie {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1.2em;
+  padding: 0.7em 1em;
+  background: var(--fon);
+  border-top: 0.1em solid var(--ramka);
+}
+
+.knopka {
+  padding: 0.3em 0.9em;
+  border: 0.1em solid var(--akcent);
+  border-radius: 0.5em;
+  background: var(--belyj);
+  color: var(--akcent);
+  font-size: var(--razmer-podpisi);
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.schetchik {
+  font-size: var(--razmer-podpisi);
+  color: var(--seryj);
+  font-variant-numeric: tabular-nums;
+}
+</style>
+</head>
+<body>
+<main class="prezentaciya">
+
+  <section class="slajd slajd--aktivnyj">
+    <span class="etap">Этап 1</span>
+    <p class="metka">Мотивация</p>
+    <h1 class="tezis">Алиса не поняла команду. Сбой не чиним — разбираемся, где ломается.</h1>
+    <div class="vopros">
+      <p class="vopros__tekst">Что случилось? Назовите 1–2 версии.</p>
+      <p class="podskazka">Щелчок — показать ответ</p>
+      <div class="otvet">Версии любые. Факт фиксируем: команда не распознана — идём по конвейеру.</div>
+    </div>
+  </section>
+
+  <section class="slajd">
+    <span class="etap">Этап 2</span>
+    <p class="metka">Актуализация и пробное действие</p>
+    <h2 class="tezis">Распознавание — звук → текст, синтез — текст → звук. Проверим на Т9.</h2>
+    <div class="dva-napravleniya">
+      <div class="napravlenie">
+        <p class="napravlenie__nazvanie">Распознавание</p>
+        <p class="napravlenie__formula">звук → текст</p>
+      </div>
+      <div class="napravlenie">
+        <p class="napravlenie__nazvanie">Синтез</p>
+        <p class="napravlenie__formula">текст → звук</p>
+      </div>
+    </div>
+    <div class="vopros">
+      <p class="vopros__tekst">Что уже знаем о речи и тексте?</p>
+      <p class="podskazka">Щелчок — показать ответ</p>
+      <div class="otvet">Ожидали одно — получили другое: модель выбирает по вероятности.</div>
+    </div>
+  </section>
+
+  <section class="slajd">
+    <span class="etap">Этап 3</span>
+    <p class="metka">Выявление места и причины затруднения</p>
+    <h2 class="tezis">Конвейер распознавания: пять станций от звука к предложению.</h2>
+    <div class="konvejer">
+      <span class="stanciya">Звук</span>
+      <span class="strelka">→</span>
+      <span class="stanciya">Фонемы</span>
+      <span class="strelka">→</span>
+      <span class="stanciya">Буквы/подслова (гипотезы)</span>
+      <span class="strelka">→</span>
+      <span class="stanciya">Слова</span>
+      <span class="strelka">→</span>
+      <span class="stanciya">Предложение</span>
+    </div>
+    <div class="vopros">
+      <p class="vopros__tekst">Где именно ломается? Назовите станцию-кандидата.</p>
+      <p class="podskazka">Щелчок — показать ответ</p>
+      <div class="otvet">Чаще — гипотезы или слова: звук разобран, а слово выбрано не то.</div>
+    </div>
+  </section>
+
+  <section class="slajd">
+    <span class="etap">Этап 4</span>
+    <p class="metka">Построение проекта выхода</p>
+    <h2 class="tezis">План: станции по порядку, эксперимент, ДРАКОН-лист.</h2>
+    <div class="vopros">
+      <p class="vopros__tekst">Назовите пять станций по порядку.</p>
+      <p class="podskazka">Щелчок — показать ответ</p>
+      <div class="otvet">
+        <ol class="spisok-stancij">
+          <li>Звук</li>
+          <li>Фонемы</li>
+          <li>Буквы/подслова (гипотезы)</li>
+          <li>Слова</li>
+          <li>Предложение</li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <section class="slajd">
+    <span class="etap">Этап 5</span>
+    <p class="metka">Реализация проекта: практикум на распознавание</p>
+    <h2 class="tezis">Пары: две фразы, протокол А/Б, счёт «понял / переспросил». Отметьте станцию сбоя в листе.</h2>
+    <div class="vopros">
+      <p class="vopros__tekst">Что считаем в правую ветку?</p>
+      <p class="podskazka">Щелчок — показать ответ</p>
+      <div class="otvet">Переспрос или отказ — вправо. Чем правее, тем хуже.</div>
+    </div>
+  </section>
+
+  <section class="slajd">
+    <span class="etap">Этап 6</span>
+    <p class="metka">Первичное закрепление с проговариванием</p>
+    <h2 class="tezis">Каждая станция — блок ДРАКОН-схемы: чем ниже — тем позже, чем правее — тем хуже.</h2>
+    <div class="vopros">
+      <p class="vopros__tekst">Покажите блок на листе и объясните, зачем он нужен.</p>
+      <p class="podskazka">Щелчок — показать ответ</p>
+      <div class="otvet">Ветка вправо — переспрос; жёлтый блок — запомнить.</div>
+    </div>
+  </section>
+
+  <section class="slajd">
+    <span class="etap">Этап 7</span>
+    <p class="metka">Самостоятельная работа: практикум на синтез</p>
+    <h2 class="tezis">Яндекс Переводчик: три заготовки и своя фраза. Меняйте только знаки препинания.</h2>
+    <ul class="zagotovki">
+      <li class="zagotovka">Маша пришла домой</li>
+      <li class="zagotovka">Маша, пришла домой</li>
+      <li class="zagotovka">Маша, пришла домой?</li>
+    </ul>
+  </section>
+
+  <section class="slajd slajd--vopros">
+    <span class="etap">Этап 7</span>
+    <p class="metka">Самостоятельная работа: вывод пары</p>
+    <h2 class="tezis">Что меняет знак препинания?</h2>
+    <p class="podskazka">Щелчок — показать ответ</p>
+    <div class="otvet">Знак задаёт паузу и интонацию — синтез звучит иначе.</div>
+  </section>
+
+  <section class="slajd slajd--vopros">
+    <span class="etap">Этап 8</span>
+    <p class="metka">Включение в систему знаний</p>
+    <h2 class="tezis">Где это в жизни?</h2>
+    <p class="podskazka">Щелчок — показать ответ</p>
+    <div class="otvet">Т9, навигатор, голосовой помощник — и бот следующего урока.</div>
+  </section>
+
+  <section class="slajd slajd--vopros">
+    <span class="etap">Этап 9</span>
+    <p class="metka">Рефлексия</p>
+    <h2 class="tezis">Покажите жёлтые блоки графа: что запомнили? Что разберём дома?</h2>
+    <p class="podskazka">Щелчок — показать ответ</p>
+    <div class="otvet"><span class="zheltoe">Жёлтое</span> — запомни, белое — разберись. Лист вклейте в тетрадь.</div>
+  </section>
+
+</main>
+
+<nav class="upravlenie">
+  <button class="knopka knopka--nazad" type="button">← Назад</button>
+  <span class="schetchik">1 / 10</span>
+  <button class="knopka knopka--vpered" type="button">Вперёд →</button>
+</nav>
+
+<script>
+// слово: все слайды презентации
+function slajdy() {
+  return Array.prototype.slice.call(document.querySelectorAll('.slajd'));
+}
+
+// слово: счётчик слайдов в панели
+const schetchik = document.querySelector('.schetchik');
+
+// слово: номер текущего слайда
+let nomer = 0;
+
+// слово: скрыть подсказки на слайде
+function skrytPodskazki(slajd) {
+  const podskazki = slajd.querySelectorAll('.podskazka');
+  podskazki.forEach(function (podskazka) {
+    podskazka.classList.add('podskazka--skryta');
+  });
+  return;
+}
+
+// слово: открыть первый закрытый ответ; вернуть «открыли ли»
+function otkrytOtvet(slajd) {
+  const otvety = slajd.querySelectorAll('.otvet:not(.otvet--otkryt)');
+  const est = otvety.length > 0;
+  if (est) {
+    otvety[0].classList.add('otvet--otkryt');
+    skrytPodskazki(slajd);
+  }
+  return est;
+}
+
+// слово: обновить счётчик «номер / всего»
+function obnovitSchetchik() {
+  const vse = slajdy();
+  schetchik.textContent = (nomer + 1) + ' / ' + vse.length;
+  return;
+}
+
+// слово: показать слайд по номеру
+function perejti(index) {
+  const vse = slajdy();
+  const novyj = Math.max(0, Math.min(vse.length - 1, index));
+  vse.forEach(function (slajd) {
+    slajd.classList.remove('slajd--aktivnyj');
+  });
+  nomer = novyj;
+  vse[nomer].classList.add('slajd--aktivnyj');
+  obnovitSchetchik();
+  return;
+}
+
+// слово: шаг вперёд — сначала ответ, потом следующий слайд
+function vpered() {
+  const slajd = slajdy()[nomer];
+  const otkryli = otkrytOtvet(slajd);
+  if (!otkryli) {
+    perejti(nomer + 1);
+  }
+  return;
+}
+
+// слово: шаг назад
+function nazad() {
+  perejti(nomer - 1);
+  return;
+}
+
+// слово: обработать щелчок по сцене
+function obrabotatKlik(sobytie) {
+  const vPaneli = sobytie.target.closest('.upravlenie');
+  if (!vPaneli) {
+    vpered();
+  }
+  return;
+}
+
+// слово: обработать нажатие клавиши
+function obrabotatKlavishu(sobytie) {
+  if (sobytie.key === 'ArrowRight' || sobytie.key === ' ' || sobytie.key === 'PageDown') {
+    sobytie.preventDefault();
+    vpered();
+  }
+  if (sobytie.key === 'ArrowLeft' || sobytie.key === 'PageUp') {
+    sobytie.preventDefault();
+    nazad();
+  }
+  if (sobytie.key === 'Home') {
+    perejti(0);
+  }
+  if (sobytie.key === 'End') {
+    perejti(slajdy().length - 1);
+  }
+  return;
+}
+
+document.addEventListener('click', obrabotatKlik);
+document.addEventListener('keydown', obrabotatKlavishu);
+document.querySelector('.knopka--vpered').addEventListener('click', vpered);
+document.querySelector('.knopka--nazad').addEventListener('click', nazad);
+perejti(0);
+</script>
+</body>
+</html>

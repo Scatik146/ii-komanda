@@ -5,7 +5,6 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Распознавание и синтез речи</title>
 <style>
-/* === Базовые переменные === */
 :root {
   --clr-bg: #f5f5f0;
   --clr-card: #ffffff;
@@ -27,8 +26,6 @@
   --pad: 1.2rem;
   --radius: 8px;
 }
-
-/* === Сброс и база === */
 * { box-sizing: border-box; margin: 0; padding: 0; }
 html { font-size: 18px; }
 body {
@@ -38,8 +35,6 @@ body {
   line-height: 1.5;
   min-height: 100vh;
 }
-
-/* === Шапка === */
 .header {
   background: var(--clr-accent);
   color: #fff;
@@ -61,19 +56,13 @@ body {
   border-radius: 4px;
   font-size: var(--fs-small);
 }
-
-/* === Контейнер === */
 .container {
   max-width: 1400px;
   margin: 0 auto;
   padding: var(--pad);
 }
-
-/* === Экраны === */
 .screen { display: none; }
 .screen.active { display: block; }
-
-/* === Стартовый экран === */
 .start-screen {
   max-width: 700px;
   margin: 2rem auto;
@@ -107,25 +96,12 @@ body {
   font-weight: bold;
   transition: background 0.2s;
 }
-.btn-primary {
-  background: var(--clr-accent);
-  color: #fff;
-}
+.btn-primary { background: var(--clr-accent); color: #fff; }
 .btn-primary:hover { background: #1e4f75; }
-.btn-primary:disabled {
-  background: var(--clr-disabled);
-  cursor: not-allowed;
-}
-.btn-secondary {
-  background: var(--clr-border);
-  color: var(--clr-text);
-}
+.btn-primary:disabled { background: var(--clr-disabled); cursor: not-allowed; }
+.btn-secondary { background: var(--clr-border); color: var(--clr-text); }
 .btn-secondary:hover { background: #9e9e9e; }
-.btn-ok { background: var(--clr-ok); color: #fff; }
-.btn-err { background: var(--clr-err); color: #fff; }
 .btn-warn { background: var(--clr-warn); color: var(--clr-text); }
-
-/* === Рабочий экран — сетка === */
 .work-layout {
   display: grid;
   grid-template-columns: 240px 1fr 280px;
@@ -133,12 +109,8 @@ body {
   align-items: start;
 }
 @media (max-width: 1100px) {
-  .work-layout {
-    grid-template-columns: 1fr;
-  }
+  .work-layout { grid-template-columns: 1fr; }
 }
-
-/* === Список заданий (левая колонка) === */
 .task-list {
   background: var(--clr-card);
   border-radius: var(--radius);
@@ -169,12 +141,7 @@ body {
 }
 .task-item.done-correct { border-left-color: var(--clr-ok); }
 .task-item.done-wrong { border-left-color: var(--clr-err); }
-.task-item .task-status {
-  float: right;
-  font-weight: bold;
-}
-
-/* === Центральная панель === */
+.task-item .task-status { float: right; font-weight: bold; }
 .task-panel {
   background: var(--clr-card);
   border-radius: var(--radius);
@@ -191,11 +158,7 @@ body {
   margin-bottom: 1.2rem;
   font-size: var(--fs-body);
 }
-.task-panel .task-body {
-  margin-bottom: 1.2rem;
-}
-
-/* === Моноширинный для сравнения === */
+.task-panel .task-body { margin-bottom: 1.2rem; }
 .mono {
   font-family: var(--font-mono);
   font-size: var(--fs-body);
@@ -215,8 +178,6 @@ body {
   white-space: pre-wrap;
   word-break: break-all;
 }
-
-/* === Карточки станций === */
 .stations-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
@@ -244,8 +205,6 @@ body {
   display: block;
   margin-bottom: 0.3rem;
 }
-
-/* === Варианты ответа === */
 .choices {
   display: flex;
   flex-direction: column;
@@ -268,20 +227,9 @@ body {
   background: #e3f2fd;
   font-weight: bold;
 }
-.choice-btn:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
-}
-.choice-btn.correct {
-  border-color: var(--clr-ok);
-  background: #e8f5e9;
-}
-.choice-btn.wrong {
-  border-color: var(--clr-err);
-  background: #ffebee;
-}
-
-/* === Результат ответа === */
+.choice-btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.choice-btn.correct { border-color: var(--clr-ok); background: #e8f5e9; }
+.choice-btn.wrong { border-color: var(--clr-err); background: #ffebee; }
 .result-box {
   margin: 1rem 0;
   padding: 1rem;
@@ -306,15 +254,8 @@ body {
   font-size: var(--fs-body);
   font-weight: normal;
 }
-.result-detail ul {
-  margin: 0.5rem 0;
-  padding-left: 1.5rem;
-}
-.result-detail li {
-  margin-bottom: 0.3rem;
-}
-
-/* === Справочник (правая колонка) === */
+.result-detail ul { margin: 0.5rem 0; padding-left: 1.5rem; }
+.result-detail li { margin-bottom: 0.3rem; }
 .reference-panel {
   background: var(--clr-card);
   border-radius: var(--radius);
@@ -336,11 +277,7 @@ body {
 }
 .reference-panel .ref-block:last-child { border-bottom: none; }
 .reference-panel strong { color: var(--clr-accent); }
-
-/* === Подсказки === */
-.hint-ladder {
-  margin: 1rem 0;
-}
+.hint-ladder { margin: 1rem 0; }
 .hint-step {
   display: none;
   padding: 0.6rem;
@@ -362,8 +299,6 @@ body {
   margin-bottom: 0.5rem;
 }
 .hint-btn:hover { background: #f57f17; }
-
-/* === Прогноз === */
 .prediction-box {
   background: #e8eaf6;
   border: 2px solid #5c6bc0;
@@ -385,8 +320,6 @@ body {
   font-size: var(--fs-body);
   margin-bottom: 0.5rem;
 }
-
-/* === Смета === */
 .budget-table {
   width: 100%;
   border-collapse: collapse;
@@ -399,9 +332,7 @@ body {
   padding: 0.5rem;
   text-align: left;
 }
-.budget-table th {
-  background: #e3f2fd;
-}
+.budget-table th { background: #e3f2fd; }
 .red-flag {
   background: #ffebee;
   border: 2px solid var(--clr-err);
@@ -411,8 +342,6 @@ body {
   font-weight: bold;
   color: var(--clr-err);
 }
-
-/* === Вердикт === */
 .verdict-options {
   display: flex;
   gap: 0.8rem;
@@ -437,11 +366,7 @@ body {
   background: #e3f2fd;
   font-weight: bold;
 }
-
-/* === Чекбоксы === */
-.check-list {
-  margin: 1rem 0;
-}
+.check-list { margin: 1rem 0; }
 .check-item {
   display: flex;
   align-items: flex-start;
@@ -455,8 +380,6 @@ body {
   margin-top: 0.1rem;
   flex-shrink: 0;
 }
-
-/* === Финальный экран === */
 .final-screen {
   max-width: 700px;
   margin: 2rem auto;
@@ -465,10 +388,7 @@ body {
   padding: var(--pad);
   box-shadow: 0 2px 6px rgba(0,0,0,0.1);
 }
-.final-screen h2 {
-  color: var(--clr-accent);
-  margin-bottom: 1rem;
-}
+.final-screen h2 { color: var(--clr-accent); margin-bottom: 1rem; }
 .final-screen .final-result {
   font-size: var(--fs-head);
   text-align: center;
@@ -483,15 +403,8 @@ body {
   padding: 1rem;
   margin: 1rem 0;
 }
-.compare-box h4 {
-  margin-bottom: 0.8rem;
-  color: var(--clr-accent);
-}
-
-/* === Выходной билет === */
-.exit-ticket {
-  margin: 1rem 0;
-}
+.compare-box h4 { margin-bottom: 0.8rem; color: var(--clr-accent); }
+.exit-ticket { margin: 1rem 0; }
 .exit-ticket textarea {
   width: 100%;
   min-height: 60px;
@@ -509,25 +422,14 @@ body {
   font-weight: bold;
   font-size: var(--fs-small);
 }
-
-/* === Навигация по экранам === */
 .screen-nav {
   display: flex;
   gap: 0.5rem;
   margin: 1rem 0;
   flex-wrap: wrap;
 }
-.screen-nav .btn {
-  font-size: var(--fs-small);
-  padding: 0.4rem 1rem;
-}
-
-/* === Роль === */
-.role-toggle {
-  display: flex;
-  gap: 0.5rem;
-  margin: 1rem 0;
-}
+.screen-nav .btn { font-size: var(--fs-small); padding: 0.4rem 1rem; }
+.role-toggle { display: flex; gap: 0.5rem; margin: 1rem 0; }
 .role-btn {
   flex: 1;
   padding: 0.5rem;
@@ -543,34 +445,41 @@ body {
   background: #e3f2fd;
   font-weight: bold;
 }
-
-/* === Скрытый блок === */
 .hidden { display: none !important; }
-
-/* === Адаптив === */
+.audio-desc {
+  background: #e8eaf6;
+  border: 2px solid #5c6bc0;
+  border-radius: var(--radius);
+  padding: 1rem;
+  margin: 0.8rem 0;
+  font-size: var(--fs-body);
+}
+.audio-desc .audio-label {
+  font-weight: bold;
+  color: var(--clr-accent);
+  margin-bottom: 0.3rem;
+}
+.audio-desc .audio-note {
+  font-size: var(--fs-hint);
+  color: var(--clr-muted);
+  margin-top: 0.5rem;
+  font-style: italic;
+}
 @media (max-width: 1100px) {
-  .work-layout {
-    grid-template-columns: 1fr;
-  }
+  .work-layout { grid-template-columns: 1fr; }
   .task-list {
     position: static;
     display: flex;
     flex-wrap: wrap;
     gap: 0.4rem;
   }
-  .task-item {
-    flex: 1;
-    min-width: 120px;
-  }
-  .reference-panel {
-    position: static;
-  }
+  .task-item { flex: 1; min-width: 120px; }
+  .reference-panel { position: static; }
 }
 </style>
 </head>
 <body>
 
-<!-- Шапка -->
 <div class="header" id="header">
   <span class="stats" id="header-stats">сделано 0 из 0, верно 0</span>
   <span class="role-badge" id="role-badge">Роль: —</span>
@@ -578,14 +487,13 @@ body {
 
 <div class="container">
 
-  <!-- ===== СТАРТОВЫЙ ЭКРАН ===== -->
   <div class="screen active" id="screen-start">
     <div class="start-screen">
       <h1>Распознавание и синтез речи</h1>
       <div class="start-steps">
         <h3>Что делать на уроке</h3>
         <ol>
-          <li><strong>Шаг 1.</strong> Выбери роль: <strong>водитель</strong> (выбирает ответы) или <strong>контролёр</strong> (сверяет и ведёт счёт). Роль чередуется.</li>
+          <li><strong>Шаг 1.</strong> Выбери роль: <strong>водитель</strong> (выбирает ответы) или <strong>контролёр</strong> (сверяет и ведёт счёт). Роли чередуются.</li>
           <li><strong>Шаг 2.</strong> Пройди задания по порядку. В каждом — сравни «сказали» и «распознала модель», выбирай станцию сбоя, отвечай на вопросы.</li>
           <li><strong>Шаг 3.</strong> В конце — финальный вопрос и выходной билет. Кнопка «Итог» доступна всегда.</li>
         </ol>
@@ -601,31 +509,22 @@ body {
     </div>
   </div>
 
-  <!-- ===== РАБОЧИЙ ЭКРАН ===== -->
   <div class="screen" id="screen-work">
     <div class="work-layout">
-
-      <!-- Левая колонка: список заданий -->
       <div class="task-list" id="task-list">
         <h3>Задания</h3>
         <div id="task-list-items"></div>
       </div>
-
-      <!-- Центральная панель -->
       <div class="task-panel" id="task-panel">
         <div id="task-content"></div>
       </div>
-
-      <!-- Правая колонка: справочник -->
       <div class="reference-panel" id="reference-panel">
         <h3>Справочник-опора</h3>
         <div id="reference-content"></div>
       </div>
-
     </div>
   </div>
 
-  <!-- ===== ФИНАЛЬНЫЙ ЭКРАН ===== -->
   <div class="screen" id="screen-final">
     <div class="final-screen" id="final-content"></div>
   </div>
@@ -637,7 +536,6 @@ body {
 // ДАННЫЕ: тексты, задания, ответы — отдельно от действий
 // ============================================================
 
-// --- Справочник ---
 var REFERENCE = {
   stations: [
     { num: 1, name: "Звук → спектрограмма", desc: "Микрофон захватывает звук, программа преобразует его в спектрограмму — картинку частот" },
@@ -657,11 +555,6 @@ var REFERENCE = {
     { rule: "Первая гипотеза всегда верная", counter: "Пример: модель выбрала «кот» (71%), а было сказано «код» (24%) — топ-1 неверен, топ-2 верен" },
     { rule: "Знаки препинания не влияют на синтез", counter: "«Маша пришла домой» / «Маша, пришла домой» / «Маша, пришла домой?» — три разных интонации" },
     { rule: "Живой голос всегда отличается от синтеза", counter: "Современный синтез может звучать естественно, с дыханием и интонацией" }
-  ],
-  synthesisExamples: [
-    { text: "Маша пришла домой", pause: "Нет пауз, ровная интонация", type: "утверждение" },
-    { text: "Маша, пришла домой", pause: "Пауза после «Маша» — обращение", type: "обращение" },
-    { text: "Маша, пришла домой?", pause: "Пауза + вопросительная интонация", type: "вопрос" }
   ],
   testPhrases: [
     "кот",
@@ -683,7 +576,7 @@ var REFERENCE = {
         "Слово, которое чаще всего встречается"
       ],
       correct: 1,
-      explanation: "Модель не «понимает» — она выбирает слово с наибольшей вероятностью на основе признаков"
+      explanation: "Модель не «понимает» — она выбирает слово с наибольшей вероятностью на основе признаков (этап 4 конвейера: гипотезы → слова)"
     },
     {
       q: "Где в конвейере распознавания происходит ошибка, если модель сказала «кот» вместо «код»?",
@@ -695,7 +588,7 @@ var REFERENCE = {
         "Станция 5: слова → предложение"
       ],
       correct: 3,
-      explanation: "Ошибка на станции 4: фонемы распознаны верно, но модель выбрала «кот» вместо «код» — это ошибка выбора слова"
+      explanation: "Ошибка на станции 4: фонемы распознаны верно, но модель выбрала «кот» вместо «код» — это ошибка выбора слова (гипотезы разошлись)"
     },
     {
       q: "Что задают знаки препинания при синтезе речи?",
@@ -706,7 +599,7 @@ var REFERENCE = {
         "Ничего, знаки не влияют"
       ],
       correct: 2,
-      explanation: "Знаки препинания задают и паузы, и интонацию: запятая — пауза, вопросительный знак — вопросительная интонация"
+      explanation: "Знаки препинания задают и паузы, и интонацию: запятая — пауза, вопросительный знак — вопросительная интонация (этап синтеза речи)"
     },
     {
       q: "Какое правило безопасности при работе с голосовыми помощниками?",
@@ -717,7 +610,7 @@ var REFERENCE = {
         "Отдавать голос любым приложениям"
       ],
       correct: 1,
-      explanation: "Правило «перезвони сам»: если звонок с просьбой о деньгах — перезвони по известному номеру, не доверяй голосу"
+      explanation: "Правило «перезвони сам»: если звонок с просьбой о деньгах — перезвони по известному номеру, не доверяй голосу (биометрические данные)"
     },
     {
       q: "Какое звено добавляется в мосте к языковым моделям?",
@@ -728,7 +621,7 @@ var REFERENCE = {
         "Звук → синтез → текст"
       ],
       correct: 0,
-      explanation: "Мост: звук → распознавание → текст → языковая модель → текст → синтез → звук. Языковая модель обрабатывает текст"
+      explanation: "Мост: звук → распознавание → текст → языковая модель → текст → синтез → звук. Языковая модель обрабатывает текст между распознаванием и синтезом"
     }
   ],
   sampleVerdict: {
@@ -746,12 +639,22 @@ var REFERENCE = {
     "Что нового узнал о синтезе речи?",
     "Где в жизни ты встречаешь распознавание речи?",
     "Какое правило безопасности запомнил?"
-  ]
+  ],
+  audioDescriptions: {
+    audio1: {
+      label: "Аудио 1 (заглушка — описание)",
+      desc: "Ровный, механический голос без дыхания. Интонация монотонная, без естественных колебаний. Каждое слово произнесено с одинаковой громкостью и длительностью. Паузы между словами ровно 0.3 секунды.",
+      note: "Это описание учебного аудиофайла. В реальном уроке здесь воспроизводится синтезированная речь."
+    },
+    audio2: {
+      label: "Аудио 2 (заглушка — описание)",
+      desc: "Голос с естественным дыханием перед началом фразы. Небольшая неровность в интонации на слове «домой». Громкость слегка колеблется. Пауза после «Маша» длиннее, чем между другими словами.",
+      note: "Это описание учебного аудиофайла. В реальном уроке здесь воспроизводится запись живого голоса."
+    }
+  }
 };
 
-// --- Задания ---
 var TASKS = [
-  // --- 9151: Распознавание ---
   {
     id: "t1",
     layer: "9151",
@@ -796,16 +699,15 @@ var TASKS = [
     hint: "Подумай: что модель «видит» и что она «делает»?",
     explanation: "Данные — вход. Признак — измеряемая характеристика. Модель — принимающее решение. Вероятность — мера уверенности."
   },
-  // --- 9142: Испытание в игре ---
   {
     id: "t4",
     layer: "9142",
     title: "Фразы-испытания",
-    desc: "Выбери 3 фразы из списка для испытания. Подумай, на какой станции каждая может вызвать ошибку.",
+    desc: "Выбери ровно 3 фразы из списка для испытания. Каждая фраза проверяет свою станцию конвейера. Выбери те, которые с наибольшей вероятностью вызовут ошибку распознавания.",
     body: "testPhrases",
     phrases: REFERENCE.testPhrases,
-    hint: "Омофоны, скороговорки, термины — каждая фраза проверяет свою станцию.",
-    explanation: "Омофоны (кот/код) — станция 4. Скороговорка — станция 3. Термин — станция 4. Имя — станция 2."
+    hint: "Омофоны, скороговорки, термины — каждая фраза проверяет свою станцию. Нужно выбрать ровно 3.",
+    explanation: "Омофоны (кот/код) — станция 4. Скороговорка — станция 3. Термин — станция 4. Имя — станция 2. Выбери 3 фразы, которые покрывают разные станции."
   },
   {
     id: "t5",
@@ -820,17 +722,14 @@ var TASKS = [
     hint: "Доля ошибок = ошибочные слова / все слова. Умножь на 100 для процентов.",
     explanation: "3 / 8 = 0.375 = 37.5%. Это значит, что в 37.5% случаев модель ошиблась."
   },
-  // --- 9152: Живой или синтез ---
   {
     id: "t6",
     layer: "9152",
     title: "Живой или синтез?",
-    desc: "Послушай два аудио (заглушка — описание). Определи, где живой голос, где синтез.",
+    desc: "Посмотри описания двух аудио. Определи, где живой голос, где синтез. В реальном уроке здесь воспроизводятся аудиофайлы.",
     body: "liveOrSynth",
-    audio1: { desc: "Ровный голос, нет дыхания, идеальная интонация", type: "synth" },
-    audio2: { desc: "Есть дыхание, небольшая неровность, живая интонация", type: "live" },
-    hint: "Слушай дыхание и естественные неровности.",
-    explanation: "Живой голос: дыхание, неровности. Синтез: ровный, идеальный. Но современный синтез может звучать естественно."
+    hint: "Слушай (читай) дыхание и естественные неровности.",
+    explanation: "Аудио 1 — синтез (ровный, без дыхания). Аудио 2 — живой голос (дыхание, неровности). Но современный синтез может звучать естественно."
   },
   {
     id: "t7",
@@ -847,7 +746,6 @@ var TASKS = [
     hint: "Подумай о безопасности: можно ли подделать голос? Нужно ли согласие?",
     explanation: "Голос — биометрия, можно идентифицировать. Нужно согласие. Записи не стоит хранить без защиты. Голос можно подделать (дипфейк)."
   },
-  // --- 9154: Проверка этапов ---
   {
     id: "t8",
     layer: "9154",
@@ -858,7 +756,6 @@ var TASKS = [
     hint: "Вспомни пример с «кот» и «код».",
     explanation: "«Первая гипотеза всегда верная» — ложно. Пример: «кот» 71%, но было «код». «Знаки не влияют» — ложно. Пример: три варианта «Маша»."
   },
-  // --- 9155: Смета ---
   {
     id: "t9",
     layer: "9155",
@@ -871,7 +768,6 @@ var TASKS = [
     hint: "Подумай о рисках: куда уходит звук? Кто его видит?",
     explanation: "Вердикт: «Берёмся с условием». Условие: шифрование, согласие, не сохранять записи. Красный флаг — звук на сервере."
   },
-  // --- 9153: Мост к языковым моделям ---
   {
     id: "t10",
     layer: "9153",
@@ -891,7 +787,6 @@ var TASKS = [
     hint: "Между текстом от распознавания и текстом для синтеза есть промежуточное звено.",
     explanation: "Полная схема: звук → распознавание → текст → языковая модель → текст → синтез → звук. Языковая модель обрабатывает текст."
   },
-  // --- 9156: Рефлексия ---
   {
     id: "t11",
     layer: "9156",
@@ -909,7 +804,6 @@ var TASKS = [
   }
 ];
 
-// --- Финальные вопросы ---
 var FINAL_TASKS = REFERENCE.finalQuestions;
 
 // ============================================================
@@ -1306,7 +1200,7 @@ function checkTermsTask() {
 
 // слово: рендерит задание с фразами-испытаниями
 function renderTestPhrasesTask(task) {
-  var html = '<p>Выбери 3 фразы для испытания (нажми для выбора):</p>';
+  var html = '<p>Выбери <strong>ровно 3 фразы</strong> для испытания (нажми для выбора/снятия):</p>';
   html += '<div class="choices">';
   var i;
   for (i = 0; i < task.phrases.length; i++) {
@@ -1315,9 +1209,9 @@ function renderTestPhrasesTask(task) {
       task.phrases[i] + '</button>';
   }
   html += '</div>';
-  html += '<p>Выбрано: ' + STATE.testPhrasesSelected.length + ' из 3</p>';
+  html += '<p>Выбрано: ' + STATE.testPhrasesSelected.length + ' из 3 (нужно ровно 3)</p>';
   html += '<button class="btn btn-primary" onclick="checkPhrasesTask()" ' +
-    (STATE.testPhrasesSelected.length < 3 ? 'disabled' : '') + '>Продолжить</button>';
+    (STATE.testPhrasesSelected.length !== 3 ? 'disabled' : '') + '>Продолжить</button>';
   return html;
 }
 
@@ -1337,7 +1231,7 @@ function togglePhrase(phrase) {
 
 // слово: проверяет выбор фраз
 function checkPhrasesTask() {
-  if (STATE.testPhrasesSelected.length < 3) return;
+  if (STATE.testPhrasesSelected.length !== 3) return;
   STATE.taskResults[TASKS[STATE.currentTask].id] = { correct: true, phrases: STATE.testPhrasesSelected };
   saveState();
   renderCurrentTask();
@@ -1350,7 +1244,7 @@ function renderCalculationTask(task) {
   var html = '<p>Пара произнесла <strong>' + task.total + '</strong> фраз. Ошиблось распознавание в <strong>' + task.errors + '</strong>.</p>';
   html += '<p>Доля ошибок = ' + task.errors + ' / ' + task.total + ' = ?</p>';
   html += '<p>Введи ответ в процентах (число):</p>';
-  html += '<input type="number" id="calc-answer" step="0.1" placeholder="Например: 37.5" style="width:150px; padding:0.5rem; font-size:var(--fs-body); border:1px solid var(--clr-border); border-radius:4px;">';
+  html += '<input type="number" id="calc-answer" step="0.1" placeholder="Например: 37.5">';
   html += '<button class="btn btn-primary" onclick="checkCalcTask()" style="margin-left:0.5rem;">Проверить</button>';
   return html;
 }
@@ -1372,8 +1266,16 @@ function checkCalcTask() {
 
 // слово: рендерит задание «живой или синтез»
 function renderLiveOrSynthTask(task) {
-  var html = '<p><strong>Аудио 1:</strong> ' + task.audio1.desc + '</p>';
-  html += '<p><strong>Аудио 2:</strong> ' + task.audio2.desc + '</p>';
+  var html = '<div class="audio-desc">';
+  html += '<div class="audio-label">' + REFERENCE.audioDescriptions.audio1.label + '</div>';
+  html += '<div>' + REFERENCE.audioDescriptions.audio1.desc + '</div>';
+  html += '<div class="audio-note">' + REFERENCE.audioDescriptions.audio1.note + '</div>';
+  html += '</div>';
+  html += '<div class="audio-desc">';
+  html += '<div class="audio-label">' + REFERENCE.audioDescriptions.audio2.label + '</div>';
+  html += '<div>' + REFERENCE.audioDescriptions.audio2.desc + '</div>';
+  html += '<div class="audio-note">' + REFERENCE.audioDescriptions.audio2.note + '</div>';
+  html += '</div>';
   html += '<p>Кто есть кто?</p>';
   html += '<div class="choices">';
   html += '<button class="choice-btn' + (STATE.liveSynthAnswers.audio1 === "live" ? ' selected' : '') + '" onclick="selectLiveSynth(\'audio1\', \'live\')">Аудио 1 — живой голос</button>';
@@ -1398,8 +1300,8 @@ function selectLiveSynth(audio, type) {
 function checkLiveSynthTask() {
   var task = TASKS[STATE.currentTask];
   var correct = true;
-  if (STATE.liveSynthAnswers.audio1 !== task.audio1.type) correct = false;
-  if (STATE.liveSynthAnswers.audio2 !== task.audio2.type) correct = false;
+  if (STATE.liveSynthAnswers.audio1 !== "synth") correct = false;
+  if (STATE.liveSynthAnswers.audio2 !== "live") correct = false;
   STATE.taskResults[task.id] = { correct: correct };
   saveState();
   renderCurrentTask();
@@ -1429,7 +1331,7 @@ function renderCheckboxTask(task) {
   return html;
 }
 
-// слово: переключает чекбокс
+// слово: переключает чекбокс без перерисовки экрана
 function toggleCheck(index) {
   var task = TASKS[STATE.currentTask];
   if (!STATE.taskResults[task.id]) STATE.taskResults[task.id] = {};
@@ -1442,7 +1344,6 @@ function toggleCheck(index) {
     checked.splice(idx, 1);
   }
   saveState();
-  renderCurrentTask();
 }
 
 // слово: проверяет чекбоксы
@@ -1492,7 +1393,6 @@ function selectMisconception(index) {
 // слово: проверяет ложные правила
 function checkMisconceptionsTask() {
   var task = TASKS[STATE.currentTask];
-  // Все перечисленные правила — ложные, выбираем любой
   STATE.taskResults[task.id] = { correct: true, misconception: STATE.misconceptionsAnswer };
   saveState();
   renderCurrentTask();
@@ -1513,7 +1413,7 @@ function renderBudgetTask(task) {
   }
   html += '</div>';
   html += '<p><label>Обоснование:</label></p>';
-  html += '<textarea id="budget-reason" rows="3" style="width:100%; padding:0.5rem; font-size:var(--fs-body); border:1px solid var(--clr-border); border-radius:4px;" placeholder="Обоснуй вердикт...">' +
+  html += '<textarea id="budget-reason" rows="3" placeholder="Обоснуй вердикт...">' +
     (STATE.budgetReason || '') + '</textarea>';
   html += '<button class="btn btn-primary" onclick="checkBudgetTask()" ' +
     (STATE.budgetVerdict === null ? 'disabled' : '') + '>Проверить</button>';
@@ -1530,7 +1430,8 @@ function selectVerdict(index) {
 // слово: проверяет смету
 function checkBudgetTask() {
   var task = TASKS[STATE.currentTask];
-  STATE.budgetReason = document.getElementById("budget-reason").value;
+  var reasonEl = document.getElementById("budget-reason");
+  if (reasonEl) STATE.budgetReason = reasonEl.value;
   var correct = STATE.budgetVerdict === task.correctVerdict;
   STATE.taskResults[task.id] = { correct: correct, verdict: STATE.budgetVerdict, reason: STATE.budgetReason };
   saveState();
@@ -1550,7 +1451,11 @@ function renderBridgeTask(task) {
       task.bridgeParts[i] + '</button>';
   }
   html += '</div>';
-  html += '<p>Порядок: ' + (STATE.bridgeOrder ? STATE.bridgeOrder.map(function(i) { return task.bridgeParts[i]; }).join(" → ") : "—") + '</p>';
+  var orderText = "—";
+  if (STATE.bridgeOrder && STATE.bridgeOrder.length > 0) {
+    orderText = STATE.bridgeOrder.map(function(i) { return task.bridgeParts[i]; }).join(" → ");
+  }
+  html += '<p>Порядок: <span class="mono">' + orderText + '</span></p>';
   html += '<button class="btn btn-primary" onclick="checkBridgeTask()" ' +
     (!STATE.bridgeOrder || STATE.bridgeOrder.length !== task.bridgeParts.length ? 'disabled' : '') + '>Проверить</button>';
   return html;
@@ -1765,10 +1670,10 @@ function renderFinal() {
     html += '<div class="compare-box">';
     html += '<h4>Образцовые ответы:</h4>';
     html += '<ul>';
-    html += '<li>Вопрос 1: Модель выбирает слово с <strong>наибольшей вероятностью</strong></li>';
-    html += '<li>Вопрос 2: Ошибка на <strong>станции 4</strong> (гипотезы → слова)</li>';
-    html += '<li>Вопрос 3: Знаки задают <strong>паузы и интонацию</strong></li>';
-    html += '<li>Вопрос 4: Правило — <strong>перезвони сам</strong></li>';
+    html += '<li>Вопрос 1: Модель выбирает слово с <strong>наибольшей вероятностью</strong> (этап 4: гипотезы → слова)</li>';
+    html += '<li>Вопрос 2: Ошибка на <strong>станции 4</strong> (гипотезы → слова) — «кот» 71%, но было «код»</li>';
+    html += '<li>Вопрос 3: Знаки задают <strong>паузы и интонацию</strong> (этап синтеза речи)</li>';
+    html += '<li>Вопрос 4: Правило — <strong>перезвони сам</strong> (биометрические данные)</li>';
     html += '<li>Вопрос 5: Мост — <strong>звук → распознавание → текст → языковая модель → текст → синтез → звук</strong></li>';
     html += '</ul>';
     html += '</div>';

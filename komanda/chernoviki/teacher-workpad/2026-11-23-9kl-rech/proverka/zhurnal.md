@@ -54,3 +54,14 @@
 | 18.11 00:40:13 | okruzhenie prilozhenie | скрипт | 2 | ВЕРНУТЬ |  |
 | 18.11 00:51:02 | prilozhenie | deepseek | 3 | НЕРАБОЧИЙ: рассуждение съело лимит max_tokens, результата нет (увеличить max_tokens в modeli.json) |  |
 | 18.11 01:02:22 | prilozhenie | deepseek | 3 | НЕРАБОЧИЙ: рассуждение съело лимит max_tokens, результата нет (увеличить max_tokens в modeli.json) |  |
+| 18.11 01:18:53 | prilozhenie | deepseek | 1 | НЕРАБОЧИЙ: рассуждение съело лимит max_tokens, результата нет (увеличить max_tokens в modeli.json) |  |
+| 18.11 01:30:36 | prilozhenie | qwen | 1 | ответ | 51725 |
+| 18.11 01:30:42 | strazh prilozhenie | alisa | 1 | ответ | 28841 |
+| 18.11 01:30:42 | strazh prilozhenie | alisa | 1 | ВЕРНУТЬ |  |
+| 18.11 01:31:23 | prilozhenie | qwen | 2 | ответ | 51904 |
+| 18.11 01:31:28 | strazh prilozhenie | alisa | 2 | ответ | 29178 |
+| 18.11 01:31:28 | strazh prilozhenie | alisa | 2 | ПРИНЯТЬ |  |
+| 18.11 01:43:11 | prezentaciya | deepseek | 1 | НЕРАБОЧИЙ: рассуждение съело лимит max_tokens, результата нет (увеличить max_tokens в modeli.json) |  |
+| 18.11 01:46:24 | prezentaciya | deepseek | 1 | ответ | 31730 |
+| 18.11 01:46:29 | strazh prezentaciya | alisa | 1 | ответ | 16812 |
+| 18.11 01:46:29 | strazh prezentaciya | alisa | 1 | ВЕРНУТЬ |  |
