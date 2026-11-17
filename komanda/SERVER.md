@@ -39,6 +39,6 @@ teacher-workpad; черновик лежит только на сервере �
 
 ## Следующие шаги (по одному, после «дальше» учителя)
 
-а) git на сервере пушит в GitHub (ключ SSH в GitHub добавляет учитель сам).
+а) git → GitHub: **17.11** ключ ed25519 сервера добавлен в GitHub (`Server-scatikwork`, отдельный от ноутбука), `ssh -T git@github.com` — успешно; имя Serge Vesnin, почта gmail, для `~/max-bot*` — yandex (`~/.gitconfig-max-bot`). Алиса вне плана поставила `xclip` (безвредно). **Осталось:** повторный `tools/server-git.sh` — ii-komanda на SSH + пробный push.
 б) **сделано 17.11**: `~/.ii-komanda.env` (600) перенесён `tools/server-klyuchi.sh`, ключи YANDEX_API_KEY и YANDEX_FOLDER_ID; `ii.py klyuchi` — alisa, alisa_flash, deepseek, qwen работают. venv не нужен: ii.py без пакетов.
 в) резервные копии.
