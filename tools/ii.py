@@ -17,7 +17,7 @@ import urllib.error
 import urllib.request
 from pathlib import Path
 
-VERSIYA = "0.2.6 (16.11.2026)"
+VERSIYA = "0.2.7 (17.11.2026)"
 TOOLS = Path(__file__).resolve().parent
 KOREN = TOOLS.parent
 PROMPTY = KOREN / "algoritm" / "prompty"
@@ -392,6 +392,12 @@ def prochitat_prompt(kod):
     return (chasti[1] if len(chasti) == 2 else tekst).strip() + "\n"
 
 
+def prochitat_prompt_iz(put):
+    """prochitat_prompt_iz: текст файла после шапки «---…---»."""
+    chasti = re.split(r"^---\s*$", put.read_text(encoding="utf-8"), maxsplit=2, flags=re.M)
+    return chasti[-1].strip() + "\n"
+
+
 def podstavit(tekst, urok, dop=None):
     """Заменяет {{ИМЯ}}. Не найдено или пусто — Oshibka, а не пустая строка."""
     dop = dop or {}
@@ -400,6 +406,9 @@ def podstavit(tekst, urok, dop=None):
         imya = mt.group(1)
         if imya in dop:
             znach = dop[imya]
+        elif imya == "STILI":
+            # стили: три стиля кода команды — навык tri-stilya-koda без шапки (решение учителя 17.11)
+            znach = prochitat_prompt_iz(KOREN / "rezerv" / "navyki" / "tri-stilya-koda" / "SKILL.md")
         elif imya == "SHABLON_TEHKARTY":
             p = urok / "shablon-tehkarty.md"
             znach = p.read_text(encoding="utf-8") if p.exists() else "(шаблона школы нет)"
