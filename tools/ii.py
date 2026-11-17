@@ -17,7 +17,7 @@ import urllib.error
 import urllib.request
 from pathlib import Path
 
-VERSIYA = "0.3.0-a (17.11.2026)"
+VERSIYA = "0.3.1 (18.11.2026)"
 TOOLS = Path(__file__).resolve().parent
 KOREN = TOOLS.parent
 PROMPTY = KOREN / "algoritm" / "prompty"
@@ -137,13 +137,86 @@ class Kontekst:
             f.write(stroka + "\n")
 
 
+# ---------- поток: ответ модели кусками (stream) ----------
+# Тайм-аут потока — пауза между кусками, а не весь ответ: пишущая модель не обрывается,
+# молчащая отваливается через PAUZA_POTOKA. Собранный ответ — того же вида, что обычный:
+# {"choices": [{"message": {"content": "…", "reasoning_content": "…"}, "finish_reason": "stop"}], "usage": {…}}
+PAUZA_POTOKA = 120
+SHAG_POKAZA = 30
+
+
+# кусок-потока: строка «data: {…}» → словарь; пустая, служебная или «[DONE]» → None
+def kusok_potoka(stroka):
+    kusok = None
+    tekst = stroka.strip()
+    if tekst.startswith("data:") and tekst[5:].strip() != "[DONE]":
+        kusok = json.loads(tekst[5:].strip())
+    return kusok
+
+
+# дописать-кусок: текст, рассуждение, finish_reason и usage куска → в собранное
+def dopisat_kusok(sobrano, kusok):
+    for vybor in kusok.get("choices") or []:
+        delta = vybor.get("delta") or {}
+        sobrano["content"].append(delta.get("content") or "")
+        sobrano["reasoning"].append(delta.get("reasoning_content") or "")
+        sobrano["finish"] = vybor.get("finish_reason") or sobrano["finish"]
+    sobrano["usage"] = kusok.get("usage") or sobrano["usage"]
+
+
+# показать-ход: раз в SHAG_POKAZA секунд — строка «идёт: N знаков», чтобы было видно, что модель пишет
+def pokazat_hod(sobrano, vremya):
+    if vremya - sobrano["pokazano"] >= SHAG_POKAZA:
+        sobrano["pokazano"] = vremya
+        tekst = sum(len(s) for s in sobrano["content"])
+        dumy = sum(len(s) for s in sobrano["reasoning"])
+        print("  модель пишет: %d знаков ответа, %d знаков рассуждения" % (tekst, dumy), flush=True)
+
+
+# в-ответ: собранное → словарь того же вида, что обычный ответ /chat/completions
+def v_otvet(sobrano):
+    soobshchenie = {"content": "".join(sobrano["content"]), "reasoning_content": "".join(sobrano["reasoning"])}
+    return {"choices": [{"message": soobshchenie, "finish_reason": sobrano["finish"]}], "usage": sobrano["usage"]}
+
+
+# собрать-поток: строки ответа (bytes) → обычный ответ; часы подменяют тесты
+def sobrat_potok(stroki, chasy=None):
+    chasy = chasy or datetime.datetime.now().timestamp
+    sobrano = {"content": [], "reasoning": [], "finish": None, "usage": {}, "pokazano": chasy()}
+    for stroka in stroki:
+        kusok = kusok_potoka(stroka.decode("utf-8", "replace"))
+        if kusok:
+            dopisat_kusok(sobrano, kusok)
+            pokazat_hod(sobrano, chasy())
+    return v_otvet(sobrano)
+
+
+# прочитать-ответ: поток (text/event-stream) — по кускам, иначе — обычный JSON целиком
+def prochitat_otvet(otvet):
+    vid = otvet.headers.get("Content-Type", "")
+    if "event-stream" in vid:
+        dannye = sobrat_potok(otvet)
+    else:
+        dannye = json.loads(otvet.read().decode("utf-8"))
+    return dannye
+
+
+# тайм-аут-чтения: с потоком — пауза между кусками (не больше PAUZA_POTOKA), без — весь ответ
+def tajmaut_chteniya(telo, tajmaut):
+    sekund = tajmaut
+    if telo.get("stream"):
+        sekund = min(tajmaut, PAUZA_POTOKA)
+    return sekund
+
+
 def http_post(adres, zagolovki, telo, tajmaut=300):
     """Отдельная функция — её подменяют тесты."""
     zapros = urllib.request.Request(adres, data=json.dumps(telo).encode("utf-8"), method="POST")
     for k, v in zagolovki.items():
         zapros.add_header(k, v)
-    with urllib.request.urlopen(zapros, timeout=tajmaut) as otvet:
-        return json.loads(otvet.read().decode("utf-8"))
+    with urllib.request.urlopen(zapros, timeout=tajmaut_chteniya(telo, tajmaut)) as otvet:
+        dannye = prochitat_otvet(otvet)
+    return dannye
 
 
 OTKAZY = ("я не могу помочь", "не могу выполнить", "i can't help", "i cannot help", "i'm sorry, but")
@@ -238,7 +311,7 @@ def odin_vyzov(kt, imya, tekst, ozhidaem=None, max_tokens=None):
     for k, v in m.get("zagolovki", {}).items():
         zagolovki[k] = raskryt(v, kt.klyuchi)
     telo = {"model": raskryt(m["model"], kt.klyuchi), "messages": [{"role": "user", "content": tekst}],
-            "max_tokens": limit_tokenov(m, max_tokens), "temperature": 0.3}
+            "max_tokens": limit_tokenov(m, max_tokens), "temperature": 0.3, "stream": m.get("potok", True)}
     telo.update(m.get("telo_dop", {}))
     try:
         dannye = http_post(m["adres"].rstrip("/") + "/chat/completions", zagolovki, telo, m.get("tajmaut", 300))
@@ -560,6 +633,12 @@ NOVOE_ES = [(r"\?\.[A-Za-z_$\[(]", "?. (новее ES2018)"), (r"\?\?=?", "?? (�
             (r"\.replaceAll\(", "replaceAll (новее ES2018)"), (r"\.at\(", ".at( (новее ES2018)")]
 
 
+# очистить-js: строки и комментарии JS → пробелы (цвет «#e3f2fd;» в строке — не поле класса)
+def ochistit_js(kod):
+    import avto
+    return avto.ochistit_kod(kod)
+
+
 def skripty_iz_html(html):
     return "\n".join(re.findall(r"<script\b[^>]*>(.*?)</script>", html, flags=re.S | re.I))
 
@@ -589,7 +668,7 @@ def proverit_okruzhenie(html, imya_fajla, tonkij=True, kartinki=None):
     for z in ZAGLUSHKI:
         if z.lower() in html.lower():
             oshibki.append("заглушка: «%s»" % z)
-    kod = skripty_iz_html(html)
+    kod = ochistit_js(skripty_iz_html(html))
     for shablon, chto in NOVOE_ES:
         if re.search(shablon, kod):
             oshibki.append(chto)

@@ -346,3 +346,67 @@ class TestSborka(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+# ---------- 0.3.1: поток и очистка JS перед проверкой новизны ----------
+
+def stroki_potoka(*kuski):
+    stroki = [("data: " + __import__("json").dumps(k) + "\n").encode("utf-8") for k in kuski]
+    return stroki + [b"\n", b"data: [DONE]\n"]
+
+
+class OtvetPotokom:
+    """Подмена ответа urlopen: заголовки и строки потока или тело JSON."""
+
+    def __init__(self, vid, stroki=None, telo=b""):
+        self.headers, self.stroki, self.telo = {"Content-Type": vid}, stroki or [], telo
+
+    def __iter__(self):
+        return iter(self.stroki)
+
+    def read(self):
+        return self.telo
+
+
+class TestPotok(unittest.TestCase):
+    def test_kuski_skleivayutsya(self):
+        stroki = stroki_potoka({"choices": [{"delta": {"reasoning_content": "думаю"}}]},
+                               {"choices": [{"delta": {"content": "кан"}}]},
+                               {"choices": [{"delta": {"content": "ва"}, "finish_reason": "stop"}]},
+                               {"choices": [], "usage": {"total_tokens": 9}})
+        dannye = ii.prochitat_otvet(OtvetPotokom("text/event-stream", stroki))
+        self.assertEqual(ii.razobrat_otvet(dannye), ("канва", 9))
+
+    def test_obrezka_rassuzhdeniem(self):
+        stroki = stroki_potoka({"choices": [{"delta": {"reasoning_content": "долго"}, "finish_reason": "length"}]})
+        dannye = ii.sobrat_potok(stroki)
+        with self.assertRaisesRegex(ii.Nerabochij, "рассуждение съело"):
+            ii.razobrat_otvet(dannye)
+
+    def test_obychnyj_otvet(self):
+        telo = '{"choices": [{"message": {"content": "ок"}, "finish_reason": "stop"}]}'.encode("utf-8")
+        dannye = ii.prochitat_otvet(OtvetPotokom("application/json", telo=telo))
+        self.assertEqual(ii.razobrat_otvet(dannye)[0], "ок")
+
+    def test_tajmaut_pauzy(self):
+        self.assertEqual(ii.tajmaut_chteniya({"stream": True}, 900), ii.PAUZA_POTOKA)
+        self.assertEqual(ii.tajmaut_chteniya({"stream": False}, 900), 900)
+
+    def test_potok_v_tele_zaprosa(self):
+        pod = Podmena(otvet("канва"))
+        staryj, ii.http_post = ii.http_post, pod
+        try:
+            ii.odin_vyzov(ii.Kontekst(MODELI, dict(KLYUCHI)), "deepseek", "текст")
+        finally:
+            ii.http_post = staryj
+        self.assertTrue(pod.vyzovy[0][2]["stream"])
+
+
+class TestNovizna(unittest.TestCase):
+    def test_cvet_v_stroke_ne_pole(self):
+        html = """<script>h += '<div style="background:#e3f2fd;">';</script>"""
+        self.assertEqual(ii.proverit_okruzhenie(html, "prilozhenie.html"), [])
+
+    def test_nastoyashchee_pole(self):
+        html = "<script>class A { #schet = 0; }</script>"
+        self.assertIn("#поле класса (новее ES2018)", ii.proverit_okruzhenie(html, "prilozhenie.html"))
