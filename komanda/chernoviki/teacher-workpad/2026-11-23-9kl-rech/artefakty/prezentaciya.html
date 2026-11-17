@@ -561,14 +561,15 @@ const skrytPodskazki = (slajd) => {
   slajd.querySelectorAll('.podskazka').forEach((p) => p.classList.add('podskazka--skryta'));
 };
 
+// открыть-ответ: открывает следующий закрытый ответ слайда; true — если открыл
 const otkrytOtvet = (slajd) => {
   const otvety = slajd.querySelectorAll('.otvet:not(.otvet--otkryt)');
-  if (otvety.length > 0) {
+  const otkryl = otvety.length > 0;
+  if (otkryl) {
     otvety[0].classList.add('otvet--otkryt');
     skrytPodskazki(slajd);
-    return true;
   }
-  return false;
+  return otkryl;
 };
 
 const obnovitSchetchik = () => {
