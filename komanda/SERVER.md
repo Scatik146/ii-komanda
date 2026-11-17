@@ -40,5 +40,5 @@ teacher-workpad; черновик лежит только на сервере �
 ## Следующие шаги (по одному, после «дальше» учителя)
 
 а) git на сервере пушит в GitHub (ключ SSH в GitHub добавляет учитель сам).
-б) `ii.py` на сервере: venv, ключи Яндекса в `~/.ii-komanda.env` (в репозиторий — никогда), `python3 tools/ii.py klyuchi`.
+б) ~~ключи~~ **сделано 17.11**: `~/.ii-komanda.env` (600) перенесён `tools/server-klyuchi.sh`, ключи YANDEX_API_KEY и YANDEX_FOLDER_ID; `ii.py klyuchi` — alisa, alisa_flash, deepseek, qwen работают. venv не нужен: ii.py без пакетов.
 в) резервные копии.
