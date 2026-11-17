@@ -4,7 +4,7 @@
 Инструкция — `komanda/vstavka/den/2026-11-17/03-alisa-server.md` (15 шагов).
 Репозиторий публичный: **IP-адреса, имена входа и пароли сюда не пишем** — они в приватном `memory_maryam_ai`.
 
-## Что стоит (сводка Алисы 17.11, сверено с 15 шагами)
+## Что стоит (17.11: все 15 шагов пройдены)
 
 | шаг | что | итог |
 |---|---|---|
@@ -14,8 +14,8 @@
 | 9 | версии | gforth 0.7.3 · SWI-Prolog 9.2.9 · Python 3.14.4 · git 2.53.0 (скрипт, 17.11) |
 | 10 | `gforth -e "wordlist drop …"` → `WORDLIST ok` | **WORDLIST ok** |
 | 11 | клон ii-komanda в `~/ii-komanda` | есть |
-| 12 | OpenSSH-сервер Windows | поставлен, автозапуск, но **служба не стартует**: sshd.exe из System32 падает с кодом 0xC0000139 (нет точки входа в DLL) → замена на winget `Microsoft.OpenSSH.Preview`, `tools/server-ssh-pochinka.ps1` |
-| 13–14 | адрес, вход с ноутбука | не сделаны |
+| 12 | OpenSSH-сервер Windows | встроенный сломан (sshd.exe падал с 0xC0000139) → заменён на OpenSSH_for_Windows 10.4p1 из winget (`tools/server-ssh-pochinka.ps1`), автозапуск, порт 22 только для частной сети |
+| 13–14 | адрес, вход с ноутбука | адрес — в `memory_maryam_ai`; вход с ноутбука → `wsl` → `gforth 0.7.3` — **работает** (17.11) |
 
 Вне инструкции Алиса завела `~/teacher-workpad/{templates_v6,ideas_v9,drakon,speech_9class}` и черновик ДРАКОН-листа
 урока «Распознавание и синтез речи», 9 кл. (`drakon/lesson_speech_9class_draft.txt`). Это **не** клон репозитория
@@ -40,5 +40,5 @@ teacher-workpad; черновик лежит только на сервере �
 ## Следующие шаги (по одному, после «дальше» учителя)
 
 а) git на сервере пушит в GitHub (ключ SSH в GitHub добавляет учитель сам).
-б) ~~ключи~~ **сделано 17.11**: `~/.ii-komanda.env` (600) перенесён `tools/server-klyuchi.sh`, ключи YANDEX_API_KEY и YANDEX_FOLDER_ID; `ii.py klyuchi` — alisa, alisa_flash, deepseek, qwen работают. venv не нужен: ii.py без пакетов.
+б) **сделано 17.11**: `~/.ii-komanda.env` (600) перенесён `tools/server-klyuchi.sh`, ключи YANDEX_API_KEY и YANDEX_FOLDER_ID; `ii.py klyuchi` — alisa, alisa_flash, deepseek, qwen работают. venv не нужен: ii.py без пакетов.
 в) резервные копии.
