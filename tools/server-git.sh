@@ -34,10 +34,13 @@ github-proverit() {              # ssh -T отвечает «successfully authen
 
 komanda-na-ssh() {               # ii-komanda: адрес https → ssh, проверка отправки
   git -C "$KOMANDA_DIR" remote set-url origin git@github.com:Scatik146/ii-komanda.git
-  if git -C "$KOMANDA_DIR" push --dry-run -q origin HEAD 2>/dev/null; then
+  git -C "$KOMANDA_DIR" pull -q --ff-only 2>&1 | tail -2          # пробный push падает, если копия отстала
+  local otvet
+  if otvet=$(git -C "$KOMANDA_DIR" push --dry-run origin HEAD 2>&1); then
     stroka "ii-komanda" "отправка через SSH — проверена (пробный push)"
   else
-    stroka "ii-komanda" "пробный push НЕ прошёл — стоп, вопрос к Марьям"
+    stroka "ii-komanda" "пробный push НЕ прошёл — стоп, вопрос к Марьям:"
+    echo "$otvet" | tail -4
   fi
 }
 
