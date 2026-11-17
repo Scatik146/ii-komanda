@@ -444,7 +444,9 @@ def nabor_iz_zayavki(urok):
             yachejki = [y.strip() for y in stroka.strip().strip("|").split("|")]
             if len(yachejki) >= 3:
                 kod = yachejki[0].strip("`* ")
-                if kod in KODY and yachejki[-1].strip("*` ").lower() in DA:
+                # отметка: первое слово ячейки — «да …» с пояснением тоже считается (сбой 32, 17.11)
+                pervoe = (re.split(r"[\s—–,:;.(]+", yachejki[-1].strip("*` ").lower()) + [""])[0]
+                if kod in KODY and pervoe in DA:
                     nabor.append(kod)
     for k in ("shpargalka", "kanva"):
         if k not in nabor:
