@@ -37,3 +37,20 @@
 | 17.11 17:38:30 | tehkarta | deepseek | 1 | ответ | 21856 |
 | 17.11 17:38:34 | strazh tehkarta | alisa | 1 | ответ | 8912 |
 | 17.11 17:38:34 | strazh tehkarta | alisa | 1 | ПРИНЯТЬ |  |
+| 17.11 23:47:34 | kanva | deepseek | 1 | ответ | 26318 |
+| 17.11 23:47:36 | strazh kanva | alisa | 1 | ответ | 12967 |
+| 17.11 23:47:36 | strazh kanva | alisa | 1 | ПРИНЯТЬ |  |
+| 17.11 23:52:07 | shpargalka | deepseek | 1 | ответ | 20631 |
+| 17.11 23:52:10 | strazh shpargalka | alisa | 1 | ответ | 11909 |
+| 17.11 23:52:10 | strazh shpargalka | alisa | 1 | ПРИНЯТЬ |  |
+| 18.11 00:03:44 | prilozhenie | deepseek | 1 | НЕРАБОЧИЙ: ответ обрезан (finish_reason: length) |  |
+| 18.11 00:14:42 | prilozhenie | deepseek | 1 | НЕРАБОЧИЙ: ответ обрезан (finish_reason: length) |  |
+| 18.11 00:15:29 | prilozhenie | qwen | 1 | ответ | 32581 |
+| 18.11 00:15:29 | okruzhenie prilozhenie | скрипт | 1 | ВЕРНУТЬ |  |
+| 18.11 00:26:35 | prilozhenie | deepseek | 2 | НЕРАБОЧИЙ: рассуждение съело лимит max_tokens, результата нет (увеличить max_tokens в modeli.json) |  |
+| 18.11 00:37:52 | prilozhenie | deepseek | 2 | НЕРАБОЧИЙ: рассуждение съело лимит max_tokens, результата нет (увеличить max_tokens в modeli.json) |  |
+| 18.11 00:39:27 | prilozhenie | qwen | 2 | НЕРАБОЧИЙ: рассуждение съело лимит max_tokens, результата нет (увеличить max_tokens в modeli.json) |  |
+| 18.11 00:40:13 | prilozhenie | qwen | 2 | ответ | 51672 |
+| 18.11 00:40:13 | okruzhenie prilozhenie | скрипт | 2 | ВЕРНУТЬ |  |
+| 18.11 00:51:02 | prilozhenie | deepseek | 3 | НЕРАБОЧИЙ: рассуждение съело лимит max_tokens, результата нет (увеличить max_tokens в modeli.json) |  |
+| 18.11 01:02:22 | prilozhenie | deepseek | 3 | НЕРАБОЧИЙ: рассуждение съело лимит max_tokens, результата нет (увеличить max_tokens в modeli.json) |  |

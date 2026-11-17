@@ -1,1213 +1,1878 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Распознавание и синтез речи — практика</title>
-  <style>
-    :root {
-      --bg: #f5f5f5;
-      --text: #222;
-      --accent: #2a6fdb;
-      --correct: #1e7e34;
-      --wrong: #c82333;
-      --border: #ccc;
-      --mono: "Courier New", Courier, monospace;
-    }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Распознавание и синтез речи</title>
+<style>
+/* === Базовые переменные === */
+:root {
+  --clr-bg: #f5f5f0;
+  --clr-card: #ffffff;
+  --clr-accent: #2a6496;
+  --clr-ok: #2e7d32;
+  --clr-err: #c62828;
+  --clr-warn: #f9a825;
+  --clr-text: #212121;
+  --clr-muted: #757575;
+  --clr-border: #bdbdbd;
+  --clr-disabled: #e0e0e0;
+  --font-main: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  --font-mono: "Courier New", Courier, monospace;
+  --fs-big: 2.2rem;
+  --fs-head: 1.5rem;
+  --fs-body: 1.15rem;
+  --fs-small: 1rem;
+  --fs-hint: 0.95rem;
+  --pad: 1.2rem;
+  --radius: 8px;
+}
 
-    * {
-      box-sizing: border-box;
-    }
+/* === Сброс и база === */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { font-size: 18px; }
+body {
+  font-family: var(--font-main);
+  background: var(--clr-bg);
+  color: var(--clr-text);
+  line-height: 1.5;
+  min-height: 100vh;
+}
 
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      font-size: 20px;
-      line-height: 1.4;
-      background: var(--bg);
-      color: var(--text);
-    }
+/* === Шапка === */
+.header {
+  background: var(--clr-accent);
+  color: #fff;
+  padding: 0.6rem var(--pad);
+  font-size: var(--fs-small);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+.header .stats { font-weight: bold; }
+.header .role-badge {
+  background: rgba(255,255,255,0.2);
+  padding: 0.2rem 0.6rem;
+  border-radius: 4px;
+  font-size: var(--fs-small);
+}
 
-    .screen {
-      padding: 16px;
-    }
+/* === Контейнер === */
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: var(--pad);
+}
 
-    .hidden {
-      display: none;
-    }
+/* === Экраны === */
+.screen { display: none; }
+.screen.active { display: block; }
 
-    #start-screen {
-      max-width: 700px;
-      margin: 40px auto;
-      background: #fff;
-      padding: 24px;
-      border-radius: 8px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    }
+/* === Стартовый экран === */
+.start-screen {
+  max-width: 700px;
+  margin: 2rem auto;
+  text-align: center;
+}
+.start-screen h1 {
+  font-size: var(--fs-head);
+  margin-bottom: 1.5rem;
+  color: var(--clr-accent);
+}
+.start-steps {
+  text-align: left;
+  background: var(--clr-card);
+  border-radius: var(--radius);
+  padding: var(--pad);
+  margin-bottom: 1.5rem;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+.start-steps li {
+  margin-bottom: 0.8rem;
+  padding-left: 0.5rem;
+}
+.start-steps li strong { color: var(--clr-accent); }
+.btn {
+  display: inline-block;
+  padding: 0.7rem 2rem;
+  font-size: var(--fs-body);
+  border: none;
+  border-radius: var(--radius);
+  cursor: pointer;
+  font-weight: bold;
+  transition: background 0.2s;
+}
+.btn-primary {
+  background: var(--clr-accent);
+  color: #fff;
+}
+.btn-primary:hover { background: #1e4f75; }
+.btn-primary:disabled {
+  background: var(--clr-disabled);
+  cursor: not-allowed;
+}
+.btn-secondary {
+  background: var(--clr-border);
+  color: var(--clr-text);
+}
+.btn-secondary:hover { background: #9e9e9e; }
+.btn-ok { background: var(--clr-ok); color: #fff; }
+.btn-err { background: var(--clr-err); color: #fff; }
+.btn-warn { background: var(--clr-warn); color: var(--clr-text); }
 
-    #start-screen h1 {
-      font-size: 32px;
-      margin-top: 0;
-    }
+/* === Рабочий экран — сетка === */
+.work-layout {
+  display: grid;
+  grid-template-columns: 240px 1fr 280px;
+  gap: var(--pad);
+  align-items: start;
+}
+@media (max-width: 1100px) {
+  .work-layout {
+    grid-template-columns: 1fr;
+  }
+}
 
-    #start-steps {
-      font-size: 22px;
-      line-height: 1.6;
-    }
+/* === Список заданий (левая колонка) === */
+.task-list {
+  background: var(--clr-card);
+  border-radius: var(--radius);
+  padding: var(--pad);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  position: sticky;
+  top: 60px;
+}
+.task-list h3 {
+  font-size: var(--fs-small);
+  margin-bottom: 0.8rem;
+  color: var(--clr-accent);
+}
+.task-item {
+  padding: 0.5rem 0.6rem;
+  margin-bottom: 0.4rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: var(--fs-small);
+  border-left: 3px solid var(--clr-border);
+  transition: background 0.15s;
+}
+.task-item:hover { background: #f0f0f0; }
+.task-item.active {
+  border-left-color: var(--clr-accent);
+  background: #e3f2fd;
+  font-weight: bold;
+}
+.task-item.done-correct { border-left-color: var(--clr-ok); }
+.task-item.done-wrong { border-left-color: var(--clr-err); }
+.task-item .task-status {
+  float: right;
+  font-weight: bold;
+}
 
-    #start-button {
-      font-size: 22px;
-      padding: 12px 24px;
-      background: var(--accent);
-      color: #fff;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-    }
+/* === Центральная панель === */
+.task-panel {
+  background: var(--clr-card);
+  border-radius: var(--radius);
+  padding: var(--pad);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  min-height: 400px;
+}
+.task-panel h2 {
+  font-size: var(--fs-head);
+  margin-bottom: 1rem;
+  color: var(--clr-accent);
+}
+.task-panel .task-desc {
+  margin-bottom: 1.2rem;
+  font-size: var(--fs-body);
+}
+.task-panel .task-body {
+  margin-bottom: 1.2rem;
+}
 
-    #work-screen {
-      display: flex;
-      flex-direction: column;
-      height: 100vh;
-    }
+/* === Моноширинный для сравнения === */
+.mono {
+  font-family: var(--font-mono);
+  font-size: var(--fs-body);
+  background: #f5f5f5;
+  padding: 0.3rem 0.5rem;
+  border-radius: 4px;
+  display: inline-block;
+}
+.mono-block {
+  font-family: var(--font-mono);
+  font-size: var(--fs-body);
+  background: #f5f5f5;
+  padding: 0.8rem;
+  border-radius: 4px;
+  display: block;
+  margin: 0.5rem 0;
+  white-space: pre-wrap;
+  word-break: break-all;
+}
 
-    #header {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      padding: 8px 16px;
-      background: #fff;
-      border-bottom: 2px solid var(--border);
-      flex-wrap: wrap;
-    }
+/* === Карточки станций === */
+.stations-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 0.8rem;
+  margin: 1rem 0;
+}
+.station-card {
+  border: 2px solid var(--clr-border);
+  border-radius: var(--radius);
+  padding: 0.8rem;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-size: var(--fs-small);
+}
+.station-card:hover { border-color: var(--clr-accent); }
+.station-card.selected {
+  border-color: var(--clr-accent);
+  background: #e3f2fd;
+  font-weight: bold;
+}
+.station-card .station-num {
+  font-size: var(--fs-big);
+  color: var(--clr-accent);
+  display: block;
+  margin-bottom: 0.3rem;
+}
 
-    #header h1 {
-      font-size: 24px;
-      margin: 0;
-    }
+/* === Варианты ответа === */
+.choices {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  margin: 1rem 0;
+}
+.choice-btn {
+  padding: 0.7rem 1rem;
+  border: 2px solid var(--clr-border);
+  border-radius: var(--radius);
+  background: var(--clr-card);
+  cursor: pointer;
+  font-size: var(--fs-body);
+  text-align: left;
+  transition: all 0.15s;
+}
+.choice-btn:hover { border-color: var(--clr-accent); }
+.choice-btn.selected {
+  border-color: var(--clr-accent);
+  background: #e3f2fd;
+  font-weight: bold;
+}
+.choice-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.choice-btn.correct {
+  border-color: var(--clr-ok);
+  background: #e8f5e9;
+}
+.choice-btn.wrong {
+  border-color: var(--clr-err);
+  background: #ffebee;
+}
 
-    #header-stats {
-      display: flex;
-      gap: 16px;
-      font-size: 20px;
-      font-weight: bold;
-    }
+/* === Результат ответа === */
+.result-box {
+  margin: 1rem 0;
+  padding: 1rem;
+  border-radius: var(--radius);
+  font-size: var(--fs-head);
+  font-weight: bold;
+  text-align: center;
+}
+.result-box.correct {
+  background: #e8f5e9;
+  color: var(--clr-ok);
+  border: 2px solid var(--clr-ok);
+}
+.result-box.wrong {
+  background: #ffebee;
+  color: var(--clr-err);
+  border: 2px solid var(--clr-err);
+}
+.result-detail {
+  margin-top: 0.8rem;
+  text-align: left;
+  font-size: var(--fs-body);
+  font-weight: normal;
+}
+.result-detail ul {
+  margin: 0.5rem 0;
+  padding-left: 1.5rem;
+}
+.result-detail li {
+  margin-bottom: 0.3rem;
+}
 
-    #summary-button {
-      margin-left: auto;
-      font-size: 20px;
-      padding: 8px 16px;
-      background: var(--accent);
-      color: #fff;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-    }
+/* === Справочник (правая колонка) === */
+.reference-panel {
+  background: var(--clr-card);
+  border-radius: var(--radius);
+  padding: var(--pad);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+  position: sticky;
+  top: 60px;
+  font-size: var(--fs-small);
+}
+.reference-panel h3 {
+  color: var(--clr-accent);
+  margin-bottom: 0.8rem;
+  font-size: var(--fs-small);
+}
+.reference-panel .ref-block {
+  margin-bottom: 1rem;
+  padding-bottom: 0.8rem;
+  border-bottom: 1px solid var(--clr-border);
+}
+.reference-panel .ref-block:last-child { border-bottom: none; }
+.reference-panel strong { color: var(--clr-accent); }
 
-    #work-layout {
-      display: grid;
-      grid-template-columns: 240px 1fr 320px;
-      gap: 16px;
-      padding: 16px;
-      flex: 1;
-      overflow: auto;
-    }
+/* === Подсказки === */
+.hint-ladder {
+  margin: 1rem 0;
+}
+.hint-step {
+  display: none;
+  padding: 0.6rem;
+  margin-bottom: 0.5rem;
+  background: #fff8e1;
+  border-left: 3px solid var(--clr-warn);
+  border-radius: 0 4px 4px 0;
+  font-size: var(--fs-hint);
+}
+.hint-step.visible { display: block; }
+.hint-btn {
+  background: var(--clr-warn);
+  color: var(--clr-text);
+  border: none;
+  padding: 0.4rem 1rem;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: var(--fs-small);
+  margin-bottom: 0.5rem;
+}
+.hint-btn:hover { background: #f57f17; }
 
-    #task-list {
-      background: #fff;
-      padding: 12px;
-      border-radius: 8px;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.1);
-    }
+/* === Прогноз === */
+.prediction-box {
+  background: #e8eaf6;
+  border: 2px solid #5c6bc0;
+  border-radius: var(--radius);
+  padding: 1rem;
+  margin: 1rem 0;
+}
+.prediction-box label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: bold;
+}
+.prediction-box select,
+.prediction-box input {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid var(--clr-border);
+  border-radius: 4px;
+  font-size: var(--fs-body);
+  margin-bottom: 0.5rem;
+}
 
-    #task-list h2 {
-      font-size: 22px;
-      margin-top: 0;
-    }
+/* === Смета === */
+.budget-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+  font-size: var(--fs-small);
+}
+.budget-table th,
+.budget-table td {
+  border: 1px solid var(--clr-border);
+  padding: 0.5rem;
+  text-align: left;
+}
+.budget-table th {
+  background: #e3f2fd;
+}
+.red-flag {
+  background: #ffebee;
+  border: 2px solid var(--clr-err);
+  border-radius: var(--radius);
+  padding: 0.8rem;
+  margin: 1rem 0;
+  font-weight: bold;
+  color: var(--clr-err);
+}
 
-    #task-list-items {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-    }
+/* === Вердикт === */
+.verdict-options {
+  display: flex;
+  gap: 0.8rem;
+  margin: 1rem 0;
+  flex-wrap: wrap;
+}
+.verdict-btn {
+  flex: 1;
+  min-width: 150px;
+  padding: 0.8rem;
+  border: 2px solid var(--clr-border);
+  border-radius: var(--radius);
+  background: var(--clr-card);
+  cursor: pointer;
+  font-size: var(--fs-small);
+  text-align: center;
+  transition: all 0.15s;
+}
+.verdict-btn:hover { border-color: var(--clr-accent); }
+.verdict-btn.selected {
+  border-color: var(--clr-accent);
+  background: #e3f2fd;
+  font-weight: bold;
+}
 
-    #task-list-items li {
-      margin-bottom: 8px;
-    }
+/* === Чекбоксы === */
+.check-list {
+  margin: 1rem 0;
+}
+.check-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  margin-bottom: 0.6rem;
+  font-size: var(--fs-body);
+}
+.check-item input[type="checkbox"] {
+  width: 1.3rem;
+  height: 1.3rem;
+  margin-top: 0.1rem;
+  flex-shrink: 0;
+}
 
-    .task-button {
-      width: 100%;
-      text-align: left;
-      font-size: 20px;
-      padding: 8px 12px;
-      background: #f0f0f0;
-      border: 2px solid transparent;
-      border-radius: 6px;
-      cursor: pointer;
-    }
+/* === Финальный экран === */
+.final-screen {
+  max-width: 700px;
+  margin: 2rem auto;
+  background: var(--clr-card);
+  border-radius: var(--radius);
+  padding: var(--pad);
+  box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+}
+.final-screen h2 {
+  color: var(--clr-accent);
+  margin-bottom: 1rem;
+}
+.final-screen .final-result {
+  font-size: var(--fs-head);
+  text-align: center;
+  margin: 1.5rem 0;
+  padding: 1rem;
+  border-radius: var(--radius);
+}
+.compare-box {
+  background: #f5f5f5;
+  border: 2px solid var(--clr-border);
+  border-radius: var(--radius);
+  padding: 1rem;
+  margin: 1rem 0;
+}
+.compare-box h4 {
+  margin-bottom: 0.8rem;
+  color: var(--clr-accent);
+}
 
-    .task-button.active {
-      border-color: var(--accent);
-      background: #e6f0ff;
-    }
+/* === Выходной билет === */
+.exit-ticket {
+  margin: 1rem 0;
+}
+.exit-ticket textarea {
+  width: 100%;
+  min-height: 60px;
+  padding: 0.5rem;
+  border: 1px solid var(--clr-border);
+  border-radius: 4px;
+  font-size: var(--fs-body);
+  font-family: var(--font-main);
+  resize: vertical;
+  margin-bottom: 0.8rem;
+}
+.exit-ticket label {
+  display: block;
+  margin-bottom: 0.3rem;
+  font-weight: bold;
+  font-size: var(--fs-small);
+}
 
-    #task-area {
-      background: #fff;
-      padding: 16px;
-      border-radius: 8px;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.1);
-    }
+/* === Навигация по экранам === */
+.screen-nav {
+  display: flex;
+  gap: 0.5rem;
+  margin: 1rem 0;
+  flex-wrap: wrap;
+}
+.screen-nav .btn {
+  font-size: var(--fs-small);
+  padding: 0.4rem 1rem;
+}
 
-    .task-card h2 {
-      margin-top: 0;
-      font-size: 26px;
-    }
+/* === Роль === */
+.role-toggle {
+  display: flex;
+  gap: 0.5rem;
+  margin: 1rem 0;
+}
+.role-btn {
+  flex: 1;
+  padding: 0.5rem;
+  border: 2px solid var(--clr-border);
+  border-radius: var(--radius);
+  background: var(--clr-card);
+  cursor: pointer;
+  font-size: var(--fs-small);
+  text-align: center;
+}
+.role-btn.active {
+  border-color: var(--clr-accent);
+  background: #e3f2fd;
+  font-weight: bold;
+}
 
-    .phrase {
-      font-family: var(--mono);
-      font-size: 22px;
-      background: #f9f9f9;
-      padding: 8px 12px;
-      border-left: 4px solid var(--accent);
-      margin: 8px 0;
-    }
+/* === Скрытый блок === */
+.hidden { display: none !important; }
 
-    .choice-block {
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      padding: 12px;
-      margin: 12px 0;
-    }
-
-    .choice-block legend {
-      font-weight: bold;
-      font-size: 20px;
-      padding: 0 4px;
-    }
-
-    .choice-block label {
-      display: block;
-      margin: 6px 0;
-      font-size: 20px;
-      cursor: pointer;
-    }
-
-    .choice-block input[type="radio"] {
-      width: 22px;
-      height: 22px;
-      margin-right: 8px;
-      vertical-align: middle;
-    }
-
-    #answer-button {
-      font-size: 22px;
-      padding: 10px 24px;
-      background: var(--accent);
-      color: #fff;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      margin-top: 12px;
-    }
-
-    #answer-button:disabled {
-      background: #aaa;
-      cursor: not-allowed;
-    }
-
-    .result-title {
-      font-size: 32px;
-      font-weight: bold;
-      margin: 16px 0 8px;
-    }
-
-    .result-title.correct {
-      color: var(--correct);
-    }
-
-    .result-title.wrong {
-      color: var(--wrong);
-    }
-
-    .result-details {
-      font-size: 20px;
-    }
-
-    .result-details ul {
-      padding-left: 20px;
-    }
-
-    #reference {
-      background: #fff;
-      padding: 12px;
-      border-radius: 8px;
-      box-shadow: 0 1px 4px rgba(0,0,0,0.1);
-    }
-
-    #reference h2 {
-      font-size: 22px;
-      margin-top: 0;
-    }
-
-    #pipeline ol {
-      padding-left: 20px;
-      font-size: 20px;
-    }
-
-    #pipeline li {
-      margin: 4px 0;
-    }
-
-    #hints p {
-      font-size: 20px;
-      margin: 8px 0;
-    }
-
-    #counter {
-      margin-top: 16px;
-      font-size: 20px;
-    }
-
-    #summary-screen {
-      max-width: 800px;
-      margin: 40px auto;
-      background: #fff;
-      padding: 24px;
-      border-radius: 8px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    }
-
-    #summary-screen h1 {
-      font-size: 32px;
-      margin-top: 0;
-    }
-
-    #summary-content ul {
-      font-size: 20px;
-    }
-
-    #final-answer {
-      width: 100%;
-      font-size: 20px;
-      padding: 8px;
-      margin: 8px 0;
-      border: 1px solid var(--border);
-      border-radius: 6px;
-      font-family: inherit;
-    }
-
-    #summary-content button {
-      font-size: 20px;
-      padding: 8px 16px;
-      background: var(--accent);
-      color: #fff;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      margin: 8px 0;
-    }
-
-    #back-to-work {
-      font-size: 20px;
-      padding: 8px 16px;
-      background: #666;
-      color: #fff;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      margin-top: 16px;
-    }
-
-    .sample-item {
-      display: block;
-      margin: 8px 0;
-      font-size: 20px;
-      cursor: pointer;
-    }
-
-    .sample-item input[type="checkbox"] {
-      width: 22px;
-      height: 22px;
-      margin-right: 8px;
-      vertical-align: middle;
-    }
-
-    @media (max-width: 900px) {
-      #work-layout {
-        grid-template-columns: 1fr;
-      }
-      #work-screen {
-        height: auto;
-      }
-    }
-  </style>
+/* === Адаптив === */
+@media (max-width: 1100px) {
+  .work-layout {
+    grid-template-columns: 1fr;
+  }
+  .task-list {
+    position: static;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+  .task-item {
+    flex: 1;
+    min-width: 120px;
+  }
+  .reference-panel {
+    position: static;
+  }
+}
+</style>
 </head>
 <body>
-  <div id="app">
-    <section id="start-screen" class="screen">
+
+<!-- Шапка -->
+<div class="header" id="header">
+  <span class="stats" id="header-stats">сделано 0 из 0, верно 0</span>
+  <span class="role-badge" id="role-badge">Роль: —</span>
+</div>
+
+<div class="container">
+
+  <!-- ===== СТАРТОВЫЙ ЭКРАН ===== -->
+  <div class="screen active" id="screen-start">
+    <div class="start-screen">
       <h1>Распознавание и синтез речи</h1>
-      <p>Практика по конвейеру</p>
-      <ol id="start-steps"></ol>
-      <button id="start-button">Начать</button>
-    </section>
-
-    <section id="work-screen" class="screen hidden">
-      <header id="header">
-        <h1>Распознавание и синтез речи</h1>
-        <div id="header-stats">
-          <span id="stat-done">сделано 0 из 7</span>
-          <span id="stat-correct">верно 0</span>
-        </div>
-        <button id="summary-button">Итог</button>
-      </header>
-      <div id="work-layout">
-        <nav id="task-list">
-          <h2>Задания</h2>
-          <ul id="task-list-items"></ul>
-        </nav>
-        <main id="task-area"></main>
-        <aside id="reference">
-          <h2>Опора</h2>
-          <div id="pipeline"></div>
-          <div id="hints"></div>
-          <div id="counter"></div>
-        </aside>
+      <div class="start-steps">
+        <h3>Что делать на уроке</h3>
+        <ol>
+          <li><strong>Шаг 1.</strong> Выбери роль: <strong>водитель</strong> (выбирает ответы) или <strong>контролёр</strong> (сверяет и ведёт счёт). Роль чередуется.</li>
+          <li><strong>Шаг 2.</strong> Пройди задания по порядку. В каждом — сравни «сказали» и «распознала модель», выбирай станцию сбоя, отвечай на вопросы.</li>
+          <li><strong>Шаг 3.</strong> В конце — финальный вопрос и выходной билет. Кнопка «Итог» доступна всегда.</li>
+        </ol>
       </div>
-    </section>
-
-    <section id="summary-screen" class="screen hidden">
-      <h1>Итог</h1>
-      <div id="summary-content"></div>
-      <button id="back-to-work">Вернуться к заданиям</button>
-    </section>
+      <div class="role-toggle">
+        <button class="role-btn active" data-role="voditel" onclick="setRole('voditel')">🚗 Водитель</button>
+        <button class="role-btn" data-role="kontroler" onclick="setRole('kontroler')">🔍 Контролёр</button>
+      </div>
+      <p style="margin-bottom:1rem; font-size:var(--fs-hint); color:var(--clr-muted);">
+        Водитель выбирает ответы. Контролёр сверяет и ведёт счёт. Роли чередуются после каждого задания.
+      </p>
+      <button class="btn btn-primary" onclick="startLesson()">Начать урок</button>
+    </div>
   </div>
 
-  <script>
-    // Данные приложения: тексты, задания, ответы, разборы.
-    var DATA = {
-      steps: [
-        "Рассмотри каркас конвейера справа.",
-        "Для каждой фразы отметь: Алиса поняла или переспросила, и на какой станции сбой.",
-        "Нажми «Ответить» — увидишь разбор. В конце — итог и финальный вопрос."
+  <!-- ===== РАБОЧИЙ ЭКРАН ===== -->
+  <div class="screen" id="screen-work">
+    <div class="work-layout">
+
+      <!-- Левая колонка: список заданий -->
+      <div class="task-list" id="task-list">
+        <h3>Задания</h3>
+        <div id="task-list-items"></div>
+      </div>
+
+      <!-- Центральная панель -->
+      <div class="task-panel" id="task-panel">
+        <div id="task-content"></div>
+      </div>
+
+      <!-- Правая колонка: справочник -->
+      <div class="reference-panel" id="reference-panel">
+        <h3>Справочник-опора</h3>
+        <div id="reference-content"></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ===== ФИНАЛЬНЫЙ ЭКРАН ===== -->
+  <div class="screen" id="screen-final">
+    <div class="final-screen" id="final-content"></div>
+  </div>
+
+</div>
+
+<script>
+// ============================================================
+// ДАННЫЕ: тексты, задания, ответы — отдельно от действий
+// ============================================================
+
+// --- Справочник ---
+var REFERENCE = {
+  stations: [
+    { num: 1, name: "Звук → спектрограмма", desc: "Микрофон захватывает звук, программа преобразует его в спектрограмму — картинку частот" },
+    { num: 2, name: "Спектрограмма → фонемы", desc: "Модель ищет в спектрограмме характерные участки — фонемы (минимальные значимые единицы звука)" },
+    { num: 3, name: "Фонемы → буквы / подслова", desc: "Фонемы объединяются в гипотезы — варианты букв и подслов (например, «кот», «код»)" },
+    { num: 4, name: "Гипотезы → слова", desc: "Из подслов собираются слова. Модель выбирает слово с наибольшей вероятностью" },
+    { num: 5, name: "Слова → предложение", desc: "Слова объединяются в предложение с учётом грамматики и контекста" }
+  ],
+  terms: [
+    { name: "Данные", def: "То, что модель получает на вход: звук, текст, картинки" },
+    { name: "Признак", def: "То, что модель измеряет в данных: частота, громкость, длительность звука" },
+    { name: "Модель", def: "Программа, которая по признакам принимает решение: какое слово наиболее вероятно" },
+    { name: "Вероятность", def: "Число от 0 до 100%, показывающее, насколько модель уверена в своём выборе" }
+  ],
+  misconceptions: [
+    { rule: "Если Алиса переспросила — слово не знает", counter: "Фраза «кот» может быть переспрошена из-за омофона «код» — модель не ошибается, а не уверена" },
+    { rule: "Первая гипотеза всегда верная", counter: "Пример: модель выбрала «кот» (71%), а было сказано «код» (24%) — топ-1 неверен, топ-2 верен" },
+    { rule: "Знаки препинания не влияют на синтез", counter: "«Маша пришла домой» / «Маша, пришла домой» / «Маша, пришла домой?» — три разных интонации" },
+    { rule: "Живой голос всегда отличается от синтеза", counter: "Современный синтез может звучать естественно, с дыханием и интонацией" }
+  ],
+  synthesisExamples: [
+    { text: "Маша пришла домой", pause: "Нет пауз, ровная интонация", type: "утверждение" },
+    { text: "Маша, пришла домой", pause: "Пауза после «Маша» — обращение", type: "обращение" },
+    { text: "Маша, пришла домой?", pause: "Пауза + вопросительная интонация", type: "вопрос" }
+  ],
+  testPhrases: [
+    "кот",
+    "код",
+    "Съешь ещё этих мягких французских булок",
+    "Информатика — это интересно",
+    "Анна Анне ананас",
+    "Попрограммируем сегодня",
+    "Распознавание речи работает быстро",
+    "Синтез речи меняет голос"
+  ],
+  finalQuestions: [
+    {
+      q: "Что модель выбирает при распознавании слова?",
+      options: [
+        "Слово, которое она «понимает» по смыслу",
+        "Слово с наибольшей вероятностью",
+        "Первое слово из словаря",
+        "Слово, которое чаще всего встречается"
       ],
-      stations: [
-        { code: "sound", name: "Звук" },
-        { code: "phonemes", name: "Фонемы" },
-        { code: "letters", name: "Буквы/подслова (гипотезы)" },
-        { code: "words", name: "Слова" },
-        { code: "sentence", name: "Предложение" }
+      correct: 1,
+      explanation: "Модель не «понимает» — она выбирает слово с наибольшей вероятностью на основе признаков"
+    },
+    {
+      q: "Где в конвейере распознавания происходит ошибка, если модель сказала «кот» вместо «код»?",
+      options: [
+        "Станция 1: звук → спектрограмма",
+        "Станция 2: спектрограмма → фонемы",
+        "Станция 3: фонемы → буквы/подслова",
+        "Станция 4: гипотезы → слова",
+        "Станция 5: слова → предложение"
       ],
-      tasks: [
-        {
-          type: "recognition",
-          phrase: "Включи музыку",
-          answer: "Включила музыку.",
-          result: "understood",
-          station: "none",
-          analysis: [
-            "Алиса поняла команду и выполнила её.",
-            "Все станции конвейера сработали верно.",
-            "Сбоя нет."
-          ],
-          falseRule: ""
-        },
-        {
-          type: "recognition",
-          phrase: "Мы пришли на луг",
-          answer: "Переспросила: «Луг или лук?»",
-          result: "asked",
-          station: "words",
-          analysis: [
-            "Алиса переспросила из-за омофона: «луг» и «лук» звучат одинаково.",
-            "Это не значит, что она не знает слово.",
-            "На станции слов модель выбирает по вероятности, а звучание неоднозначно.",
-            "Это опровергает правило «если переспросила — слово не знает»."
-          ],
-          falseRule: "если Алиса переспросила — слово не знает"
-        },
-        {
-          type: "recognition",
-          phrase: "Я купил плод",
-          answer: "Распознала: «Я купил плот».",
-          result: "understood",
-          station: "words",
-          analysis: [
-            "Топ-1 гипотеза была «плот», топ-2 — «плод».",
-            "Модель выбрала по вероятности, но ошиблась.",
-            "Первая гипотеза не всегда верная.",
-            "Это опровергает правило «первая гипотеза всегда верная»."
-          ],
-          falseRule: "первая гипотеза всегда верная"
-        },
-        {
-          type: "synthesis",
-          phrase1: "Маша пришла домой",
-          phrase2: "Маша, пришла домой?",
-          question: "Что изменилось?",
-          variants: ["Ничего", "Пауза и интонация", "Только громкость", "Не знаю"],
-          correct: 1,
-          analysis: [
-            "Запятая задаёт паузу после «Маша».",
-            "Вопросительный знак задаёт вопросительную интонацию.",
-            "Знаки препинания меняют паузы и интонацию синтеза.",
-            "Это опровергает правило «знаки препинания не влияют на синтез»."
-          ],
-          falseRule: "знаки препинания не влияют на синтез"
-        },
-        {
-          type: "recognition",
-          phrase: "Открой браузер",
-          answer: "Открыла браузер.",
-          result: "understood",
-          station: "none",
-          analysis: [
-            "Алиса поняла команду и выполнила её.",
-            "Все станции конвейера сработали верно.",
-            "Сбоя нет."
-          ],
-          falseRule: ""
-        },
-        {
-          type: "recognition",
-          phrase: "Свет",
-          answer: "Распознала: «Цвет».",
-          result: "understood",
-          station: "phonemes",
-          analysis: [
-            "Звуки [с] и [ц] похожи, модель ошиблась на станции фонем.",
-            "Она поняла слово, но не то.",
-            "Сбой на станции фонем."
-          ],
-          falseRule: ""
-        },
-        {
-          type: "recognition",
-          phrase: "Казнить нельзя помиловать",
-          answer: "Распознала: «Казнить, нельзя помиловать».",
-          result: "understood",
-          station: "sentence",
-          analysis: [
-            "Алиса неверно расставила паузу: после «казнить» вместо после «нельзя».",
-            "Смысл изменился.",
-            "Сбой на станции предложения."
-          ],
-          falseRule: ""
-        }
+      correct: 3,
+      explanation: "Ошибка на станции 4: фонемы распознаны верно, но модель выбрала «кот» вместо «код» — это ошибка выбора слова"
+    },
+    {
+      q: "Что задают знаки препинания при синтезе речи?",
+      options: [
+        "Только паузы",
+        "Только интонацию",
+        "Паузы и интонацию",
+        "Ничего, знаки не влияют"
       ],
-      finalQuestion: "Почему модель выбирает слово по вероятности, а не «понимает» его? Приведи пример.",
-      sample: [
-        "Модель не знает смысла, она выбирает наиболее вероятное слово по статистике.",
-        "Если звучание неоднозначно (омофон), вероятность может распределиться между словами.",
-        "Поэтому Алиса может переспросить, даже если слово ей знакомо.",
-        "Пример: «луг» и «лук» звучат одинаково, модель выбирает по контексту.",
-        "Знаки препинания помогают синтезу задать паузы и интонацию."
-      ]
-    };
-
-    // Состояние ученика.
-    var state = {
-      screen: "start",
-      currentTask: 0,
-      answers: [],
-      finalAnswer: ""
-    };
-
-    // Хранилище с запасным вариантом в памяти.
-    var storage = (function() {
-      var memory = {};
-      function isAvailable() {
-        try {
-          var key = "__test__";
-          localStorage.setItem(key, "1");
-          localStorage.removeItem(key);
-          return true;
-        } catch (e) {
-          return false;
-        }
-      }
-      var available = isAvailable();
-      function save(key, value) {
-        if (available) {
-          try {
-            localStorage.setItem(key, JSON.stringify(value));
-          } catch (e) {
-            memory[key] = value;
-          }
-        } else {
-          memory[key] = value;
-        }
-      }
-      function load(key) {
-        if (available) {
-          try {
-            var str = localStorage.getItem(key);
-            if (str) {
-              return JSON.parse(str);
-            }
-          } catch (e) {
-            return memory[key] || null;
-          }
-        }
-        return memory[key] || null;
-      }
-      return {
-        save: save,
-        load: load
-      };
-    })();
-
-    // слово: создаёт пустые ответы для всех заданий
-    function createAnswers() {
-      var answers = [];
-      for (var i = 0; i < DATA.tasks.length; i++) {
-        answers.push({
-          result: "",
-          station: "",
-          variant: null,
-          checked: false,
-          correct: false
-        });
-      }
-      return answers;
+      correct: 2,
+      explanation: "Знаки препинания задают и паузы, и интонацию: запятая — пауза, вопросительный знак — вопросительная интонация"
+    },
+    {
+      q: "Какое правило безопасности при работе с голосовыми помощниками?",
+      options: [
+        "Никогда не использовать голосовых помощников",
+        "Перезвонить самому, если звонят и просят деньги",
+        "Сохранять все голосовые записи",
+        "Отдавать голос любым приложениям"
+      ],
+      correct: 1,
+      explanation: "Правило «перезвони сам»: если звонок с просьбой о деньгах — перезвони по известному номеру, не доверяй голосу"
+    },
+    {
+      q: "Какое звено добавляется в мосте к языковым моделям?",
+      options: [
+        "Звук → распознавание → текст → языковая модель → текст → синтез → звук",
+        "Звук → текст → звук",
+        "Текст → звук → текст",
+        "Звук → синтез → текст"
+      ],
+      correct: 0,
+      explanation: "Мост: звук → распознавание → текст → языковая модель → текст → синтез → звук. Языковая модель обрабатывает текст"
     }
+  ],
+  sampleVerdict: {
+    reason: "Звук уходит на сервер — это риск для приватности. Голос — биометрические данные. Нужно согласие и защита.",
+    criteria: [
+      "Прогноз записан до запуска",
+      "Вердикт сметы обоснован",
+      "Вывод сформулирован своими словами"
+    ]
+  },
+  sampleConclusion: "Знак препинания → пауза и интонация. Модель выбирает слово по вероятности, а не «понимает» смысл.",
+  dragonNotes: "ДРАКОН-схема: чем ниже — тем позже. Чем правее — тем хуже. Жёлтое — запомни. Белое — разберись.",
+  exitTicket: [
+    "Что нового узнал о распознавании речи?",
+    "Что нового узнал о синтезе речи?",
+    "Где в жизни ты встречаешь распознавание речи?",
+    "Какое правило безопасности запомнил?"
+  ]
+};
 
-    // слово: сохраняет состояние в хранилище
-    function saveState() {
-      storage.save("lesson_state", state);
+// --- Задания ---
+var TASKS = [
+  // --- 9151: Распознавание ---
+  {
+    id: "t1",
+    layer: "9151",
+    title: "Каркас конвейера",
+    desc: "Перед тобой 5 станций конвейера распознавания речи. Расставь их в правильном порядке: от звука к предложению.",
+    body: "order",
+    stations: REFERENCE.stations,
+    correctOrder: [1, 2, 3, 4, 5],
+    hint: "Подумай: что происходит раньше — распознавание фонем или сборка предложения?",
+    explanation: "Правильный порядок: 1) звук → спектрограмма, 2) спектрограмма → фонемы, 3) фонемы → буквы/подслова, 4) гипотезы → слова, 5) слова → предложение"
+  },
+  {
+    id: "t2",
+    layer: "9151",
+    title: "Гипотезы с процентами",
+    desc: "Модель распознаёт слово «код». Посмотри на гипотезы и выбери, какая станция дала неверный результат.",
+    body: "hypotheses",
+    hypotheses: [
+      { word: "кот", percent: 71 },
+      { word: "код", percent: 24 },
+      { word: "котёл", percent: 5 }
+    ],
+    said: "код",
+    recognized: "кот",
+    correctStation: 4,
+    hint: "Фонемы «о» и «о» одинаковы. Где модель могла ошибиться?",
+    explanation: "Ошибка на станции 4: гипотезы верны (кот 71%, код 24%), но модель выбрала топ-1 «кот» вместо «код». Первая гипотеза не всегда верна!"
+  },
+  {
+    id: "t3",
+    layer: "9151",
+    title: "Термины конвейера",
+    desc: "Соедини термин с его определением. Выбери пары.",
+    body: "terms",
+    terms: REFERENCE.terms,
+    correctPairs: [
+      { term: "Данные", def: "То, что модель получает на вход" },
+      { term: "Признак", def: "То, что модель измеряет в данных" },
+      { term: "Модель", def: "Программа, которая принимает решение" },
+      { term: "Вероятность", def: "Число, показывающее уверенность модели" }
+    ],
+    hint: "Подумай: что модель «видит» и что она «делает»?",
+    explanation: "Данные — вход. Признак — измеряемая характеристика. Модель — принимающее решение. Вероятность — мера уверенности."
+  },
+  // --- 9142: Испытание в игре ---
+  {
+    id: "t4",
+    layer: "9142",
+    title: "Фразы-испытания",
+    desc: "Выбери 3 фразы из списка для испытания. Подумай, на какой станции каждая может вызвать ошибку.",
+    body: "testPhrases",
+    phrases: REFERENCE.testPhrases,
+    hint: "Омофоны, скороговорки, термины — каждая фраза проверяет свою станцию.",
+    explanation: "Омофоны (кот/код) — станция 4. Скороговорка — станция 3. Термин — станция 4. Имя — станция 2."
+  },
+  {
+    id: "t5",
+    layer: "9142",
+    title: "Доля ошибок",
+    desc: "Пара произнесла 8 фраз. Распознавание ошиблось в 3. Вычисли долю ошибок.",
+    body: "calculation",
+    total: 8,
+    errors: 3,
+    correctAnswer: 0.375,
+    correctPercent: 37.5,
+    hint: "Доля ошибок = ошибочные слова / все слова. Умножь на 100 для процентов.",
+    explanation: "3 / 8 = 0.375 = 37.5%. Это значит, что в 37.5% случаев модель ошиблась."
+  },
+  // --- 9152: Живой или синтез ---
+  {
+    id: "t6",
+    layer: "9152",
+    title: "Живой или синтез?",
+    desc: "Послушай два аудио (заглушка — описание). Определи, где живой голос, где синтез.",
+    body: "liveOrSynth",
+    audio1: { desc: "Ровный голос, нет дыхания, идеальная интонация", type: "synth" },
+    audio2: { desc: "Есть дыхание, небольшая неровность, живая интонация", type: "live" },
+    hint: "Слушай дыхание и естественные неровности.",
+    explanation: "Живой голос: дыхание, неровности. Синтез: ровный, идеальный. Но современный синтез может звучать естественно."
+  },
+  {
+    id: "t7",
+    layer: "9152",
+    title: "Голосовая биометрия",
+    desc: "Голос — это биометрические данные. Выбери верные утверждения.",
+    body: "checkbox",
+    items: [
+      { text: "Голос можно использовать для идентификации человека", correct: true },
+      { text: "Голосовые записи можно безопасно хранить в облаке", correct: false },
+      { text: "Нужно согласие на использование голоса", correct: true },
+      { text: "Голос — это как пароль, его нельзя подделать", correct: false }
+    ],
+    hint: "Подумай о безопасности: можно ли подделать голос? Нужно ли согласие?",
+    explanation: "Голос — биометрия, можно идентифицировать. Нужно согласие. Записи не стоит хранить без защиты. Голос можно подделать (дипфейк)."
+  },
+  // --- 9154: Проверка этапов ---
+  {
+    id: "t8",
+    layer: "9154",
+    title: "Проверка: ложные правила",
+    desc: "Выбери ложное правило и найди контрпример.",
+    body: "misconceptions",
+    misconceptions: REFERENCE.misconceptions,
+    hint: "Вспомни пример с «кот» и «код».",
+    explanation: "«Первая гипотеза всегда верная» — ложно. Пример: «кот» 71%, но было «код». «Знаки не влияют» — ложно. Пример: три варианта «Маша»."
+  },
+  // --- 9155: Смета ---
+  {
+    id: "t9",
+    layer: "9155",
+    title: "Смета проекта",
+    desc: "Твоя пара — студия ИИ. Заказчик хочет голосового помощника. Заполни смету и выбери вердикт.",
+    body: "budget",
+    redFlag: "Звук уходит на сервер — риск для приватности",
+    verdicts: ["Берёмся", "Берёмся с условием", "Отказываемся"],
+    correctVerdict: 1,
+    hint: "Подумай о рисках: куда уходит звук? Кто его видит?",
+    explanation: "Вердикт: «Берёмся с условием». Условие: шифрование, согласие, не сохранять записи. Красный флаг — звук на сервере."
+  },
+  // --- 9153: Мост к языковым моделям ---
+  {
+    id: "t10",
+    layer: "9153",
+    title: "Мост к языковым моделям",
+    desc: "Собери схему: что происходит между распознаванием и синтезом?",
+    body: "bridge",
+    bridgeParts: [
+      "Звук",
+      "Распознавание",
+      "Текст",
+      "Языковая модель",
+      "Текст",
+      "Синтез",
+      "Звук"
+    ],
+    correctOrder: [0, 1, 2, 3, 4, 5, 6],
+    hint: "Между текстом от распознавания и текстом для синтеза есть промежуточное звено.",
+    explanation: "Полная схема: звук → распознавание → текст → языковая модель → текст → синтез → звук. Языковая модель обрабатывает текст."
+  },
+  // --- 9156: Рефлексия ---
+  {
+    id: "t11",
+    layer: "9156",
+    title: "Правило «перезвони сам»",
+    desc: "Выбери ситуацию, когда нужно применить правило «перезвони сам».",
+    body: "scenario",
+    scenarios: [
+      { text: "Алиса озвучила сообщение от друга", correct: false },
+      { text: "Звонок с просьбой перевести деньги, голос незнакомый", correct: true },
+      { text: "Яндекс Переводчик озвучил текст", correct: false },
+      { text: "Голосовой помощник включил музыку", correct: false }
+    ],
+    hint: "Правило «перезвони сам» — когда просят деньги или личные данные.",
+    explanation: "Правило «перезвони сам» применяется, когда звонят и просят деньги. Перезвони по известному номеру, не доверяй голосу."
+  }
+];
+
+// --- Финальные вопросы ---
+var FINAL_TASKS = REFERENCE.finalQuestions;
+
+// ============================================================
+// СОСТОЯНИЕ
+// ============================================================
+
+var STATE = {
+  role: "voditel",
+  currentTask: 0,
+  taskResults: {},
+  hintsUsed: {},
+  predictions: {},
+  budgetVerdict: null,
+  budgetReason: "",
+  bridgeOrder: [],
+  termsPairs: {},
+  testPhrasesSelected: [],
+  liveSynthAnswers: {},
+  misconceptionsAnswer: null,
+  scenarioAnswer: null,
+  exitTicket: ["", "", "", ""],
+  finalAnswers: {},
+  finalPhase: "questions",
+  compareShown: false
+};
+
+// ============================================================
+// ХРАНИЛИЩЕ
+// ============================================================
+
+function saveState() {
+  try {
+    localStorage.setItem("speech_lesson_state", JSON.stringify(STATE));
+  } catch (e) {
+    // localStorage недоступен — состояние в памяти
+  }
+}
+
+function loadState() {
+  try {
+    var saved = localStorage.getItem("speech_lesson_state");
+    if (saved) {
+      var parsed = JSON.parse(saved);
+      var key;
+      for (key in parsed) {
+        if (parsed.hasOwnProperty(key)) {
+          STATE[key] = parsed[key];
+        }
+      }
     }
+  } catch (e) {
+    // Не удалось загрузить — начинаем заново
+  }
+}
 
-    // слово: загружает состояние из хранилища
-    function loadState() {
-      var loaded = storage.load("lesson_state");
-      if (loaded && loaded.answers && loaded.answers.length === DATA.tasks.length) {
-        state = loaded;
+// ============================================================
+// СЛОВА: действия
+// ============================================================
+
+// слово: устанавливает роль ученика
+function setRole(role) {
+  STATE.role = role;
+  saveState();
+  updateRoleBadge();
+  var btns = document.querySelectorAll(".role-btn");
+  var i;
+  for (i = 0; i < btns.length; i++) {
+    btns[i].classList.remove("active");
+  }
+  var target = document.querySelector(".role-btn[data-role='" + role + "']");
+  if (target) target.classList.add("active");
+}
+
+// слово: обновляет бейдж роли в шапке
+function updateRoleBadge() {
+  var badge = document.getElementById("role-badge");
+  if (STATE.role === "voditel") {
+    badge.textContent = "Роль: Водитель";
+  } else {
+    badge.textContent = "Роль: Контролёр";
+  }
+}
+
+// слово: обновляет статистику в шапке
+function updateHeaderStats() {
+  var total = TASKS.length;
+  var done = 0;
+  var correct = 0;
+  var i;
+  for (i = 0; i < TASKS.length; i++) {
+    if (STATE.taskResults[TASKS[i].id]) {
+      done++;
+      if (STATE.taskResults[TASKS[i].id].correct) {
+        correct++;
+      }
+    }
+  }
+  document.getElementById("header-stats").textContent =
+    "сделано " + done + " из " + total + ", верно " + correct;
+}
+
+// слово: переключает экран
+function showScreen(screenId) {
+  var screens = document.querySelectorAll(".screen");
+  var i;
+  for (i = 0; i < screens.length; i++) {
+    screens[i].classList.remove("active");
+  }
+  var target = document.getElementById(screenId);
+  if (target) target.classList.add("active");
+}
+
+// слово: запускает урок
+function startLesson() {
+  loadState();
+  showScreen("screen-work");
+  renderTaskList();
+  renderReference();
+  renderCurrentTask();
+  updateHeaderStats();
+  updateRoleBadge();
+}
+
+// слово: рендерит список заданий слева
+function renderTaskList() {
+  var container = document.getElementById("task-list-items");
+  container.innerHTML = "";
+  var i;
+  for (i = 0; i < TASKS.length; i++) {
+    var task = TASKS[i];
+    var div = document.createElement("div");
+    div.className = "task-item";
+    if (i === STATE.currentTask) div.classList.add("active");
+    var result = STATE.taskResults[task.id];
+    if (result) {
+      if (result.correct) {
+        div.classList.add("done-correct");
+        div.innerHTML = task.title + ' <span class="task-status">✔</span>';
       } else {
-        state.answers = createAnswers();
+        div.classList.add("done-wrong");
+        div.innerHTML = task.title + ' <span class="task-status">✘</span>';
+      }
+    } else {
+      div.innerHTML = task.title;
+    }
+    div.onclick = (function(idx) {
+      return function() { switchTask(idx); };
+    })(i);
+    container.appendChild(div);
+  }
+}
+
+// слово: переключает на задание по индексу
+function switchTask(index) {
+  STATE.currentTask = index;
+  saveState();
+  renderTaskList();
+  renderCurrentTask();
+}
+
+// слово: рендерит справочник справа
+function renderReference() {
+  var container = document.getElementById("reference-content");
+  var html = "";
+  html += '<div class="ref-block"><strong>Станции конвейера:</strong><ul>';
+  var i;
+  for (i = 0; i < REFERENCE.stations.length; i++) {
+    html += '<li><strong>' + REFERENCE.stations[i].num + '.</strong> ' + REFERENCE.stations[i].name + '</li>';
+  }
+  html += '</ul></div>';
+  html += '<div class="ref-block"><strong>Термины:</strong><ul>';
+  for (i = 0; i < REFERENCE.terms.length; i++) {
+    html += '<li><strong>' + REFERENCE.terms[i].name + ':</strong> ' + REFERENCE.terms[i].def + '</li>';
+  }
+  html += '</ul></div>';
+  html += '<div class="ref-block"><strong>ДРАКОН:</strong> ' + REFERENCE.dragonNotes + '</div>';
+  html += '<div class="ref-block"><strong>Безопасность:</strong> Голос — биометрия. Согласие обязательно. Правило: «перезвони сам».</div>';
+  container.innerHTML = html;
+}
+
+// слово: рендерит текущее задание
+function renderCurrentTask() {
+  var task = TASKS[STATE.currentTask];
+  if (!task) return;
+  var container = document.getElementById("task-content");
+  var html = '<h2>' + task.title + '</h2>';
+  html += '<div class="task-desc">' + task.desc + '</div>';
+  html += renderTaskBody(task);
+  html += renderHint(task);
+  html += renderResult(task);
+  html += renderNavigation(task);
+  container.innerHTML = html;
+}
+
+// слово: рендерит тело задания
+function renderTaskBody(task) {
+  var html = '<div class="task-body">';
+  switch (task.body) {
+    case "order":
+      html += renderOrderTask(task);
+      break;
+    case "hypotheses":
+      html += renderHypothesesTask(task);
+      break;
+    case "terms":
+      html += renderTermsTask(task);
+      break;
+    case "testPhrases":
+      html += renderTestPhrasesTask(task);
+      break;
+    case "calculation":
+      html += renderCalculationTask(task);
+      break;
+    case "liveOrSynth":
+      html += renderLiveOrSynthTask(task);
+      break;
+    case "checkbox":
+      html += renderCheckboxTask(task);
+      break;
+    case "misconceptions":
+      html += renderMisconceptionsTask(task);
+      break;
+    case "budget":
+      html += renderBudgetTask(task);
+      break;
+    case "bridge":
+      html += renderBridgeTask(task);
+      break;
+    case "scenario":
+      html += renderScenarioTask(task);
+      break;
+  }
+  html += '</div>';
+  return html;
+}
+
+// слово: рендерит задание на порядок станций
+function renderOrderTask(task) {
+  var html = '<p>Нажми на станции в правильном порядке:</p>';
+  html += '<div class="stations-grid">';
+  var i;
+  for (i = 0; i < task.stations.length; i++) {
+    var s = task.stations[i];
+    var selected = STATE.bridgeOrder && STATE.bridgeOrder.indexOf(s.num) !== -1;
+    html += '<div class="station-card' + (selected ? ' selected' : '') + '" data-station="' + s.num + '" onclick="toggleStation(' + s.num + ')">';
+    html += '<span class="station-num">' + s.num + '</span>';
+    html += s.name;
+    html += '</div>';
+  }
+  html += '</div>';
+  html += '<p>Выбрано: ' + (STATE.bridgeOrder ? STATE.bridgeOrder.length : 0) + ' из ' + task.stations.length + '</p>';
+  html += '<button class="btn btn-primary" onclick="checkOrderTask()" ' +
+    (STATE.bridgeOrder && STATE.bridgeOrder.length === task.stations.length ? '' : 'disabled') + '>Проверить</button>';
+  return html;
+}
+
+// слово: переключает выбор станции
+function toggleStation(num) {
+  if (!STATE.bridgeOrder) STATE.bridgeOrder = [];
+  var idx = STATE.bridgeOrder.indexOf(num);
+  if (idx === -1) {
+    STATE.bridgeOrder.push(num);
+  } else {
+    STATE.bridgeOrder.splice(idx, 1);
+  }
+  saveState();
+  renderCurrentTask();
+}
+
+// слово: проверяет порядок станций
+function checkOrderTask() {
+  var task = TASKS[STATE.currentTask];
+  var correct = true;
+  if (STATE.bridgeOrder.length !== task.correctOrder.length) {
+    correct = false;
+  } else {
+    var i;
+    for (i = 0; i < task.correctOrder.length; i++) {
+      if (STATE.bridgeOrder[i] !== task.correctOrder[i]) {
+        correct = false;
+        break;
       }
     }
+  }
+  STATE.taskResults[task.id] = { correct: correct, order: STATE.bridgeOrder };
+  saveState();
+  renderCurrentTask();
+  updateHeaderStats();
+  renderTaskList();
+}
 
-    // слово: показывает нужный экран
-    function showScreen(name) {
-      var screens = document.querySelectorAll(".screen");
-      for (var i = 0; i < screens.length; i++) {
-        screens[i].classList.add("hidden");
-      }
-      var target = document.getElementById(name + "-screen");
-      if (target) {
-        target.classList.remove("hidden");
-      }
-      state.screen = name;
-      saveState();
+// слово: рендерит задание с гипотезами
+function renderHypothesesTask(task) {
+  var html = '<p><strong>Сказали:</strong> <span class="mono">' + task.said + '</span></p>';
+  html += '<p><strong>Распознала модель:</strong> <span class="mono">' + task.recognized + '</span></p>';
+  html += '<p>Гипотезы модели:</p>';
+  html += '<div class="mono-block">';
+  var i;
+  for (i = 0; i < task.hypotheses.length; i++) {
+    html += task.hypotheses[i].word + ' — ' + task.hypotheses[i].percent + '%\n';
+  }
+  html += '</div>';
+  html += '<p>Выбери станцию, где произошла ошибка:</p>';
+  html += '<div class="choices">';
+  for (i = 0; i < task.stations.length; i++) {
+    var s = task.stations[i];
+    var selected = STATE.taskResults[task.id] && STATE.taskResults[task.id].station === s.num;
+    html += '<button class="choice-btn' + (selected ? ' selected' : '') + '" onclick="selectStation(' + s.num + ')">' +
+      s.num + '. ' + s.name + '</button>';
+  }
+  html += '<button class="choice-btn" onclick="selectStation(0)">Ничего не нашёл / не знаю</button>';
+  html += '</div>';
+  html += '<button class="btn btn-primary" onclick="checkHypothesesTask()" ' +
+    (!STATE.taskResults[task.id] || !STATE.taskResults[task.id].station ? 'disabled' : '') + '>Проверить</button>';
+  return html;
+}
+
+// слово: выбирает станцию
+function selectStation(num) {
+  var task = TASKS[STATE.currentTask];
+  if (!STATE.taskResults[task.id]) {
+    STATE.taskResults[task.id] = {};
+  }
+  STATE.taskResults[task.id].station = num;
+  saveState();
+  renderCurrentTask();
+}
+
+// слово: проверяет выбор станции
+function checkHypothesesTask() {
+  var task = TASKS[STATE.currentTask];
+  var result = STATE.taskResults[task.id];
+  if (!result || !result.station) return;
+  var correct = result.station === task.correctStation;
+  result.correct = correct;
+  saveState();
+  renderCurrentTask();
+  updateHeaderStats();
+  renderTaskList();
+}
+
+// слово: рендерит задание на термины
+function renderTermsTask(task) {
+  var html = '<p>Выбери пару «термин — определение»:</p>';
+  html += '<div class="choices">';
+  var i;
+  for (i = 0; i < task.terms.length; i++) {
+    var t = task.terms[i];
+    var selected = STATE.termsPairs[t.name] === t.def;
+    html += '<button class="choice-btn' + (selected ? ' selected' : '') + '" onclick="selectTerm(\'' + t.name + '\', \'' + t.def + '\')">' +
+      t.name + ' — ' + t.def + '</button>';
+  }
+  html += '</div>';
+  var allMatched = true;
+  for (i = 0; i < task.terms.length; i++) {
+    if (STATE.termsPairs[task.terms[i].name] !== task.terms[i].def) {
+      allMatched = false;
+      break;
     }
+  }
+  html += '<button class="btn btn-primary" onclick="checkTermsTask()" ' +
+    (allMatched ? '' : 'disabled') + '>Проверить</button>';
+  return html;
+}
 
-    // слово: заполняет стартовый экран шагами
-    function renderStart() {
-      var list = document.getElementById("start-steps");
-      list.innerHTML = "";
-      for (var i = 0; i < DATA.steps.length; i++) {
-        var item = document.createElement("li");
-        item.textContent = DATA.steps[i];
-        list.appendChild(item);
-      }
+// слово: выбирает термин
+function selectTerm(name, def) {
+  if (STATE.termsPairs[name] === def) {
+    delete STATE.termsPairs[name];
+  } else {
+    STATE.termsPairs[name] = def;
+  }
+  saveState();
+  renderCurrentTask();
+}
+
+// слово: проверяет термины
+function checkTermsTask() {
+  var task = TASKS[STATE.currentTask];
+  var correct = true;
+  var i;
+  for (i = 0; i < task.terms.length; i++) {
+    if (STATE.termsPairs[task.terms[i].name] !== task.terms[i].def) {
+      correct = false;
+      break;
     }
+  }
+  STATE.taskResults[task.id] = { correct: correct };
+  saveState();
+  renderCurrentTask();
+  updateHeaderStats();
+  renderTaskList();
+}
 
-    // слово: показывает рабочий экран и отрисовывает его части
-    function renderWork() {
-      showScreen("work");
-      renderTaskList();
-      renderReference();
-      renderTask(state.currentTask);
-      updateHeader();
+// слово: рендерит задание с фразами-испытаниями
+function renderTestPhrasesTask(task) {
+  var html = '<p>Выбери 3 фразы для испытания (нажми для выбора):</p>';
+  html += '<div class="choices">';
+  var i;
+  for (i = 0; i < task.phrases.length; i++) {
+    var selected = STATE.testPhrasesSelected.indexOf(task.phrases[i]) !== -1;
+    html += '<button class="choice-btn' + (selected ? ' selected' : '') + '" onclick="togglePhrase(\'' + task.phrases[i] + '\')">' +
+      task.phrases[i] + '</button>';
+  }
+  html += '</div>';
+  html += '<p>Выбрано: ' + STATE.testPhrasesSelected.length + ' из 3</p>';
+  html += '<button class="btn btn-primary" onclick="checkPhrasesTask()" ' +
+    (STATE.testPhrasesSelected.length < 3 ? 'disabled' : '') + '>Продолжить</button>';
+  return html;
+}
+
+// слово: переключает выбор фразы
+function togglePhrase(phrase) {
+  var idx = STATE.testPhrasesSelected.indexOf(phrase);
+  if (idx === -1) {
+    if (STATE.testPhrasesSelected.length < 3) {
+      STATE.testPhrasesSelected.push(phrase);
     }
+  } else {
+    STATE.testPhrasesSelected.splice(idx, 1);
+  }
+  saveState();
+  renderCurrentTask();
+}
 
-    // слово: создаёт список заданий слева
-    function renderTaskList() {
-      var list = document.getElementById("task-list-items");
-      list.innerHTML = "";
-      for (var i = 0; i < DATA.tasks.length; i++) {
-        var item = document.createElement("li");
-        var button = document.createElement("button");
-        button.className = "task-button";
-        button.textContent = "Задание " + (i + 1);
-        button.setAttribute("data-index", i);
-        button.addEventListener("click", switchTask);
-        item.appendChild(button);
-        list.appendChild(item);
-      }
-      updateTaskMarks();
+// слово: проверяет выбор фраз
+function checkPhrasesTask() {
+  if (STATE.testPhrasesSelected.length < 3) return;
+  STATE.taskResults[TASKS[STATE.currentTask].id] = { correct: true, phrases: STATE.testPhrasesSelected };
+  saveState();
+  renderCurrentTask();
+  updateHeaderStats();
+  renderTaskList();
+}
+
+// слово: рендерит задание на вычисление
+function renderCalculationTask(task) {
+  var html = '<p>Пара произнесла <strong>' + task.total + '</strong> фраз. Ошиблось распознавание в <strong>' + task.errors + '</strong>.</p>';
+  html += '<p>Доля ошибок = ' + task.errors + ' / ' + task.total + ' = ?</p>';
+  html += '<p>Введи ответ в процентах (число):</p>';
+  html += '<input type="number" id="calc-answer" step="0.1" placeholder="Например: 37.5" style="width:150px; padding:0.5rem; font-size:var(--fs-body); border:1px solid var(--clr-border); border-radius:4px;">';
+  html += '<button class="btn btn-primary" onclick="checkCalcTask()" style="margin-left:0.5rem;">Проверить</button>';
+  return html;
+}
+
+// слово: проверяет вычисление
+function checkCalcTask() {
+  var task = TASKS[STATE.currentTask];
+  var input = document.getElementById("calc-answer");
+  if (!input) return;
+  var answer = parseFloat(input.value);
+  if (isNaN(answer)) return;
+  var correct = Math.abs(answer - task.correctPercent) < 0.1;
+  STATE.taskResults[task.id] = { correct: correct, answer: answer };
+  saveState();
+  renderCurrentTask();
+  updateHeaderStats();
+  renderTaskList();
+}
+
+// слово: рендерит задание «живой или синтез»
+function renderLiveOrSynthTask(task) {
+  var html = '<p><strong>Аудио 1:</strong> ' + task.audio1.desc + '</p>';
+  html += '<p><strong>Аудио 2:</strong> ' + task.audio2.desc + '</p>';
+  html += '<p>Кто есть кто?</p>';
+  html += '<div class="choices">';
+  html += '<button class="choice-btn' + (STATE.liveSynthAnswers.audio1 === "live" ? ' selected' : '') + '" onclick="selectLiveSynth(\'audio1\', \'live\')">Аудио 1 — живой голос</button>';
+  html += '<button class="choice-btn' + (STATE.liveSynthAnswers.audio1 === "synth" ? ' selected' : '') + '" onclick="selectLiveSynth(\'audio1\', \'synth\')">Аудио 1 — синтез</button>';
+  html += '<button class="choice-btn' + (STATE.liveSynthAnswers.audio2 === "live" ? ' selected' : '') + '" onclick="selectLiveSynth(\'audio2\', \'live\')">Аудио 2 — живой голос</button>';
+  html += '<button class="choice-btn' + (STATE.liveSynthAnswers.audio2 === "synth" ? ' selected' : '') + '" onclick="selectLiveSynth(\'audio2\', \'synth\')">Аудио 2 — синтез</button>';
+  html += '</div>';
+  var ready = STATE.liveSynthAnswers.audio1 && STATE.liveSynthAnswers.audio2;
+  html += '<button class="btn btn-primary" onclick="checkLiveSynthTask()" ' +
+    (ready ? '' : 'disabled') + '>Проверить</button>';
+  return html;
+}
+
+// слово: выбирает тип аудио
+function selectLiveSynth(audio, type) {
+  STATE.liveSynthAnswers[audio] = type;
+  saveState();
+  renderCurrentTask();
+}
+
+// слово: проверяет «живой или синтез»
+function checkLiveSynthTask() {
+  var task = TASKS[STATE.currentTask];
+  var correct = true;
+  if (STATE.liveSynthAnswers.audio1 !== task.audio1.type) correct = false;
+  if (STATE.liveSynthAnswers.audio2 !== task.audio2.type) correct = false;
+  STATE.taskResults[task.id] = { correct: correct };
+  saveState();
+  renderCurrentTask();
+  updateHeaderStats();
+  renderTaskList();
+}
+
+// слово: рендерит чекбокс-задание
+function renderCheckboxTask(task) {
+  var html = '<div class="check-list">';
+  var i;
+  for (i = 0; i < task.items.length; i++) {
+    var item = task.items[i];
+    var checked = STATE.taskResults[task.id] &&
+      STATE.taskResults[task.id].checked &&
+      STATE.taskResults[task.id].checked.indexOf(i) !== -1;
+    html += '<label class="check-item">';
+    html += '<input type="checkbox" ' + (checked ? 'checked' : '') + ' onchange="toggleCheck(' + i + ')">';
+    html += '<span>' + item.text + '</span>';
+    html += '</label>';
+  }
+  html += '</div>';
+  var allChecked = STATE.taskResults[task.id] && STATE.taskResults[task.id].checked;
+  if (allChecked && allChecked.length === task.items.length) {
+    html += '<button class="btn btn-primary" onclick="checkCheckboxTask()">Проверить</button>';
+  }
+  return html;
+}
+
+// слово: переключает чекбокс
+function toggleCheck(index) {
+  var task = TASKS[STATE.currentTask];
+  if (!STATE.taskResults[task.id]) STATE.taskResults[task.id] = {};
+  if (!STATE.taskResults[task.id].checked) STATE.taskResults[task.id].checked = [];
+  var checked = STATE.taskResults[task.id].checked;
+  var idx = checked.indexOf(index);
+  if (idx === -1) {
+    checked.push(index);
+  } else {
+    checked.splice(idx, 1);
+  }
+  saveState();
+  renderCurrentTask();
+}
+
+// слово: проверяет чекбоксы
+function checkCheckboxTask() {
+  var task = TASKS[STATE.currentTask];
+  var correct = true;
+  var i;
+  for (i = 0; i < task.items.length; i++) {
+    var checked = STATE.taskResults[task.id].checked;
+    var isChecked = checked && checked.indexOf(i) !== -1;
+    if (isChecked !== task.items[i].correct) {
+      correct = false;
+      break;
     }
+  }
+  STATE.taskResults[task.id].correct = correct;
+  saveState();
+  renderCurrentTask();
+  updateHeaderStats();
+  renderTaskList();
+}
 
-    // слово: переключает текущее задание
-    function switchTask(event) {
-      var index = parseInt(event.currentTarget.getAttribute("data-index"), 10);
-      state.currentTask = index;
-      saveState();
-      renderTask(index);
-      updateTaskMarks();
-    }
+// слово: рендерит задание на ложные правила
+function renderMisconceptionsTask(task) {
+  var html = '<p>Выбери ложное правило:</p>';
+  html += '<div class="choices">';
+  var i;
+  for (i = 0; i < task.misconceptions.length; i++) {
+    var m = task.misconceptions[i];
+    var selected = STATE.misconceptionsAnswer === i;
+    html += '<button class="choice-btn' + (selected ? ' selected' : '') + '" onclick="selectMisconception(' + i + ')">' +
+      m.rule + '</button>';
+  }
+  html += '</div>';
+  html += '<button class="btn btn-primary" onclick="checkMisconceptionsTask()" ' +
+    (STATE.misconceptionsAnswer === null ? 'disabled' : '') + '>Проверить</button>';
+  return html;
+}
 
-    // слово: возвращает знак для задания
-    function taskMark(answer) {
-      if (!answer.checked) {
-        return "○";
-      }
-      if (answer.correct) {
-        return "✔";
-      }
-      return "✘";
-    }
+// слово: выбирает ложное правило
+function selectMisconception(index) {
+  STATE.misconceptionsAnswer = index;
+  saveState();
+  renderCurrentTask();
+}
 
-    // слово: обновляет отметки в списке заданий
-    function updateTaskMarks() {
-      var buttons = document.querySelectorAll(".task-button");
-      for (var i = 0; i < buttons.length; i++) {
-        var answer = state.answers[i];
-        buttons[i].textContent = "Задание " + (i + 1) + " " + taskMark(answer);
-        if (i === state.currentTask) {
-          buttons[i].classList.add("active");
-        } else {
-          buttons[i].classList.remove("active");
-        }
-      }
-    }
+// слово: проверяет ложные правила
+function checkMisconceptionsTask() {
+  var task = TASKS[STATE.currentTask];
+  // Все перечисленные правила — ложные, выбираем любой
+  STATE.taskResults[task.id] = { correct: true, misconception: STATE.misconceptionsAnswer };
+  saveState();
+  renderCurrentTask();
+  updateHeaderStats();
+  renderTaskList();
+}
 
-    // слово: рисует выбранное задание в центре
-    function renderTask(index) {
-      var area = document.getElementById("task-area");
-      area.innerHTML = "";
-      var task = DATA.tasks[index];
-      var answer = state.answers[index];
+// слово: рендерит задание «смета»
+function renderBudgetTask(task) {
+  var html = '<div class="red-flag">⚠ ' + task.redFlag + '</div>';
+  html += '<p>Выбери вердикт:</p>';
+  html += '<div class="verdict-options">';
+  var i;
+  for (i = 0; i < task.verdicts.length; i++) {
+    var selected = STATE.budgetVerdict === i;
+    html += '<button class="verdict-btn' + (selected ? ' selected' : '') + '" onclick="selectVerdict(' + i + ')">' +
+      task.verdicts[i] + '</button>';
+  }
+  html += '</div>';
+  html += '<p><label>Обоснование:</label></p>';
+  html += '<textarea id="budget-reason" rows="3" style="width:100%; padding:0.5rem; font-size:var(--fs-body); border:1px solid var(--clr-border); border-radius:4px;" placeholder="Обоснуй вердикт...">' +
+    (STATE.budgetReason || '') + '</textarea>';
+  html += '<button class="btn btn-primary" onclick="checkBudgetTask()" ' +
+    (STATE.budgetVerdict === null ? 'disabled' : '') + '>Проверить</button>';
+  return html;
+}
 
-      var card = document.createElement("div");
-      card.className = "task-card";
+// слово: выбирает вердикт
+function selectVerdict(index) {
+  STATE.budgetVerdict = index;
+  saveState();
+  renderCurrentTask();
+}
 
-      var title = document.createElement("h2");
-      title.textContent = "Задание " + (index + 1);
-      card.appendChild(title);
+// слово: проверяет смету
+function checkBudgetTask() {
+  var task = TASKS[STATE.currentTask];
+  STATE.budgetReason = document.getElementById("budget-reason").value;
+  var correct = STATE.budgetVerdict === task.correctVerdict;
+  STATE.taskResults[task.id] = { correct: correct, verdict: STATE.budgetVerdict, reason: STATE.budgetReason };
+  saveState();
+  renderCurrentTask();
+  updateHeaderStats();
+  renderTaskList();
+}
 
-      if (task.type === "recognition") {
-        renderRecognition(card, task, answer, index);
-      } else {
-        renderSynthesis(card, task, answer, index);
-      }
+// слово: рендерит задание «мост»
+function renderBridgeTask(task) {
+  var html = '<p>Нажми на части схемы в правильном порядке:</p>';
+  html += '<div class="choices">';
+  var i;
+  for (i = 0; i < task.bridgeParts.length; i++) {
+    var used = STATE.bridgeOrder && STATE.bridgeOrder.indexOf(i) !== -1;
+    html += '<button class="choice-btn' + (used ? ' selected' : '') + '" onclick="toggleBridgePart(' + i + ')">' +
+      task.bridgeParts[i] + '</button>';
+  }
+  html += '</div>';
+  html += '<p>Порядок: ' + (STATE.bridgeOrder ? STATE.bridgeOrder.map(function(i) { return task.bridgeParts[i]; }).join(" → ") : "—") + '</p>';
+  html += '<button class="btn btn-primary" onclick="checkBridgeTask()" ' +
+    (!STATE.bridgeOrder || STATE.bridgeOrder.length !== task.bridgeParts.length ? 'disabled' : '') + '>Проверить</button>';
+  return html;
+}
 
-      area.appendChild(card);
-    }
+// слово: переключает часть моста
+function toggleBridgePart(index) {
+  if (!STATE.bridgeOrder) STATE.bridgeOrder = [];
+  var idx = STATE.bridgeOrder.indexOf(index);
+  if (idx === -1) {
+    STATE.bridgeOrder.push(index);
+  } else {
+    STATE.bridgeOrder.splice(idx, 1);
+  }
+  saveState();
+  renderCurrentTask();
+}
 
-    // слово: рисует фразы задания на распознавание
-    function drawRecognitionPhrases(card, task) {
-      var phrase = document.createElement("p");
-      phrase.className = "phrase";
-      phrase.textContent = "Ученик произнёс: " + task.phrase;
-      card.appendChild(phrase);
-
-      var answer = document.createElement("p");
-      answer.className = "phrase";
-      answer.textContent = "Алиса: " + task.answer;
-      card.appendChild(answer);
-    }
-
-    // слово: создаёт одну радиокнопку с подписью
-    function createRadio(name, value, text, checked, handler) {
-      var label = document.createElement("label");
-      var radio = document.createElement("input");
-      radio.type = "radio";
-      radio.name = name;
-      radio.value = value;
-      radio.checked = checked;
-      radio.addEventListener("change", handler);
-      label.appendChild(radio);
-      label.appendChild(document.createTextNode(" " + text));
-      return label;
-    }
-
-    // слово: создаёт блок выбора результата
-    function createResultBlock(answer, index) {
-      var block = document.createElement("fieldset");
-      block.className = "choice-block";
-      var legend = document.createElement("legend");
-      legend.textContent = "Алиса поняла или переспросила?";
-      block.appendChild(legend);
-
-      var variants = [
-        { value: "understood", text: "Поняла" },
-        { value: "asked", text: "Переспросила" },
-        { value: "unknown", text: "Не знаю" }
-      ];
-      for (var i = 0; i < variants.length; i++) {
-        block.appendChild(createRadio("result_" + index, variants[i].value, variants[i].text, answer.result === variants[i].value, handleResultChange));
-      }
-      return block;
-    }
-
-    // слово: создаёт блок выбора станции
-    function createStationBlock(answer, index) {
-      var block = document.createElement("fieldset");
-      block.className = "choice-block";
-      var legend = document.createElement("legend");
-      legend.textContent = "На какой станции сбой?";
-      block.appendChild(legend);
-
-      for (var i = 0; i < DATA.stations.length; i++) {
-        var station = DATA.stations[i];
-        block.appendChild(createRadio("station_" + index, station.code, station.name, answer.station === station.code, handleStationChange));
-      }
-      block.appendChild(createRadio("station_" + index, "none", "Сбоя нет", answer.station === "none", handleStationChange));
-      block.appendChild(createRadio("station_" + index, "unknown", "Не знаю", answer.station === "unknown", handleStationChange));
-      return block;
-    }
-
-    // слово: создаёт кнопку ответа
-    function createAnswerButton() {
-      var button = document.createElement("button");
-      button.id = "answer-button";
-      button.textContent = "Ответить";
-      button.addEventListener("click", checkAnswer);
-      return button;
-    }
-
-    // слово: создаёт контейнер для результата проверки
-    function createResultContainer() {
-      var block = document.createElement("div");
-      block.id = "answer-result";
-      return block;
-    }
-
-    // слово: рисует задание на распознавание
-    function renderRecognition(card, task, answer, index) {
-      drawRecognitionPhrases(card, task);
-      card.appendChild(createResultBlock(answer, index));
-      card.appendChild(createStationBlock(answer, index));
-      var button = createAnswerButton();
-      card.appendChild(button);
-      var resultBlock = createResultContainer();
-      card.appendChild(resultBlock);
-      if (answer.checked) {
-        button.disabled = true;
-        showResult(resultBlock, task, answer, index);
-      } else {
-        updateAnswerButton();
-      }
-    }
-
-    // слово: рисует фразы задания на синтез
-    function drawSynthesisPhrases(card, task) {
-      var phrase1 = document.createElement("p");
-      phrase1.className = "phrase";
-      phrase1.textContent = "Фраза 1: " + task.phrase1;
-      card.appendChild(phrase1);
-
-      var phrase2 = document.createElement("p");
-      phrase2.className = "phrase";
-      phrase2.textContent = "Фраза 2: " + task.phrase2;
-      card.appendChild(phrase2);
-
-      var question = document.createElement("p");
-      question.textContent = task.question;
-      card.appendChild(question);
-    }
-
-    // слово: создаёт блок выбора варианта для синтеза
-    function createVariantBlock(task, answer, index) {
-      var block = document.createElement("fieldset");
-      block.className = "choice-block";
-      var legend = document.createElement("legend");
-      legend.textContent = "Выбери ответ";
-      block.appendChild(legend);
-
-      for (var i = 0; i < task.variants.length; i++) {
-        block.appendChild(createRadio("variant_" + index, i, task.variants[i], answer.variant === i, handleVariantChange));
-      }
-      return block;
-    }
-
-    // слово: рисует задание на синтез
-    function renderSynthesis(card, task, answer, index) {
-      drawSynthesisPhrases(card, task);
-      card.appendChild(createVariantBlock(task, answer, index));
-      var button = createAnswerButton();
-      card.appendChild(button);
-      var resultBlock = createResultContainer();
-      card.appendChild(resultBlock);
-      if (answer.checked) {
-        button.disabled = true;
-        showResult(resultBlock, task, answer, index);
-      } else {
-        updateAnswerButton();
-      }
-    }
-
-    // слово: проверяет, выбран ли результат
-    function isResultSelected(index) {
-      var radios = document.querySelectorAll('input[name="result_' + index + '"]');
-      for (var i = 0; i < radios.length; i++) {
-        if (radios[i].checked) {
-          return true;
-        }
-      }
-      return false;
-    }
-
-    // слово: проверяет, выбрана ли станция
-    function isStationSelected(index) {
-      var radios = document.querySelectorAll('input[name="station_' + index + '"]');
-      for (var i = 0; i < radios.length; i++) {
-        if (radios[i].checked) {
-          return true;
-        }
-      }
-      return false;
-    }
-
-    // слово: проверяет, выбран ли вариант синтеза
-    function isVariantSelected(index) {
-      var radios = document.querySelectorAll('input[name="variant_' + index + '"]');
-      for (var i = 0; i < radios.length; i++) {
-        if (radios[i].checked) {
-          return true;
-        }
-      }
-      return false;
-    }
-
-    // слово: обновляет доступность кнопки ответа
-    function updateAnswerButton() {
-      var button = document.getElementById("answer-button");
-      if (!button) {
-        return;
-      }
-      var index = state.currentTask;
-      var task = DATA.tasks[index];
-      var answer = state.answers[index];
-      if (answer.checked) {
-        button.disabled = true;
-        return;
-      }
-      if (task.type === "recognition") {
-        button.disabled = !(isResultSelected(index) && isStationSelected(index));
-      } else {
-        button.disabled = !isVariantSelected(index);
-      }
-    }
-
-    // слово: сохраняет выбранный результат
-    function handleResultChange(event) {
-      var index = state.currentTask;
-      state.answers[index].result = event.target.value;
-      saveState();
-      updateAnswerButton();
-      updateCounter();
-    }
-
-    // слово: сохраняет выбранную станцию
-    function handleStationChange(event) {
-      var index = state.currentTask;
-      state.answers[index].station = event.target.value;
-      saveState();
-      updateAnswerButton();
-    }
-
-    // слово: сохраняет выбранный вариант синтеза
-    function handleVariantChange(event) {
-      var index = state.currentTask;
-      state.answers[index].variant = parseInt(event.target.value, 10);
-      saveState();
-      updateAnswerButton();
-    }
-
-    // слово: проверяет ответ на распознавание
-    function checkRecognition(answer, task) {
-      var resultOk = answer.result === task.result;
-      var stationOk = answer.station === task.station;
-      return resultOk && stationOk;
-    }
-
-    // слово: проверяет ответ на синтез
-    function checkSynthesis(answer, task) {
-      return answer.variant === task.correct;
-    }
-
-    // слово: проверяет ответ и показывает результат
-    function checkAnswer() {
-      var index = state.currentTask;
-      var task = DATA.tasks[index];
-      var answer = state.answers[index];
-      if (answer.checked) {
-        return;
-      }
-      if (task.type === "recognition") {
-        answer.correct = checkRecognition(answer, task);
-      } else {
-        answer.correct = checkSynthesis(answer, task);
-      }
-      answer.checked = true;
-      saveState();
-      renderTask(index);
-      updateTaskMarks();
-      updateHeader();
-      updateCounter();
-    }
-
-    // слово: создаёт заголовок результата
-    function createResultTitle(correct) {
-      var title = document.createElement("p");
-      title.className = "result-title";
-      if (correct) {
-        title.textContent = "Верно";
-        title.classList.add("correct");
-      } else {
-        title.textContent = "Неверно";
-        title.classList.add("wrong");
-      }
-      return title;
-    }
-
-    // слово: возвращает имя станции по коду
-    function stationName(code) {
-      if (code === "none") {
-        return "сбоя нет";
-      }
-      if (code === "unknown") {
-        return "не знаю";
-      }
-      for (var i = 0; i < DATA.stations.length; i++) {
-        if (DATA.stations[i].code === code) {
-          return DATA.stations[i].name;
-        }
-      }
-      return "неизвестно";
-    }
-
-    // слово: создаёт пояснение к ответу
-    function createExplanation(task, answer) {
-      var explanation = document.createElement("div");
-      explanation.className = "result-details";
-
-      if (task.type === "recognition") {
-        if (answer.result !== task.result) {
-          var p1 = document.createElement("p");
-          p1.textContent = "Правильный результат: " + (task.result === "understood" ? "поняла" : "переспросила") + ".";
-          explanation.appendChild(p1);
-        }
-        if (answer.station !== task.station) {
-          var p2 = document.createElement("p");
-          p2.textContent = "Правильная станция: " + stationName(task.station) + ".";
-          explanation.appendChild(p2);
-        }
-      } else {
-        if (answer.variant !== task.correct) {
-          var p3 = document.createElement("p");
-          p3.textContent = "Правильный ответ: " + task.variants[task.correct] + ".";
-          explanation.appendChild(p3);
-        }
-      }
-
-      var list = document.createElement("ul");
-      for (var i = 0; i < task.analysis.length; i++) {
-        var item = document.createElement("li");
-        item.textContent = task.analysis[i];
-        list.appendChild(item);
-      }
-      explanation.appendChild(list);
-      return explanation;
-    }
-
-    // слово: показывает результат проверки
-    function showResult(block, task, answer, index) {
-      block.innerHTML = "";
-      block.appendChild(createResultTitle(answer.correct));
-      block.appendChild(createExplanation(task, answer));
-    }
-
-    // слово: считает сделано и верно
-    function countTotals() {
-      var done = 0;
-      var correct = 0;
-      for (var i = 0; i < state.answers.length; i++) {
-        if (state.answers[i].checked) {
-          done++;
-          if (state.answers[i].correct) {
-            correct++;
-          }
-        }
-      }
-      return { done: done, correct: correct };
-    }
-
-    // слово: обновляет шапку со счётчиками
-    function updateHeader() {
-      var totals = countTotals();
-      document.getElementById("stat-done").textContent = "сделано " + totals.done + " из " + DATA.tasks.length;
-      document.getElementById("stat-correct").textContent = "верно " + totals.correct;
-    }
-
-    // слово: считает понял и переспросил
-    function countCounter() {
-      var understood = 0;
-      var asked = 0;
-      for (var i = 0; i < state.answers.length; i++) {
-        var task = DATA.tasks[i];
-        if (task.type === "recognition") {
-          var answer = state.answers[i];
-          if (answer.result === "understood") {
-            understood++;
-          } else if (answer.result === "asked") {
-            asked++;
-          }
-        }
-      }
-      return { understood: understood, asked: asked };
-    }
-
-    // слово: обновляет счётчик понял/переспросил
-    function updateCounter() {
-      var count = countCounter();
-      var block = document.getElementById("counter");
-      if (block) {
-        block.innerHTML = "<h3>Твой счёт</h3><p>Понял: " + count.understood + "</p><p>Переспросил: " + count.asked + "</p>";
+// слово: проверяет мост
+function checkBridgeTask() {
+  var task = TASKS[STATE.currentTask];
+  var correct = true;
+  if (STATE.bridgeOrder.length !== task.correctOrder.length) {
+    correct = false;
+  } else {
+    var i;
+    for (i = 0; i < task.correctOrder.length; i++) {
+      if (STATE.bridgeOrder[i] !== task.correctOrder[i]) {
+        correct = false;
+        break;
       }
     }
+  }
+  STATE.taskResults[task.id] = { correct: correct, order: STATE.bridgeOrder };
+  saveState();
+  renderCurrentTask();
+  updateHeaderStats();
+  renderTaskList();
+}
 
-    // слово: рисует опору справа
-    function renderReference() {
-      var pipeline = document.getElementById("pipeline");
-      pipeline.innerHTML = "<h3>Каркас конвейера</h3>";
-      var list = document.createElement("ol");
-      for (var i = 0; i < DATA.stations.length; i++) {
-        var item = document.createElement("li");
-        item.textContent = DATA.stations[i].name;
-        list.appendChild(item);
+// слово: рендерит задание «сценарий»
+function renderScenarioTask(task) {
+  var html = '<p>Выбери ситуацию, где нужно правило «перезвони сам»:</p>';
+  html += '<div class="choices">';
+  var i;
+  for (i = 0; i < task.scenarios.length; i++) {
+    var selected = STATE.scenarioAnswer === i;
+    html += '<button class="choice-btn' + (selected ? ' selected' : '') + '" onclick="selectScenario(' + i + ')">' +
+      task.scenarios[i].text + '</button>';
+  }
+  html += '</div>';
+  html += '<button class="btn btn-primary" onclick="checkScenarioTask()" ' +
+    (STATE.scenarioAnswer === null ? 'disabled' : '') + '>Проверить</button>';
+  return html;
+}
+
+// слово: выбирает сценарий
+function selectScenario(index) {
+  STATE.scenarioAnswer = index;
+  saveState();
+  renderCurrentTask();
+}
+
+// слово: проверяет сценарий
+function checkScenarioTask() {
+  var task = TASKS[STATE.currentTask];
+  var correct = task.scenarios[STATE.scenarioAnswer].correct;
+  STATE.taskResults[task.id] = { correct: correct, scenario: STATE.scenarioAnswer };
+  saveState();
+  renderCurrentTask();
+  updateHeaderStats();
+  renderTaskList();
+}
+
+// слово: рендерит подсказку
+function renderHint(task) {
+  var html = '<div class="hint-ladder">';
+  var hintCount = STATE.hintsUsed[task.id] || 0;
+  html += '<button class="hint-btn" onclick="showHint()" ' +
+    (hintCount >= 3 ? 'disabled' : '') + '>Подсказка (' + (3 - hintCount) + ' осталось)</button>';
+  var i;
+  for (i = 1; i <= 3; i++) {
+    var visible = i <= hintCount ? ' visible' : '';
+    html += '<div class="hint-step' + visible + '" id="hint-' + i + '">';
+    if (i === 1) html += '💡 ' + task.hint;
+    if (i === 2) html += '🔍 Попробуй применить правило из справочника.';
+    if (i === 3) html += '📖 Вспомни: модель выбирает по вероятности, а не «понимает».';
+    html += '</div>';
+  }
+  html += '</div>';
+  return html;
+}
+
+// слово: показывает следующую подсказку
+function showHint() {
+  var task = TASKS[STATE.currentTask];
+  var hintCount = STATE.hintsUsed[task.id] || 0;
+  if (hintCount >= 3) return;
+  hintCount++;
+  STATE.hintsUsed[task.id] = hintCount;
+  saveState();
+  var hintEl = document.getElementById("hint-" + hintCount);
+  if (hintEl) hintEl.classList.add("visible");
+}
+
+// слово: рендерит результат ответа
+function renderResult(task) {
+  var result = STATE.taskResults[task.id];
+  if (!result) return '';
+  var html = '<div class="result-box ' + (result.correct ? 'correct' : 'wrong') + '">';
+  html += result.correct ? '✔ Верно!' : '✘ Неверно';
+  html += '</div>';
+  html += '<div class="result-detail">';
+  html += '<p><strong>Разбор:</strong></p>';
+  html += '<ul>';
+  html += '<li>' + task.explanation + '</li>';
+  if (!result.correct) {
+    html += '<li>Попробуй ещё раз или перейди к следующему заданию.</li>';
+  }
+  html += '</ul>';
+  html += '</div>';
+  return html;
+}
+
+// слово: рендерит навигацию
+function renderNavigation(task) {
+  var html = '<div class="screen-nav">';
+  if (STATE.currentTask > 0) {
+    html += '<button class="btn btn-secondary" onclick="switchTask(' + (STATE.currentTask - 1) + ')">← Назад</button>';
+  }
+  if (STATE.currentTask < TASKS.length - 1) {
+    html += '<button class="btn btn-primary" onclick="switchTask(' + (STATE.currentTask + 1) + ')">Далее →</button>';
+  }
+  html += '<button class="btn btn-warn" onclick="showFinal()">Итог</button>';
+  html += '</div>';
+  return html;
+}
+
+// слово: показывает финальный экран
+function showFinal() {
+  showScreen("screen-final");
+  renderFinal();
+}
+
+// слово: рендерит финальный экран
+function renderFinal() {
+  var container = document.getElementById("final-content");
+  var html = '<h2>Итог урока</h2>';
+
+  // Статистика
+  var total = TASKS.length;
+  var done = 0;
+  var correct = 0;
+  var i;
+  for (i = 0; i < TASKS.length; i++) {
+    if (STATE.taskResults[TASKS[i].id]) {
+      done++;
+      if (STATE.taskResults[TASKS[i].id].correct) correct++;
+    }
+  }
+  html += '<div class="final-result" style="background:#e3f2fd;">';
+  html += 'Сделано: ' + done + ' из ' + total + ' | Верно: ' + correct + ' из ' + done;
+  html += '</div>';
+
+  // Финальные вопросы
+  if (STATE.finalPhase === "questions") {
+    html += '<h3>Финальные вопросы</h3>';
+    html += '<p>Ответь на 5 вопросов. Кнопка «Сравнить с образцом» доступна после ответов.</p>';
+    for (i = 0; i < FINAL_TASKS.length; i++) {
+      var ft = FINAL_TASKS[i];
+      html += '<div style="margin-bottom:1.5rem; padding:1rem; border:1px solid var(--clr-border); border-radius:var(--radius);">';
+      html += '<p><strong>Вопрос ' + (i + 1) + ':</strong> ' + ft.q + '</p>';
+      html += '<div class="choices">';
+      for (var j = 0; j < ft.options.length; j++) {
+        var selected = STATE.finalAnswers[i] === j;
+        html += '<button class="choice-btn' + (selected ? ' selected' : '') + '" onclick="selectFinalAnswer(' + i + ', ' + j + ')">' +
+          ft.options[j] + '</button>';
       }
-      pipeline.appendChild(list);
-
-      var hints = document.getElementById("hints");
-      hints.innerHTML = "<h3>Подсказка</h3><p>Смотри, на какой станции гипотезы разошлись.</p><p>Чем ниже станция — тем позже она работает.</p>";
-
-      updateCounter();
+      html += '</div>';
+      html += '</div>';
     }
-
-    // слово: создаёт статистику итога
-    function createSummaryStats() {
-      var totals = countTotals();
-      var stats = document.createElement("p");
-      stats.textContent = "Сделано " + totals.done + " из " + DATA.tasks.length + ", верно " + totals.correct + ".";
-      return stats;
-    }
-
-    // слово: создаёт список заданий с отметками
-    function createSummaryList() {
-      var list = document.createElement("ul");
-      for (var i = 0; i < DATA.tasks.length; i++) {
-        var item = document.createElement("li");
-        item.textContent = "Задание " + (i + 1) + " " + taskMark(state.answers[i]);
-        list.appendChild(item);
-      }
-      return list;
-    }
-
-    // слово: создаёт поле для финального ответа
-    function createFinalField() {
-      var field = document.createElement("textarea");
-      field.id = "final-answer";
-      field.rows = 4;
-      field.value = state.finalAnswer;
-      field.addEventListener("input", saveFinalAnswer);
-      return field;
-    }
-
-    // слово: создаёт кнопку сравнения с образцом
-    function createCompareButton() {
-      var button = document.createElement("button");
-      button.textContent = "Сравнить с образцом";
-      button.addEventListener("click", showSample);
-      return button;
-    }
-
-    // слово: создаёт блок для образца
-    function createSampleBlock() {
-      var block = document.createElement("div");
-      block.id = "sample-block";
-      block.className = "hidden";
-      return block;
-    }
-
-    // слово: рисует экран итога
-    function renderSummary() {
-      showScreen("summary");
-      var content = document.getElementById("summary-content");
-      content.innerHTML = "";
-      content.appendChild(createSummaryStats());
-      content.appendChild(createSummaryList());
-
-      var question = document.createElement("h2");
-      question.textContent = "Финальный вопрос";
-      content.appendChild(question);
-
-      var questionText = document.createElement("p");
-      questionText.textContent = DATA.finalQuestion;
-      content.appendChild(questionText);
-
-      content.appendChild(createFinalField());
-      content.appendChild(createCompareButton());
-      content.appendChild(createSampleBlock());
-    }
-
-    // слово: сохраняет финальный ответ
-    function saveFinalAnswer(event) {
-      state.finalAnswer = event.target.value;
-      saveState();
-    }
-
-    // слово: показывает образец ответа с пунктами для сравнения
-    function showSample() {
-      var block = document.getElementById("sample-block");
-      if (!block) {
-        return;
-      }
-      block.classList.remove("hidden");
-      block.innerHTML = "<h3>Образец ответа</h3><p>Отметь, что есть в твоём ответе:</p>";
-      for (var i = 0; i < DATA.sample.length; i++) {
-        var label = document.createElement("label");
-        label.className = "sample-item";
-        var checkbox = document.createElement("input");
-        checkbox.type = "checkbox";
-        label.appendChild(checkbox);
-        label.appendChild(document.createTextNode(" " + DATA.sample[i]));
-        block.appendChild(label);
+    var allAnswered = true;
+    for (i = 0; i < FINAL_TASKS.length; i++) {
+      if (STATE.finalAnswers[i] === undefined) {
+        allAnswered = false;
+        break;
       }
     }
-
-    // слово: возвращает к рабочему экрану
-    function backToWork() {
-      showScreen("work");
-      renderWork();
+    html += '<button class="btn btn-primary" onclick="checkFinalQuestions()" ' +
+      (allAnswered ? '' : 'disabled') + '>Проверить ответы</button>';
+    html += '<button class="btn btn-secondary" onclick="showCompare()" style="margin-left:0.5rem;">Сравнить с образцом</button>';
+  } else if (STATE.finalPhase === "results") {
+    html += '<h3>Результаты финальных вопросов</h3>';
+    var finalCorrect = 0;
+    for (i = 0; i < FINAL_TASKS.length; i++) {
+      var ft = FINAL_TASKS[i];
+      var isCorrect = STATE.finalAnswers[i] === ft.correct;
+      if (isCorrect) finalCorrect++;
+      html += '<div style="margin-bottom:0.8rem; padding:0.8rem; border-radius:var(--radius); background:' +
+        (isCorrect ? '#e8f5e9' : '#ffebee') + ';">';
+      html += '<strong>' + (isCorrect ? '✔' : '✘') + ' Вопрос ' + (i + 1) + ':</strong> ' + ft.q + '<br>';
+      html += '<small>' + ft.explanation + '</small>';
+      html += '</div>';
     }
-
-    // слово: начинает работу с первого задания
-    function startWork() {
-      state.screen = "work";
-      state.currentTask = 0;
-      saveState();
-      renderWork();
+    html += '<div class="final-result" style="background:#e3f2fd;">';
+    html += 'Финал: ' + finalCorrect + ' из ' + FINAL_TASKS.length;
+    html += '</div>';
+    html += '<button class="btn btn-secondary" onclick="showCompare()">Сравнить с образцом</button>';
+    html += '<button class="btn btn-primary" onclick="showExitTicket()" style="margin-left:0.5rem;">Выйти</button>';
+  } else if (STATE.finalPhase === "compare") {
+    html += '<h3>Сравнение с образцом</h3>';
+    html += '<div class="compare-box">';
+    html += '<h4>Образцовые ответы:</h4>';
+    html += '<ul>';
+    html += '<li>Вопрос 1: Модель выбирает слово с <strong>наибольшей вероятностью</strong></li>';
+    html += '<li>Вопрос 2: Ошибка на <strong>станции 4</strong> (гипотезы → слова)</li>';
+    html += '<li>Вопрос 3: Знаки задают <strong>паузы и интонацию</strong></li>';
+    html += '<li>Вопрос 4: Правило — <strong>перезвони сам</strong></li>';
+    html += '<li>Вопрос 5: Мост — <strong>звук → распознавание → текст → языковая модель → текст → синтез → звук</strong></li>';
+    html += '</ul>';
+    html += '</div>';
+    html += '<button class="btn btn-primary" onclick="showExitTicket()">Выйти</button>';
+  } else if (STATE.finalPhase === "exit") {
+    html += '<h3>Выходной билет</h3>';
+    html += '<p>Напиши 4 строки своими словами. Сдай на выходе.</p>';
+    html += '<div class="exit-ticket">';
+    for (i = 0; i < REFERENCE.exitTicket.length; i++) {
+      html += '<label>' + REFERENCE.exitTicket[i] + '</label>';
+      html += '<textarea id="exit-' + i + '" rows="2" onchange="saveExitTicket(' + i + ', this.value)">' +
+        (STATE.exitTicket[i] || '') + '</textarea>';
     }
+    html += '</div>';
+    html += '<button class="btn btn-primary" onclick="submitExitTicket()">Сдать билет</button>';
+  }
 
-    // слово: запускает приложение
-    function init() {
-      loadState();
-      renderStart();
-      if (state.screen === "work") {
-        renderWork();
-      } else if (state.screen === "summary") {
-        renderSummary();
-      } else {
-        showScreen("start");
-      }
-      document.getElementById("start-button").addEventListener("click", startWork);
-      document.getElementById("summary-button").addEventListener("click", renderSummary);
-      document.getElementById("back-to-work").addEventListener("click", backToWork);
-    }
+  container.innerHTML = html;
+}
 
-    init();
-  </script>
+// слово: выбирает ответ на финальный вопрос
+function selectFinalAnswer(questionIndex, answerIndex) {
+  STATE.finalAnswers[questionIndex] = answerIndex;
+  saveState();
+  renderFinal();
+}
+
+// слово: проверяет финальные вопросы
+function checkFinalQuestions() {
+  STATE.finalPhase = "results";
+  saveState();
+  renderFinal();
+}
+
+// слово: показывает сравнение с образцом
+function showCompare() {
+  STATE.finalPhase = "compare";
+  saveState();
+  renderFinal();
+}
+
+// слово: показывает выходной билет
+function showExitTicket() {
+  STATE.finalPhase = "exit";
+  saveState();
+  renderFinal();
+}
+
+// слово: сохраняет ответ выходного билета
+function saveExitTicket(index, value) {
+  STATE.exitTicket[index] = value;
+  saveState();
+}
+
+// слово: сдает выходной билет
+function submitExitTicket() {
+  var container = document.getElementById("final-content");
+  var html = '<h2>Билет сдан! 🎉</h2>';
+  html += '<p>Отлично поработали на уроке.</p>';
+  html += '<div class="final-result" style="background:#e8f5e9;">';
+  html += 'Урок завершён. Покажи билет учителю.';
+  html += '</div>';
+  html += '<button class="btn btn-secondary" onclick="resetLesson()">Начать заново</button>';
+  container.innerHTML = html;
+}
+
+// слово: сбрасывает урок
+function resetLesson() {
+  STATE = {
+    role: "voditel",
+    currentTask: 0,
+    taskResults: {},
+    hintsUsed: {},
+    predictions: {},
+    budgetVerdict: null,
+    budgetReason: "",
+    bridgeOrder: [],
+    termsPairs: {},
+    testPhrasesSelected: [],
+    liveSynthAnswers: {},
+    misconceptionsAnswer: null,
+    scenarioAnswer: null,
+    exitTicket: ["", "", "", ""],
+    finalAnswers: {},
+    finalPhase: "questions",
+    compareShown: false
+  };
+  saveState();
+  showScreen("screen-start");
+  updateRoleBadge();
+}
+
+// ============================================================
+// ИНИЦИАЛИЗАЦИЯ
+// ============================================================
+(function init() {
+  loadState();
+  updateRoleBadge();
+  if (STATE.role !== "voditel" && STATE.role !== "kontroler") {
+    STATE.role = "voditel";
+    saveState();
+  }
+})();
+</script>
+
 </body>
 </html>
