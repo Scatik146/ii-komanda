@@ -110,3 +110,19 @@ ii-komanda/
 ## 10. Решения учителя 14.11 (чат 07)
 
 Схема принята. Урок живёт в `teacher-workpad`, инструмент — в `ii-komanda`. Главный запуск — с ноутбука; одна система, не две: перейти с GitHub на SourceCraft можно без правки скрипта. Claude по API выключен. Картинки — второй очередью, на неделе пробуем оба варианта (с ними и без); правила картинок — v9 § 6. Предел вызовов — 40. Python на ноутбуке установлен. Какие ключи есть и оплачены — неизвестно, выясняет команда `klyuchi`.
+
+## 11. ii.py 0.3 — автопроверки и прогон в браузере (17.11, чат 07-claude-ii-py-0-3)
+
+Код — `tools/avto.py` (вызывается из ii.py, как `analiz.py`), тесты — `tools/test_avto.py`. Без моделей и без пакетов Python.
+
+| Команда | Что делает | Выход |
+|---|---|---|
+| `ii.py avto <урок> [код]` | стиль (inline `style=`, больше одного `return` в функции, цвета вне `:root`) + решения: правила урока из `avtoproverki.md` (`есть:` / `нет:` / `в данных:`), у приложения — Ctrl+Alt+M | `proverka/<код>-avto.md` |
+| `ii.py progon <урок> [код]` | браузер без окна: ошибки консоли (перехватчик вставляется в копию страницы, чтение через `--dump-dom`) и снимок каждого экрана (`.screen`, `.ekran`, `.slide`, `section`; экран выбирается `#ii-ekran=N`) | `proverka/<код>-progon.md`, `proverka/progon/<код>-NN.png` |
+
+- **Браузер:** `II_BRAUZER` → Edge (Windows и `/mnt/c/…` из WSL) → Chrome/Chromium. Яндекс Браузер без окна не работает при открытом окне (ProcessSingleton; проверка Алисы 17.11); Edge проверен на компьютере. Каждый запуск — с отдельным временным профилем. Из WSL пути переводятся `wslpath`, временная папка — в `%TEMP%` Windows.
+- **`avtoproverki.md`** лежит в папке урока; нет файла — `avto` кладёт образец. «Каждая станция — ответ хотя бы раз» проверяется приближённо (`в данных:` — текст есть в коде скриптов); точная проверка — после единого `tekst.js` (шаг 4 плана).
+- **Ограничение снимков:** экран показывается принудительно, логика приложения не запускается — пустые экраны на снимке возможны. Это обзор, а не «прогон учеником» (шаг 4 плана).
+- Проверено 17.11 на уроке 23.11 (Chrome в облаке): приложение — 6 нарушений (цвета вне `:root`, 8 функций с несколькими `return`, нет «Новая пара», `rech-9-v1`, «станции звука», Ctrl+Alt+M); консоль чистая; 14 снимков.
+
+Пополнение словаря (`tools/avto.py`): нижние — `stili_v_stroke`, `bloki_stilej`, `bez_root`, `propustit_stroku`, `propustit_kommentarij`, `parnaya_skobka`, `odno_pravilo`, `est_ctrl_alt_m`, `eto_wsl`, `est_brauzer`, `s_perehvatchikom`, `zapustit_brauzer`, `otchet_iz_dom`; средние — `cveta_vne_root`, `ochistit_kod`, `nachala_funkcij`, `funkcii`, `hozyain`, `vozvraty_po_funkciyam`, `lishnie_vozvraty`, `prochitat_pravila`, `najti_brauzer`, `put_dlya_brauzera`, `adres_fajla`, `rabochaya_papka`, `flagi_brauzera`, `snimok`, `snimki`; верхние — `proverit_stil`, `proverit_resheniya`, `zapisat_avto`, `progon`, `zapisat_progon`; в ii.py — `html_kody`, `pravila_uroka`, `komanda_avto`, `komanda_progon`.

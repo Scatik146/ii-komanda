@@ -17,7 +17,7 @@ import urllib.error
 import urllib.request
 from pathlib import Path
 
-VERSIYA = "0.2.7 (17.11.2026)"
+VERSIYA = "0.3.0-a (17.11.2026)"
 TOOLS = Path(__file__).resolve().parent
 KOREN = TOOLS.parent
 PROMPTY = KOREN / "algoritm" / "prompty"
@@ -1102,6 +1102,52 @@ def ne_sdelano(arg):
     raise Oshibka("команда %s ещё не написана (вторая очередь, USTROJSTVO.md § 7)" % arg.komanda)
 
 
+# ---------- шаг 8 (0.3): автопроверки и прогон в браузере — работу делает tools/avto.py ----------
+
+# html-коды: HTML-артефакты урока, файл которых уже есть (или один заданный)
+def html_kody(urok, kod=None):
+    import avto
+    kody = [kod] if kod else [k for k in nabor_iz_zayavki(urok) if k in avto.HTML_KODY]
+    return [k for k in kody if k in avto.FAJL and (urok / avto.FAJL[k]).exists()]
+
+
+# правила-урока: правила avtoproverki.md; нет файла — кладёт образец
+def pravila_uroka(urok):
+    import avto
+    put = urok / "avtoproverki.md"
+    if not put.exists():
+        put.write_text(avto.SHABLON_PRAVIL, encoding="utf-8")
+        print("Положил образец правил: %s — дополнить под урок." % put)
+    return avto.prochitat_pravila(urok)
+
+
+# komanda_avto: стиль + решения без моделей → proverka/<код>-avto.md
+def komanda_avto(arg):
+    import avto
+    urok = put_uroka(arg.urok)
+    pravila, vsego = pravila_uroka(urok), 0
+    for kod in html_kody(urok, arg.kod):
+        chislo = avto.zapisat_avto(urok, kod, pravila)
+        vsego += chislo
+        print("%s: нарушений %d (proverka/%s-avto.md)" % (kod, chislo, kod))
+    return 1 if vsego else 0
+
+
+# komanda_progon: браузер без окна → ошибки консоли и снимки экранов
+def komanda_progon(arg):
+    import avto
+    urok, brauzer = put_uroka(arg.urok), avto.najti_brauzer()
+    if brauzer is None:
+        raise Oshibka("не нашёл браузер (Edge/Chrome); путь можно задать переменной II_BRAUZER")
+    print("Браузер: %s" % brauzer)
+    vsego = 0
+    for kod in html_kody(urok, arg.kod):
+        chislo = avto.zapisat_progon(urok, kod, brauzer)
+        vsego += abs(chislo)
+        print("%s: %s (proverka/%s-progon.md)" % (kod, "снимков нет — браузер не сработал" if chislo < 0 else "ошибок консоли %d" % chislo, kod))
+    return 1 if vsego else 0
+
+
 # ---------- разбор команд ----------
 
 # komanda_analiz: кандидаты урока → разметчик → очередь учителю; работу делает tools/analiz.py
@@ -1158,6 +1204,12 @@ def razbor(argv=None):
     s.add_argument("--prompt", required=True)
     s.add_argument("--vyhod", required=True)
     s.set_defaults(f=komanda_zapros, urok=None)
+    for imya, f, pomoshch in (("avto", komanda_avto, "стиль и решения без моделей → proverka/<код>-avto.md"),
+                              ("progon", komanda_progon, "браузер без окна: ошибки консоли и снимки экранов")):
+        s = k.add_parser(imya, parents=[obshchie], help=pomoshch)
+        s.add_argument("urok")
+        s.add_argument("kod", nargs="?", choices=KODY)
+        s.set_defaults(f=f)
     s = k.add_parser("kartinki", parents=[obshchie], help="(вторая очередь, ещё не написана)")
     s.add_argument("ostalnoe", nargs="*")
     s.set_defaults(f=ne_sdelano)
