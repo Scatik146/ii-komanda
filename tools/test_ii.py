@@ -410,3 +410,19 @@ class TestNovizna(unittest.TestCase):
     def test_nastoyashchee_pole(self):
         html = "<script>class A { #schet = 0; }</script>"
         self.assertIn("#поле класса (новее ES2018)", ii.proverit_okruzhenie(html, "prilozhenie.html"))
+
+
+class TestSohranitRassuzhdenie(unittest.TestCase):
+    def test_sohranyaetsya_pri_obrezke(self):
+        papka = Path(tempfile.mkdtemp())
+        dannye = {"choices": [{"message": {"content": "", "reasoning_content": "думаю долго"}, "finish_reason": "length"}]}
+        staryj, ii.http_post = ii.http_post, Podmena(dannye, dannye)
+        kt = ii.Kontekst({"roli": {"solo": ["deepseek"]}, "modeli": MODELI["modeli"]}, dict(KLYUCHI), urok=papka)
+        try:
+            with self.assertRaises(ii.Nerabochij):
+                ii.vyzov(kt, "solo", "т", "prilozhenie")
+        finally:
+            ii.http_post = staryj
+        tekst = (papka / "proverka" / "prilozhenie-rassuzhdenie.txt").read_text(encoding="utf-8")
+        self.assertIn("думаю долго", tekst)
+        shutil.rmtree(papka)

@@ -244,7 +244,9 @@ def razobrat_otvet(dannye, ozhidaem=None):
     except (KeyError, IndexError, TypeError, AttributeError):
         raise Nerabochij("нет choices[0].message в ответе")
     if vybor.get("finish_reason") == "length":
-        raise Nerabochij(prichina_obrezki(vybor["message"], tekst))
+        oshibka = Nerabochij(prichina_obrezki(vybor["message"], tekst))
+        oshibka.rassuzhdenie = vybor["message"].get("reasoning_content") or ""
+        raise oshibka
     if not tekst.strip():
         raise Nerabochij("пустой ответ")
     if any(o in tekst[:300].lower() for o in OTKAZY):
@@ -320,6 +322,15 @@ def odin_vyzov(kt, imya, tekst, ozhidaem=None, max_tokens=None):
     return razobrat_otvet(dannye, ozhidaem)
 
 
+# сохранить-рассуждение: обрезанное рассуждение модели → proverka/<шаг>-rassuzhdenie.txt (последнее)
+def sohranit_rassuzhdenie(kt, shag, imya, oshibka):
+    tekst = getattr(oshibka, "rassuzhdenie", "")
+    if tekst and kt.urok:
+        put = Path(kt.urok) / "proverka" / (shag.replace(" ", "-") + "-rassuzhdenie.txt")
+        put.parent.mkdir(parents=True, exist_ok=True)
+        put.write_text("# %s, модель %s: рассуждение съело лимит\n\n%s\n" % (shag, imya, tekst), encoding="utf-8")
+
+
 def vyzov(kt, rol, tekst, shag, krug=1, ozhidaem=None, krome=None):
     """Роль → первая работающая модель списка: один повтор той же моделью, затем следующая.
     krome — модель, которой нельзя (страж не автор). Возвращает (текст, модель, токены)."""
@@ -338,6 +349,7 @@ def vyzov(kt, rol, tekst, shag, krug=1, ozhidaem=None, krome=None):
                 return otvet, imya, tokeny
             except Nerabochij as e:
                 kt.zhurnal(shag, imya, krug, "НЕРАБОЧИЙ: %s" % e)
+                sohranit_rassuzhdenie(kt, shag, imya, e)
                 prichiny.append("%s: %s" % (imya, e))
                 if str(e).startswith(("нет ключа", "модель выключена", "модель вручную")):
                     break  # повтор не поможет

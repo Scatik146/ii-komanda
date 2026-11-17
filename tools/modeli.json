@@ -2,7 +2,7 @@
   "_kommentarij": "Роли → порядок моделей (первая — по умолчанию, дальше — замена). Решение 14.11: всё через Яндекс, один ключ YANDEX_API_KEY + каталог YANDEX_FOLDER_ID (сами значения — в ~/.ii-komanda.env). Адреса моделей — из прогона klyuchi 14.11 (ii-py/klyuchi-2026-11-14.md). GLM — вручную через учителя (команда ekspertiza). rassuzhdenie: true — у модели рассуждение включено по умолчанию: скрипт даёт больше токенов и убирает рассуждение из ответа. telo_dop — добавки в тело запроса; параметр выключения рассуждения у Яндекса не сверен — не знаю, надо проверить, поэтому пусто.",
   "roli": {
     "kanva": ["deepseek", "qwen"],
-    "prilozhenie": ["deepseek", "qwen"],
+    "prilozhenie": ["qwen", "deepseek"],
     "kontent": ["deepseek", "qwen"],
     "vizual": ["alisa_flash", "deepseek"],
     "strazh": ["alisa", "alisa_flash"],
