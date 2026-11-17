@@ -179,9 +179,14 @@ def v_otvet(sobrano):
     return {"choices": [{"message": soobshchenie, "finish_reason": sobrano["finish"]}], "usage": sobrano["usage"]}
 
 
+# сейчас: секунды по часам — каждый вызов заново
+def sejchas():
+    return datetime.datetime.now().timestamp()
+
+
 # собрать-поток: строки ответа (bytes) → обычный ответ; часы подменяют тесты
 def sobrat_potok(stroki, chasy=None):
-    chasy = chasy or datetime.datetime.now().timestamp
+    chasy = chasy or sejchas
     sobrano = {"content": [], "reasoning": [], "finish": None, "usage": {}, "pokazano": chasy()}
     for stroka in stroki:
         kusok = kusok_potoka(stroka.decode("utf-8", "replace"))

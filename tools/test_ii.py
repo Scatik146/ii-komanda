@@ -426,3 +426,22 @@ class TestSohranitRassuzhdenie(unittest.TestCase):
         tekst = (papka / "proverka" / "prilozhenie-rassuzhdenie.txt").read_text(encoding="utf-8")
         self.assertIn("думаю долго", tekst)
         shutil.rmtree(papka)
+
+
+class TestHod(unittest.TestCase):
+    def test_hod_pechataetsya(self):
+        import io
+        import contextlib
+        vremena = iter([0, 10, 31, 40])
+        stroki = stroki_potoka({"choices": [{"delta": {"reasoning_content": "а"}}]},
+                               {"choices": [{"delta": {"content": "бв"}}]},
+                               {"choices": [{"delta": {"content": "г"}, "finish_reason": "stop"}]})
+        vyvod = io.StringIO()
+        with contextlib.redirect_stdout(vyvod):
+            ii.sobrat_potok(stroki, chasy=lambda: next(vremena))
+        self.assertEqual(vyvod.getvalue().count("модель пишет"), 1)
+
+    def test_sejchas_idyot(self):
+        pervoe = ii.sejchas()
+        __import__("time").sleep(0.01)
+        self.assertGreater(ii.sejchas(), pervoe)
