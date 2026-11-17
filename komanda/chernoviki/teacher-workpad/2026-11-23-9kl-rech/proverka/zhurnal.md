@@ -65,3 +65,12 @@
 | 18.11 01:46:24 | prezentaciya | deepseek | 1 | ответ | 31730 |
 | 18.11 01:46:29 | strazh prezentaciya | alisa | 1 | ответ | 16812 |
 | 18.11 01:46:29 | strazh prezentaciya | alisa | 1 | ВЕРНУТЬ |  |
+| 18.11 01:56:07 | prezentaciya | qwen | 1 | ответ | 29118 |
+| 18.11 01:56:11 | strazh prezentaciya | alisa | 1 | ответ | 16794 |
+| 18.11 01:56:11 | strazh prezentaciya | alisa | 1 | ВЕРНУТЬ |  |
+| 18.11 01:56:29 | prezentaciya | qwen | 2 | ответ | 29212 |
+| 18.11 01:56:35 | strazh prezentaciya | alisa | 2 | ответ | 16672 |
+| 18.11 01:56:35 | strazh prezentaciya | alisa | 2 | ВЕРНУТЬ |  |
+| 18.11 01:56:55 | prezentaciya | qwen | 3 | ответ | 28899 |
+| 18.11 01:56:59 | strazh prezentaciya | alisa | 3 | ответ | 16224 |
+| 18.11 01:56:59 | strazh prezentaciya | alisa | 3 | ВЕРНУТЬ |  |

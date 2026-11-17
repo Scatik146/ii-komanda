@@ -318,21 +318,6 @@ body {
   </section>
 
   <section class="slajd">
-    <span class="etap">Этап 2</span>
-    <p class="metka">Гипотеза до ноутбуков</p>
-    <h2 class="tezis">Запишите два числа-прогноза на пару.</h2>
-    <ul class="shagi">
-      <li>За сколько секунд научитесь управлять машиной?</li>
-      <li>Сколько фраз из десяти она угадает?</li>
-    </ul>
-    <div class="vopros">
-      <p class="vopros__tekst">Куда записать прогноз?</p>
-      <p class="podskazka">Щелчок — показать ответ</p>
-      <div class="otvet">В лист пары, этап 0 «Гипотеза»: два числа и подпись пары. Сверим в конце.</div>
-    </div>
-  </section>
-
-  <section class="slajd slajd--vopros">
     <span class="etap">Этап 3–4</span>
     <p class="metka">Выявление места и причины затруднения</p>
     <h2 class="tezis">Поймайте модель на жульничестве: по какому признаку она на самом деле отличает?</h2>
@@ -360,7 +345,7 @@ body {
 
   <section class="slajd">
     <span class="etap">Этап 3–4</span>
-    <p class="metka">Подпишите схему</p>
+    <p class="metka">Построение проекта выхода</p>
     <h2 class="tezis">Звук → спектрограмма → признаки → вероятности → текст.</h2>
     <div class="vopros">
       <p class="vopros__tekst">Подпишите каждое звено схемы своим словом.</p>
@@ -370,58 +355,35 @@ body {
   </section>
 
   <section class="slajd">
-    <span class="etap">Этап 4</span>
-    <p class="metka">Построение проекта выхода</p>
-    <h2 class="tezis">Каркас конвейера: пять станций от звука к предложению.</h2>
-    <div class="konvejer">
-      <span class="stanciya">Звук</span>
-      <span class="strelka">→</span>
-      <span class="stanciya">Фонемы</span>
-      <span class="strelka">→</span>
-      <span class="stanciya">Буквы/подслова (гипотезы)</span>
-      <span class="strelka">→</span>
-      <span class="stanciya">Слова</span>
-      <span class="strelka">→</span>
-      <span class="stanciya">Предложение</span>
-    </div>
-    <div class="vopros">
-      <p class="vopros__tekst">Назовите станции по порядку.</p>
-      <p class="podskazka">Щелчок — показать ответ</p>
-      <div class="otvet">Звук → фонемы → буквы/подслова (гипотезы) → слова → предложение.</div>
-    </div>
-  </section>
-
-  <section class="slajd">
     <span class="etap">Этап 5</span>
-    <p class="metka">Разбор машины — 0–4 мин</p>
-    <h2 class="tezis">Пробная фраза: пульт по шагам, прогноз перед каждым запуском.</h2>
+    <p class="metka">Реализация проекта: распознавание</p>
+    <h2 class="tezis">Сравниваем сказанное и распознанное, ищем станцию сбоя.</h2>
     <ul class="shagi">
-      <li>Прочитайте шаг на экране и сделайте его.</li>
-      <li>Запишите прогноз до запуска.</li>
-      <li>После запуска отметьте: угадали или нет.</li>
+      <li>Откройте приложение, выберите готовый пример.</li>
+      <li>Скажите фразу, посмотрите, что распознала модель.</li>
+      <li>Отметьте, на какой станции конвейера произошла ошибка.</li>
     </ul>
-    <p class="podskazka">Красная карточка — застряли, зелёная — этап готов.</p>
   </section>
 
   <section class="slajd slajd--vopros">
     <span class="etap">Этап 5</span>
     <p class="metka">Проверка этапа 5 — разбор машины</p>
-    <h2 class="tezis">Распознаватель даёт 2–3 гипотезы с процентами.</h2>
+    <h2 class="tezis">Где именно модель ошиблась?</h2>
     <p class="podskazka">Щелчок — показать образец</p>
     <div class="otvet">
       <table class="tablica">
-        <tr><th>Гипотеза</th><th>Процент</th></tr>
-        <tr><td>кот</td><td>71 %</td></tr>
-        <tr><td>код</td><td>24 %</td></tr>
-        <tr><td>год</td><td>5 %</td></tr>
+        <tr><th>Сказали</th><th>Распознано</th><th>Станция сбоя</th></tr>
+        <tr><td>кот</td><td>код</td><td>слова</td></tr>
+        <tr><td>скороговорка</td><td>пропуск слога</td><td>фонемы</td></tr>
+        <tr><td>фраза при шуме</td><td>переспрос</td><td>звук</td></tr>
+        <tr><td>битрейт</td><td>бит рейт</td><td>слова</td></tr>
       </table>
-      <p>Модель выбирает верхнюю строку — самое вероятное, а не «понятое».</p>
     </div>
   </section>
 
   <section class="slajd">
     <span class="etap">Этап 5</span>
-    <p class="metka">Фразы-испытания — 4–10 мин</p>
+    <p class="metka">Фразы-испытания</p>
     <h2 class="tezis">8–10 фраз, протокол А/Б, доля ошибок.</h2>
     <ul class="shagi">
       <li>Омофоны, скороговорка, фраза при шуме, термин информатики, имя знакомого.</li>
@@ -433,7 +395,7 @@ body {
   <section class="slajd slajd--vopros">
     <span class="etap">Этап 5</span>
     <p class="metka">Проверка этапа 5 — испытание</p>
-    <h2 class="tezis">Где разошлись гипотезы и какова доля ошибок?</h2>
+    <h2 class="tezis">Какова доля ошибок вашей пары?</h2>
     <p class="podskazka">Щелчок — показать образец</p>
     <div class="otvet">
       <table class="tablica">
@@ -449,8 +411,8 @@ body {
 
   <section class="slajd">
     <span class="etap">Этап 6</span>
-    <p class="metka">Первичное закрепление — 4 мин</p>
-    <h2 class="tezis">Станции — блоки ДРАКОН-схемы; порядок величин: от секунд до 150 000 часов.</h2>
+    <p class="metka">Первичное закрепление с проговариванием</p>
+    <h2 class="tezis">Станции конвейера — это блоки ДРАКОН-схемы.</h2>
     <ul class="shagi">
       <li>Покажите блок на листе и объясните, зачем он нужен.</li>
       <li>Чем ниже — тем позже, чем правее — тем хуже.</li>
@@ -480,27 +442,34 @@ body {
 
   <section class="slajd">
     <span class="etap">Этап 7</span>
-    <p class="metka">Голос машины — 3–4 мин</p>
-    <h2 class="tezis">Два аудио: живой голос или синтез?</h2>
+    <p class="metka">Самостоятельная работа: синтез</p>
+    <h2 class="tezis">Опыт с пунктуацией: знаки задают паузы и интонацию.</h2>
     <ul class="shagi">
-      <li>Слушаем по одному динамику на ученика.</li>
-      <li>Записываем: где дыхание, где ровно.</li>
-      <li>Голоса учеников не записываем.</li>
+      <li>Введите в Яндекс Переводчик: «Маша пришла домой».</li>
+      <li>Добавьте запятую: «Маша, пришла домой?».</li>
+      <li>Сравните озвучку. Запишите свой вывод.</li>
     </ul>
   </section>
 
   <section class="slajd slajd--vopros">
     <span class="etap">Этап 7</span>
-    <p class="metka">Проверка этапа 7 — голос машины</p>
-    <h2 class="tezis">Синтез собирает заранее написанные части.</h2>
+    <p class="metka">Проверка этапа 7 — синтез</p>
+    <h2 class="tezis">Как знак меняет голос?</h2>
     <p class="podskazka">Щелчок — показать ответ</p>
-    <div class="otvet">Живой голос: дыхание, неровности. Синтез: ровно, без вдохов. Машина склеивает заранее написанные куски — поэтому и звучит по-разному.</div>
+    <div class="otvet">
+      <table class="tablica">
+        <tr><th>Текст</th><th>Что слышим</th></tr>
+        <tr><td>Маша пришла домой</td><td>Рассказ, ровная интонация.</td></tr>
+        <tr><td>Маша, пришла домой?</td><td>Обращение, вопрос, пауза после «Маша».</td></tr>
+      </table>
+      <p>Знак препинания задаёт паузу и интонацию.</p>
+    </div>
   </section>
 
   <section class="slajd">
     <span class="etap">Этап 7</span>
-    <p class="metka">Смета — 4 мин</p>
-    <h2 class="tezis">Смета студии: заказчик, красный флаг, вердикт.</h2>
+    <p class="metka">Смета студии</p>
+    <h2 class="tezis">Смета: заказчик, красный флаг, вердикт.</h2>
     <ul class="shagi">
       <li>Три заготовки и своя фраза: меняем только знаки.</li>
       <li>Красный флаг: звук уходит на сервер.</li>
@@ -525,8 +494,8 @@ body {
 
   <section class="slajd">
     <span class="etap">Этап 8</span>
-    <p class="metka">Включение в систему знаний — 2 мин</p>
-    <h2 class="tezis">Таблица → схема; подпишите звено «языковая модель».</h2>
+    <p class="metka">Включение в систему знаний</p>
+    <h2 class="tezis">Где это в жизни? Мост к языковым моделям.</h2>
     <ul class="shagi">
       <li>Соберите таблицу пары — получите схему.</li>
       <li>Подпишите среднее звено сами.</li>
@@ -544,20 +513,29 @@ body {
 
   <section class="slajd">
     <span class="etap">Этап 9</span>
-    <p class="metka">Рефлексия — 2 мин</p>
-    <h2 class="tezis">Выходной билет: четыре строки, каждый сам и молча.</h2>
+    <p class="metka">Рефлексия учебной деятельности</p>
+    <h2 class="tezis">ДРАКОН-схема и ДРАКОН-ГРАФ: что запомнили?</h2>
     <ul class="shagi">
-      <li>Что понял про конвейер?</li>
-      <li>Где ошибалась модель?</li>
-      <li>Что меняет знак препинания?</li>
-      <li>Какое правило запомнил?</li>
+      <li>Покажите жёлтые блоки на ДРАКОН-ГРАФе.</li>
+      <li>Объясните, почему «чем правее — тем хуже».</li>
+      <li>Вклейте лист в тетрадь.</li>
     </ul>
-    <p class="podskazka">Сдаём на выходе — главный слайд после сдачи.</p>
   </section>
 
   <section class="slajd slajd--vopros">
     <span class="etap">Этап 9</span>
-    <p class="metka">Главная мысль — после билетов</p>
+    <p class="metka">Проверка этапа 9</p>
+    <h2 class="tezis">Жёлтое — запомни, белое — разберись.</h2>
+    <p class="podskazka">Щелчок — показать ответ</p>
+    <div class="otvet">
+      <p>Жёлтые блоки — ключевые выводы урока: конвейер, вероятности, правило «перезвони сам».</p>
+      <p>Ветка вправо на ДРАКОН-схеме — это переспрос, когда модель не уверена.</p>
+    </div>
+  </section>
+
+  <section class="slajd">
+    <span class="etap">Этап 9</span>
+    <p class="metka">Главная мысль — после сдачи билетов</p>
     <h2 class="tezis">Модель не понимает речь — она выбирает вероятное. Поэтому проверяй.</h2>
     <p class="podskazka">Щелчок — показать цифры и правило</p>
     <div class="otvet">
@@ -570,108 +548,67 @@ body {
 
 <nav class="upravlenie">
   <button class="knopka knopka--nazad" type="button">← Назад</button>
-  <span class="schetchik">1 / 21</span>
+  <span class="schetchik">1 / 23</span>
   <button class="knopka knopka--vpered" type="button">Вперёд →</button>
 </nav>
 
 <script>
-// слово: все слайды презентации
-function slajdy() {
-  return Array.prototype.slice.call(document.querySelectorAll('.slajd'));
-}
-
-// слово: счётчик слайдов в панели
+const slajdy = () => Array.from(document.querySelectorAll('.slajd'));
 const schetchik = document.querySelector('.schetchik');
-
-// слово: номер текущего слайда
 let nomer = 0;
 
-// слово: скрыть подсказки на слайде
-function skrytPodskazki(slajd) {
-  const podskazki = slajd.querySelectorAll('.podskazka');
-  podskazki.forEach(function (podskazka) {
-    podskazka.classList.add('podskazka--skryta');
-  });
-  return;
-}
+const skrytPodskazki = (slajd) => {
+  slajd.querySelectorAll('.podskazka').forEach((p) => p.classList.add('podskazka--skryta'));
+};
 
-// слово: открыть первый закрытый ответ; вернуть «открыли ли»
-function otkrytOtvet(slajd) {
+const otkrytOtvet = (slajd) => {
   const otvety = slajd.querySelectorAll('.otvet:not(.otvet--otkryt)');
-  const est = otvety.length > 0;
-  if (est) {
+  if (otvety.length > 0) {
     otvety[0].classList.add('otvet--otkryt');
     skrytPodskazki(slajd);
+    return true;
   }
-  return est;
-}
+  return false;
+};
 
-// слово: обновить счётчик «номер / всего»
-function obnovitSchetchik() {
-  const vse = slajdy();
-  schetchik.textContent = (nomer + 1) + ' / ' + vse.length;
-  return;
-}
+const obnovitSchetchik = () => {
+  schetchik.textContent = (nomer + 1) + ' / ' + slajdy().length;
+};
 
-// слово: показать слайд по номеру
-function perejti(index) {
+const perejti = (index) => {
   const vse = slajdy();
-  const novyj = Math.max(0, Math.min(vse.length - 1, index));
-  vse.forEach(function (slajd) {
-    slajd.classList.remove('slajd--aktivnyj');
-  });
-  nomer = novyj;
+  nomer = Math.max(0, Math.min(vse.length - 1, index));
+  vse.forEach((s) => s.classList.remove('slajd--aktivnyj'));
   vse[nomer].classList.add('slajd--aktivnyj');
   obnovitSchetchik();
-  return;
-}
+};
 
-// слово: шаг вперёд — сначала ответ, потом следующий слайд
-function vpered() {
+const vpered = () => {
   const slajd = slajdy()[nomer];
-  const otkryli = otkrytOtvet(slajd);
-  if (!otkryli) {
+  if (!otkrytOtvet(slajd)) {
     perejti(nomer + 1);
   }
-  return;
-}
+};
 
-// слово: шаг назад
-function nazad() {
-  perejti(nomer - 1);
-  return;
-}
+const nazad = () => perejti(nomer - 1);
 
-// слово: обработать щелчок по сцене
-function obrabotatKlik(sobytie) {
-  const vPaneli = sobytie.target.closest('.upravlenie');
-  if (!vPaneli) {
+document.addEventListener('click', (e) => {
+  if (!e.target.closest('.upravlenie')) vpered();
+});
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowRight' || e.key === ' ' || e.key === 'PageDown') {
+    e.preventDefault();
     vpered();
   }
-  return;
-}
-
-// слово: обработать нажатие клавиши
-function obrabotatKlavishu(sobytie) {
-  if (sobytie.key === 'ArrowRight' || sobytie.key === ' ' || sobytie.key === 'PageDown') {
-    sobytie.preventDefault();
-    vpered();
-  }
-  if (sobytie.key === 'ArrowLeft' || sobytie.key === 'PageUp') {
-    sobytie.preventDefault();
+  if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+    e.preventDefault();
     nazad();
   }
-  if (sobytie.key === 'Home') {
-    perejti(0);
-  }
-  if (sobytie.key === 'End') {
-    perejti(slajdy().length - 1);
-  }
-  return;
-}
+  if (e.key === 'Home') perejti(0);
+  if (e.key === 'End') perejti(slajdy().length - 1);
+});
 
-document.addEventListener('click', obrabotatKlik);
-document.addEventListener('keydown', obrabotatKlavishu);
 document.querySelector('.knopka--vpered').addEventListener('click', vpered);
 document.querySelector('.knopka--nazad').addEventListener('click', nazad);
 perejti(0);
