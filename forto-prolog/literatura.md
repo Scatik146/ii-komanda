@@ -1,0 +1,85 @@
+# «Форто-Пролог»: список литературы и авторство чужих идей
+
+Рабочий список для будущей статьи и для честных ссылок. Сюда попадает каждый источник, на который мы опирались в проекте «Форто-Пролог». Формат — как в drakon-graf `docs/литература.md`; чужие программы, их авторы и лицензии — в drakon-graf `docs/STORONNIE.md`.
+
+**Пометки:**
+- **[Ц]** — прочитан целиком;
+- **[Ф]** — прочитаны фрагменты (страница, раздел, выдержка в поиске);
+- **[С]** — использован по ссылке или пересказу у других авторов, первоисточник не читали;
+- **→** — где источник использован в проекте.
+
+Ведёт Марьям; пополняется в каждом чате проекта. Создан 18.11.2026 (до этого источники проекта лежали только в тексте чатов и в `brusentsov.md`).
+
+---
+
+## 1. Троичная логика и логика Н. П. Брусенцова
+
+Выжимка по 12 работам — `brusentsov.md` (выжимку делал помощник; пометки ниже — по его списку «прочитано»).
+
+1. **[Ф]** Брусенцов Н. П. Блуждание в трёх соснах (Приключения диалектики в информатике). — М.: SvR-Аргус, 2000. — URL: https://ternarycomp.cs.msu.ru/Papers/3PINES.pdf. Таблицы связок — картинками, не извлечены. → `brusentsov.md`; задание GLM `brusentsov-tablicy.md`.
+2. **[Ф]** Брусенцов Н. П. Трёхзначное обобщение алгебры логики // Историко-математические исследования. Сер. 2, вып. 15(50). — М.: Янус-К, 2014. — С. 241–242. — URL: https://ternarycomp.cs.msu.ru/Papers/Brusen_IMI14_Trehzn_obobsch.pdf → `brusentsov.md`.
+3. **[Ф]** Брусенцов Н. П. Трёхзначность отношения следования // Программные системы и инструменты: тем. сб. № 11. — М.: Изд-во фак. ВМиК МГУ, 2010. — С. 86–87. — URL: https://ternarycomp.cs.msu.ru/Papers/brusentsov_sborn2010_1.pdf → следование ≠ импликация (открытый вопрос 19).
+4. **[Ф]** Брусенцов Н. П. Ущербность классической логики // Интеллект и творчество. — 2004–2005. — № 7. — С. 4. — URL: https://ternarycomp.cs.msu.ru/Papers/Ushcherbnost_ClassLog.pdf
+5. **[Ф]** Брусенцов Н. П. Алгебраическая реконструкция силлогистики // Информационные технологии. — 2008. — № 2. — С. 7–10. — URL: https://ternarycomp.cs.msu.ru/Papers/Alrek.pdf
+6. **[Ф]** Брусенцов Н. П. Содержательное следование, сосуществование противоположностей и формальные импликации // Современная логика: материалы IX Общерос. науч. конф. — СПб., 2006. — С. 342–343. — URL: https://ternarycomp.cs.msu.ru/Papers/Soder_sled.pdf
+7. **[Ф]** Брусенцов Н. П., Владимирова Ю. С. Троичная диалектическая информатика // SORUCOM-2006: материалы междунар. конф. — Петрозаводск, 2006. — С. 153–159. — URL: https://ternarycomp.cs.msu.ru/Papers/Petrozavodsk.pdf
+8. **[Ф]** Брусенцов Н. П. Отчего математическая логика несодержательна // Историко-математические исследования. Сер. 2, вып. 11(46). — М.: Янус-К, 2006. — URL: https://ternarycomp.cs.msu.ru/Papers/Otchego.pdf
+9. **[Ф]** Бурцев А. А. Особенности программирования троичной машины: новые возможности и новые задачи. — URL: https://ternarycomp.cs.msu.ru/Papers/Burtsev_Programming_features_of_ternary_computer.pdf → операции ТВМ NEG, TMIN, TMAX, TMUL, BRS (`instrumenty.md` § 7).
+10. **[Ф]** Бурцев А. А., Бурцев М. А. ДССП для троичной виртуальной машины // Труды НИИСИ РАН. — 2012. — Т. 2, № 1. — URL: https://ternarycomp.cs.msu.ru/Papers/Burtsev_dssptvm.pdf
+11. **[Ф]** Бурцев А. А. Процедурный сшитый код для обеспечения нисходящей разработки структурированных программ в ДССП для троичной машины. — URL: https://ternarycomp.cs.msu.ru/Papers/Burtsev_Procedural_threaded_code.pdf
+12. **[Ф]** Бурцев А. А. Разработка собственных управляющих конструкций в среде ДССП для троичной машины. — URL: https://ternarycomp.cs.msu.ru/Papers/Burtsev_Design_of_own_control_structures_in_DSSP_TVM.pdf → «ФОРТ и ДССП — системы со словарной организацией».
+13. **[Ф]** Владимирова Ю. С. [о ДССП и «Сетуни-70»]. — URL: https://www.iis.nsk.su/files/page/vladimirova_yu.s.pdf → двухстековая архитектура и ПОЛИЗ ДССП.
+14. **[С]** Kleene S. C. Introduction to Metamathematics. — 1952. → сильная трёхзначная логика K3 (`pravila/FORTO-PROLOG.md` § 4; Р30).
+15. **[С]** Łukasiewicz J. O logice trójwartościowej. — 1920. → Ł3 (`instrumenty.md` § 7).
+16. **[С]** Бочвар Д. А. Об одном трёхзначном исчислении… — 1938. → B3 (отвергнута в модели).
+17. **[С]** Post E. L. Introduction to a general theory of elementary propositions. — 1921. → функции Поста, критерий полноты.
+18. **[С]** Яблонский С. В. [функциональная полнота в трёхзначной логике]. — 1958. → «18 предполных классов» — **не проверено по источнику**.
+
+## 2. Логика и человеческое рассуждение
+
+19. **[Ф]** Dietz E.-A., Hölldobler S., Ragni M. A Computational Logic Approach to the Suppression Task // CogSci 2012. — URL: https://escholarship.org/content/qt2sd6d61q/qt2sd6d61q.pdf → Ł3 лучше K3 в задаче подавления (`instrumenty.md` § 7).
+20. **[Ф]** Dietz E.-A., Hölldobler S., Wernhard C. Modeling the Suppression Task under Weak Completion and Well-Founded Semantics. — URL: https://iccl.inf.tu-dresden.de/web/WVPub341 → слабое пополнение = обоснованная семантика для «плотных» программ.
+21. **[Ф]** Dietz Saldanha E.-A., Hölldobler S., Pereira L. M. Our Themes on Abduction in Human Reasoning: A Synopsis. — URL: https://userweb.fct.unl.pt/~lmp/publications/online-papers/abduction%20themes.pdf → абдукция (догадка о причине) — чего у нас пока нет.
+22. **[С]** Stenning K., van Lambalgen M. Human Reasoning and Cognitive Science. — MIT Press, 2008. → модель на K3 (Fitting), признанная неадекватной для задачи подавления.
+23. **[С]** Byrne R. M. J. Suppressing valid inferences with conditionals // Cognition. — 1989. → задача подавления.
+
+## 3. Логическое программирование
+
+24. **[Ф]** SWI-Prolog: library(wfs) — Well Founded Semantics; tabling. — URL: https://www.swi-prolog.org/ → таблирование и `tnot` (`FORTO-PROLOG-BLOKI.md` § 3, Р30).
+25. **[С]** Lloyd J. W., Topor R. W. Making Prolog more expressive // Journal of Logic Programming. — 1984. → разложение «или» и «не» (ПРЕДЛОЖЕНИЕ в `FORTO-PROLOG-BLOKI.md` § 5).
+
+## 4. Оформление ссылок и источников (Р29)
+
+26. **[Ф]** ГОСТ Р 7.0.5–2008. Библиографическая ссылка. Общие требования и правила составления. → ссылка в тексте с местом. Действует ли без замены на конец 2026 — **проверить**.
+27. **[С]** ГОСТ Р 7.0.100–2018. Библиографическая запись. Библиографическое описание. → запись в списке источников.
+28. **[Ф]** ISO 690:2021. Information and documentation — Guidelines for bibliographic references and citations to information resources. → однозначные машинно-разбираемые ссылки; данные, программы, веб-архивы.
+29. **[Ф]** The Chicago Manual of Style. 18th ed. — 2024. (§ 13.15 — дата обращения). → дата обращения: записывать в работе, печатать по требованию.
+30. **[Ф]** Wilkinson M. D. et al. The FAIR Guiding Principles… — 2016; FORCE11. — URL: https://force11.org/info/the-fair-data-principles/ → метаданные живут без данных; лицензия и происхождение.
+31. **[Ф]** Van de Sompel H. et al. Robust Links — Link Decoration. — URL: https://robustlinks.mementoweb.org/spec/ → адрес оригинала, адрес снимка, дата (Р29).
+32. **[Ф]** Pew Research Center. When Online Content Disappears. — 2024. — URL: https://www.pewresearch.org/data-labs/2024/05/17/when-online-content-disappears/ → 38 % страниц 2013 года недоступны (Р29).
+
+## 5. Тарифы и инструменты помощников
+
+33. **[Ф]** Claude: GitHub integration. — URL: https://claude.com/docs/connectors/github → доступна на всех планах, включая Free (`instrumenty.md` § 6).
+
+---
+
+## Авторство чужих идей в проекте
+
+Кому принадлежит то, что мы взяли. Программы и библиотеки — drakon-graf `docs/STORONNIE.md`.
+
+| Идея | Автор | Где у нас |
+|---|---|---|
+| Языки ДРАКОН, ГРАФ | В. Д. Паронджанов, Г. А. Гуленков (ГРАФ) | блоки `дракон`, `конспект`; drakon-graf `NOTICE` |
+| Виджет и генераторы дракон-схем | С. Митькин | teacher-workpad `lib/drakonwidget/`, `lib/drakongen/` |
+| Сильная трёхзначная логика | С. К. Клини | K3, Р30 |
+| Трёхзначная логика | Я. Лукасевич | Ł3 — мир для сравнения |
+| Трёхзначная логика Аристотеля, ДК-шкала, следование ≠ импликация | Н. П. Брусенцов | мир «логика понятий», открытый вопрос 19 |
+| Троичные машины «Сетунь», «Сетунь-70»; ДССП | Н. П. Брусенцов, Е. А. Жоголев и коллектив ЛЭВМ МГУ | родство Форто-Пролога |
+| ТВМ, ДССП-Т | А. А. Бурцев, С. А. Сидоров и др. | `instrumenty.md` § 7 |
+| Семантика слабого пополнения | Э.-А. Дитц Салданья, Ш. Хёлльдоблер и др. | `instrumenty.md` § 7 |
+| Преобразование Ллойда — Топора | Дж. Ллойд, Р. Топор | ПРЕДЛОЖЕНИЕ «или»/«не» |
+| Robust Links | Х. Ван де Сомпел, М. Кляйн и др. | Р29 |
+| Принципы FAIR | M. Wilkinson и др. (FORCE11) | Р29 |
+
+**Авторство внутри команды.** Решения Р1–Р31 и название «Логика очень осторожного человека» — учитель (автор, Р18). Описание языка `pravila/FORTO-PROLOG-YAZYK.md`, `FORTO-PROLOG-BLOKI.md` — GLM (задание 020), правки и приёмка — Марьям. Выжимка `brusentsov.md` — помощник по промпту Марьям. Находки на стенде 18.11 (SWI-Prolog 10.1.20 в swipl-wasm, таблирование) — Марьям.
