@@ -1,0 +1,1358 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Распознавание и синтез речи</title>
+<style>
+:root {
+  --fon: #0a0e18;
+  --fon-svet1: #1b1440;
+  --fon-svet2: #0b2a3a;
+  --panel: #121a2b;
+  --panel2: #18223a;
+  --liniya: #2a3757;
+  --tekst: #eef4ff;
+  --tekst-tusk: #a9b8d6;
+  --akcent: #3ee6ff;
+  --akcent2: #ff5ad9;
+  --podskazka: #ffd84a;
+  --verno: #47f5a5;
+  --neverno: #ff6b7a;
+  --akcent-fon: rgba(62,230,255,.12);
+  --akcent2-fon: rgba(255,90,217,.12);
+  --podskazka-fon: rgba(255,216,74,.12);
+  --verno-fon: rgba(71,245,165,.12);
+  --neverno-fon: rgba(255,107,122,.12);
+  --ten: 0 6px 24px rgba(0,0,0,.35);
+  --shrift: "Segoe UI", system-ui, Arial, sans-serif;
+  --razmer: 20px;
+  --razmer-vopros: 22px;
+  --razmer-ekran: 26px;
+  --razmer-shapka: 26px;
+  --razmer-melkiy: 18px;
+  --radius: 14px;
+  --radius-malyj: 10px;
+  --knopka-min: 52px;
+  --tolshchina-linii: 2px;
+  --otstup: 16px;
+  --otstup-malyj: 8px;
+  --otstup-bolshoj: 24px;
+  --shirina-ekrana: 1100px;
+  --shirina-menyu: 460px;
+  --shirina-shaga: 90px;
+  --vysota-ekrana: 100vh;
+  --razmer-avatara: 56px;
+  --sloy-menyu: 50;
+  --nul: 0;
+  --polno: 100%;
+  --krug: 50%;
+  --edinica: 1;
+  --sdvig-pryzhka: 10px;
+  --dlitelnost: .35s;
+  --zhirnyj: 600;
+}
+* { box-sizing: border-box; }
+html, body { margin: var(--nul); padding: var(--nul); }
+body {
+  display: flex;
+  flex-direction: column;
+  height: var(--vysota-ekrana);
+  overflow: hidden;
+  font-family: var(--shrift);
+  font-size: var(--razmer);
+  color: var(--tekst);
+  background: var(--fon);
+}
+.shapka {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--otstup);
+  padding: var(--otstup-malyj) var(--otstup-bolshoj);
+  background: var(--panel);
+  border-bottom: var(--tolshchina-linii) solid var(--liniya);
+}
+.shapka-nazvanie {
+  margin: var(--nul);
+  font-size: var(--razmer-shapka);
+  font-weight: var(--zhirnyj);
+  color: var(--akcent);
+}
+.tochki {
+  display: flex;
+  gap: var(--otstup-malyj);
+  flex-wrap: wrap;
+}
+.tochka {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: var(--knopka-min);
+  min-height: var(--knopka-min);
+  font-family: var(--shrift);
+  font-size: var(--razmer-melkiy);
+  color: var(--tekst-tusk);
+  background: var(--panel2);
+  border: var(--tolshchina-linii) solid var(--liniya);
+  border-radius: var(--radius-malyj);
+  cursor: default;
+}
+.tochka.tekushaya {
+  color: var(--fon);
+  background: var(--akcent);
+  border-color: var(--akcent);
+}
+.ekran {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  width: var(--polno);
+  max-width: var(--shirina-ekrana);
+  margin: var(--nul) auto;
+  padding: var(--otstup-bolshoj);
+}
+.ekran-nazvanie {
+  margin: var(--nul) var(--nul) var(--otstup);
+  font-size: var(--razmer-ekran);
+  color: var(--akcent2);
+}
+.ekran-tekst {
+  margin: var(--nul) var(--nul) var(--otstup);
+  color: var(--tekst-tusk);
+}
+.roli {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--otstup-malyj);
+  margin-bottom: var(--otstup);
+}
+.roli-podpis { color: var(--tekst-tusk); }
+.rol {
+  padding: var(--otstup-malyj);
+  border-radius: var(--radius-malyj);
+  background: var(--akcent2-fon);
+  color: var(--akcent2);
+}
+.znanie {
+  padding: var(--otstup);
+  margin-bottom: var(--otstup);
+  border-left: var(--tolshchina-linii) solid var(--akcent2);
+  border-radius: var(--radius-malyj);
+  background: var(--panel2);
+}
+.krasnyj-flag {
+  padding: var(--otstup);
+  margin-bottom: var(--otstup);
+  border-left: var(--tolshchina-linii) solid var(--neverno);
+  border-radius: var(--radius-malyj);
+  background: var(--neverno-fon);
+  color: var(--neverno);
+}
+.drakon {
+  display: block;
+  width: var(--polno);
+  max-width: 420px;
+  margin: var(--nul) auto var(--otstup);
+}
+.zadanie {
+  padding: var(--otstup);
+  margin-bottom: var(--otstup);
+  background: var(--panel);
+  border: var(--tolshchina-linii) solid var(--liniya);
+  border-radius: var(--radius);
+  box-shadow: var(--ten);
+}
+.hod {
+  display: inline-block;
+  padding: var(--otstup-malyj);
+  margin-bottom: var(--otstup-malyj);
+  border-radius: var(--radius-malyj);
+  background: var(--akcent2-fon);
+  color: var(--akcent2);
+  font-size: var(--razmer-melkiy);
+}
+.vopros {
+  margin: var(--nul) var(--nul) var(--otstup-malyj);
+  font-size: var(--razmer-vopros);
+}
+.telo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--otstup-malyj);
+}
+.variant, .variant-poryadok {
+  display: block;
+  width: var(--polno);
+  min-height: var(--knopka-min);
+  padding: var(--otstup-malyj) var(--otstup);
+  text-align: left;
+  font-family: var(--shrift);
+  font-size: var(--razmer);
+  color: var(--tekst);
+  background: var(--panel2);
+  border: var(--tolshchina-linii) solid var(--liniya);
+  border-radius: var(--radius-malyj);
+  cursor: pointer;
+}
+.variant:hover, .variant-poryadok:hover { border-color: var(--akcent); }
+.variant.vybran { border-color: var(--akcent); background: var(--akcent-fon); }
+.vybor-shaga, .para-vybor, .pole-chislo, .pole-tekst {
+  min-height: var(--knopka-min);
+  padding: var(--otstup-malyj);
+  font-family: var(--shrift);
+  font-size: var(--razmer);
+  color: var(--tekst);
+  background: var(--panel2);
+  border: var(--tolshchina-linii) solid var(--liniya);
+  border-radius: var(--radius-malyj);
+}
+.pole-tekst { width: var(--polno); }
+.stroka-poryadka, .stroka-pary, .stroka-frazy {
+  display: flex;
+  align-items: center;
+  gap: var(--otstup);
+}
+.nomer-shaga { min-width: var(--shirina-shaga); color: var(--tekst-tusk); }
+.levo { color: var(--akcent); }
+.fraza-tekst {
+  flex: 1 1 auto;
+  padding: var(--otstup-malyj);
+  border-radius: var(--radius-malyj);
+  background: var(--panel2);
+}
+.knopka-ozvuchit {
+  min-height: var(--knopka-min);
+  padding: var(--otstup-malyj) var(--otstup);
+  font-family: var(--shrift);
+  font-size: var(--razmer-melkiy);
+  color: var(--akcent);
+  background: var(--akcent-fon);
+  border: var(--tolshchina-linii) solid var(--akcent);
+  border-radius: var(--radius-malyj);
+  cursor: pointer;
+}
+.upravlenie {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--otstup-malyj);
+  margin-top: var(--otstup);
+}
+.knopka-proverit, .knopka-podskazka {
+  min-height: var(--knopka-min);
+  padding: var(--otstup-malyj) var(--otstup);
+  font-family: var(--shrift);
+  font-size: var(--razmer);
+  border-radius: var(--radius-malyj);
+  cursor: pointer;
+  border: var(--tolshchina-linii) solid var(--akcent);
+  background: var(--akcent-fon);
+  color: var(--akcent);
+}
+.knopka-podskazka {
+  border-color: var(--podskazka);
+  background: var(--podskazka-fon);
+  color: var(--podskazka);
+}
+.podskazka {
+  margin: var(--otstup-malyj) var(--nul) var(--nul);
+  padding: var(--otstup-malyj);
+  border-radius: var(--radius-malyj);
+  color: var(--podskazka);
+  background: var(--podskazka-fon);
+}
+.itog-verno {
+  margin: var(--otstup-malyj) var(--nul) var(--nul);
+  padding: var(--otstup-malyj);
+  border-radius: var(--radius-malyj);
+  color: var(--verno);
+  background: var(--verno-fon);
+}
+.itog-neverno {
+  margin: var(--otstup-malyj) var(--nul) var(--nul);
+  padding: var(--otstup-malyj);
+  border-radius: var(--radius-malyj);
+  color: var(--neverno);
+  background: var(--neverno-fon);
+}
+.obyasnenie-tekst {
+  margin: var(--otstup-malyj) var(--nul) var(--nul);
+  padding-left: var(--otstup);
+  border-left: var(--tolshchina-linii) solid var(--verno);
+  color: var(--tekst-tusk);
+}
+.pomoshnik {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  gap: var(--otstup);
+  padding: var(--otstup);
+  background: var(--panel2);
+  border-top: var(--tolshchina-linii) solid var(--liniya);
+}
+.pomoshnik-avatar {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--razmer-avatara);
+  height: var(--razmer-avatara);
+  border-radius: var(--krug);
+  border: var(--tolshchina-linii) solid var(--akcent);
+  background: var(--akcent-fon);
+  color: var(--akcent);
+  font-size: var(--razmer-melkiy);
+}
+.pomoshnik-tekst { margin: var(--nul); color: var(--tekst); }
+@keyframes poyavlenie {
+  from { opacity: var(--nul); transform: translateY(var(--sdvig-pryzhka)); }
+  to { opacity: var(--edinica); transform: translateY(var(--nul)); }
+}
+.prygaet { animation: poyavlenie var(--dlitelnost) ease-out; }
+.menyu {
+  display: none;
+  position: fixed;
+  top: var(--otstup);
+  right: var(--otstup);
+  width: var(--shirina-menyu);
+  max-height: var(--vysota-ekrana);
+  overflow-y: auto;
+  padding: var(--otstup);
+  background: var(--panel);
+  border: var(--tolshchina-linii) solid var(--akcent2);
+  border-radius: var(--radius);
+  z-index: var(--sloy-menyu);
+}
+.menyu.otkryto { display: block; }
+.menyu-zagolovok {
+  margin: var(--nul) var(--nul) var(--otstup-malyj);
+  font-size: var(--razmer-vopros);
+  color: var(--akcent2);
+}
+.menyu-stroka, .menyu-knopka {
+  display: block;
+  width: var(--polno);
+  min-height: var(--knopka-min);
+  margin-bottom: var(--otstup-malyj);
+  padding: var(--otstup-malyj);
+  text-align: left;
+  font-family: var(--shrift);
+  font-size: var(--razmer-melkiy);
+  color: var(--tekst);
+  background: var(--panel2);
+  border: var(--tolshchina-linii) solid var(--liniya);
+  border-radius: var(--radius-malyj);
+  cursor: pointer;
+}
+.samoproverka-zagolovok {
+  margin: var(--otstup-malyj) var(--nul);
+  color: var(--verno);
+  font-size: var(--razmer-melkiy);
+}
+.narushenie {
+  margin: var(--nul) var(--nul) var(--otstup-malyj);
+  color: var(--neverno);
+  font-size: var(--razmer-melkiy);
+}
+</style>
+</head>
+<body>
+<header class="shapka">
+  <h1 class="shapka-nazvanie" id="shapka-nazvanie">Урок</h1>
+  <nav class="tochki" id="tochki" aria-label="Точки хода"></nav>
+</header>
+<main id="ekran" class="ekran"></main>
+<aside class="pomoshnik">
+  <div class="pomoshnik-avatar">Эхо</div>
+  <p class="pomoshnik-tekst" id="pomoshnik-tekst">…</p>
+</aside>
+<div class="menyu" id="menyu"></div>
+<script>
+// ===== ВСЕЛЕННАЯ (знания) =====
+var VSELENNAYA = {
+  urok: {
+    id: "urok-2026-11-23-raspoznavanie-i-sintez-rechi",
+    nazvanie: "Распознавание и синтез речи",
+    klass: "9 класс",
+    vremya: "40 минут"
+  },
+  miry: [
+    { id: "0001", nazvanie: "Реальность" },
+    { id: "0002", nazvanie: "мир урока" }
+  ],
+  ekrany: [
+    "9001-ekran-motivaciya",
+    "9002-ekran-aktualizaciya",
+    "9003-ekran-zatrudnenie",
+    "9004-ekran-realizaciya",
+    "9005-ekran-zakreplenie",
+    "9006-ekran-samostoyatelnaya",
+    "9007-ekran-sistema",
+    "9008-ekran-refleksiya"
+  ],
+  atomy: [
+    { id: "9001-ekran-motivaciya", tip: "ekran", zagolovok: "1. Мотивация: Эхо слышит и говорит", minuty: 2,
+      tekst: "Эхо — голосовой помощник. Он слышит вас и отвечает голосом. Сегодня — открытие: как это устроено. Работаем в парах. Голос учеников не записывается: работаем на готовых примерах.",
+      pomoshnik: "Привет! Я Эхо. Только что я услышал «включи код», а ответил «включаю кота». Помогите разобраться, почему я ошибся.",
+      pokazat: ["9018-primer-sboj"], praktikum: false },
+    { id: "9002-ekran-aktualizaciya", tip: "ekran", zagolovok: "2. Актуализация и пробное действие", minuty: 4,
+      tekst: "На прошлом уроке нейросеть сочиняла музыку — это генерация. Сегодня — речь: машина должна её услышать и произнести.",
+      pomoshnik: "Ответьте, не подглядывая. Ошибиться здесь можно: мы только начинаем.",
+      pokazat: [], praktikum: false },
+    { id: "9003-ekran-zatrudnenie", tip: "ekran", zagolovok: "3–4. Где и почему мы затруднились. Проект выхода", minuty: 5,
+      tekst: "Два встречных процесса — и мы засомневались. Названий и порядка станций мы пока не знаем. Конверт 9097: четыре термина. Объясните каждый своими словами, затем подпишите схему.",
+      pomoshnik: "Затруднение — это хорошо: значит, есть что открыть. Сначала свои слова, потом схема.",
+      pokazat: ["9097-primer-konvert", "9098-fakt-spectrogramma"], praktikum: false },
+    { id: "9004-ekran-realizaciya", tip: "ekran", zagolovok: "5. Реализация: практикум «Распознавание»", minuty: 10,
+      tekst: "Работа в парах. Готовые примеры: что сказали → что распознала модель. Роли чередуются по заданиям.",
+      pomoshnik: "Слушайте внимательно: где модель ошиблась, а где справилась?",
+      pokazat: ["9020-primer-krasnyj-flag"], praktikum: true,
+      roli: ["А — водитель: выбирает вариант", "Б — контролёр: сверяет и ведёт счёт"] },
+    { id: "9005-ekran-zakreplenie", tip: "ekran", zagolovok: "6. Первичное закрепление: ДРАКОН-схема", minuty: 4,
+      tekst: "Сопоставьте станции с блоками ДРАКОН-схемы. Схема появится после верного ответа на задание о порядке станций.",
+      pomoshnik: "В ДРАКОН-схеме: чем ниже — тем позже; чем правее — тем хуже.",
+      pokazat: [], praktikum: false, drakonPosle: "9027-zadanie-konveer-stancii" },
+    { id: "9006-ekran-samostoyatelnaya", tip: "ekran", zagolovok: "7. Самостоятельная работа: практикум «Синтез»", minuty: 9,
+      tekst: "Практикум на синтез: пунктуация меняет голос. Откройте Яндекс Переводчик или нажмите «Озвучить». Сравните три фразы.",
+      pomoshnik: "Знаки препинания задают паузы и интонацию — проверьте на слух.",
+      pokazat: ["9021-primer-pravilo"], praktikum: true,
+      roli: ["А — водитель: вводит фразу", "Б — контролёр: слушает и сравнивает"] },
+    { id: "9007-ekran-sistema", tip: "ekran", zagolovok: "8. Включение в систему знаний", minuty: 4,
+      tekst: "Как голосовой помощник соединяет распознавание и синтез с языковой моделью?",
+      pomoshnik: "Где в голосовом помощнике стоит языковая модель?",
+      pokazat: [], praktikum: false },
+    { id: "9008-ekran-refleksiya", tip: "ekran", zagolovok: "9. Рефлексия", minuty: 2,
+      tekst: "Что открыли? Что осталось трудным? ДРАКОН-лист заполняем в тетради по ходу урока.",
+      pomoshnik: "Спасибо! Я услышал вас — и вы услышали меня.",
+      pokazat: ["9010-fakt-raspoznavanie", "9011-fakt-sintez", "9012-fakt-konveer"], praktikum: false },
+    { id: "9010-fakt-raspoznavanie", tip: "fakt", tekst: "Распознавание речи — превращение звучащей речи в текст.", istinnost: 0, provereno: false, mir: "0002", istochnik: "", status: "chernovik" },
+    { id: "9011-fakt-sintez", tip: "fakt", tekst: "Синтез речи — превращение текста в звучащую речь.", istinnost: 0, provereno: false, mir: "0002", istochnik: "", status: "chernovik" },
+    { id: "9012-fakt-konveer", tip: "fakt", tekst: "Конвейер распознавания: звук → фонемы → буквы/подслова (гипотезы) → слова → предложение.", istinnost: 0, provereno: false, mir: "0002", istochnik: "", status: "chernovik" },
+    { id: "9013-fakt-veroyatnost", tip: "fakt", tekst: "Модель выбирает слово по вероятности, а не «понимает» его.", istinnost: 0, provereno: false, mir: "0002", istochnik: "", status: "chernovik" },
+    { id: "9014-fakt-punktuaciya", tip: "fakt", tekst: "Знаки препинания задают паузы и интонацию при синтезе речи.", istinnost: 0, provereno: false, mir: "0002", istochnik: "", status: "chernovik" },
+    { id: "9015-fakt-drakon-shcema", tip: "fakt", tekst: "В ДРАКОН-схеме: чем ниже — тем позже; чем правее — тем хуже.", istinnost: 0, provereno: false, mir: "0002", istochnik: "", status: "chernovik" },
+    { id: "9016-fakt-drakon-graf", tip: "fakt", tekst: "В ДРАКОН-ГРАФ: жёлтое — запомни, белое — разберись.", istinnost: 0, provereno: false, mir: "0002", istochnik: "", status: "chernovik" },
+    { id: "9017-fakt-yazykovaya-model", tip: "fakt", tekst: "Голосовой помощник: звук → распознавание → текст → языковая модель → текст → синтез → звук.", istinnost: 0, provereno: false, mir: "0002", istochnik: "", status: "chernovik" },
+    { id: "9018-primer-sboj", tip: "primer", tekst: "Сбой: сказали «включи код», распознано «включи кота».", istinnost: 0, provereno: false, mir: "0002", istochnik: "", status: "chernovik" },
+    { id: "9019-primer-procenty", tip: "primer", tekst: "Распознаватель показал варианты: кот 71 %, код 24 %, кит 5 %.", istinnost: 0, provereno: false, mir: "0002", istochnik: "", status: "chernovik" },
+    { id: "9020-primer-krasnyj-flag", tip: "primer", tekst: "Красный флаг: звук уходит на сервер. Не сохраняйте голос и историю запросов.", istinnost: 0, provereno: false, mir: "0002", istochnik: "", status: "chernovik" },
+    { id: "9021-primer-pravilo", tip: "primer", tekst: "Правило «проверяй»: звонок голосом родных с просьбой о деньгах — перезвони сам.", istinnost: 0, provereno: false, mir: "0002", istochnik: "", status: "chernovik" },
+    { id: "9097-primer-konvert", tip: "primer", tekst: "Конверт 9097: четыре термина — данные, признак, модель, вероятность. Сначала объясните каждый своими словами.", istinnost: 0, provereno: false, mir: "0002", istochnik: "", status: "chernovik" },
+    { id: "9098-fakt-spectrogramma", tip: "fakt", tekst: "Схема распознавания: звук → спектрограмма → признаки → вероятности → текст.", istinnost: 0, provereno: false, mir: "0002", istochnik: "", status: "chernovik" },
+    { id: "9022-zadanie-motivaciya", tip: "zadanie", vid: "vybor", ekran: "9001-ekran-motivaciya",
+      vopros: "Эхо услышал «включи код», а ответил «включаю кота». Что произошло?",
+      varianty: ["Машина распознала слово неверно", "Машина сломалась навсегда", "Машина не слышала команду"],
+      otvet: "Машина распознала слово неверно",
+      podskazki: ["Сравните: что сказали — и что услышала машина.", "Слова «код» и «кот» звучат похоже.", "Машина распознала слово неверно — это ошибка распознавания."],
+      obyasnenie: "Похожие по звучанию слова машина может распознать неверно — это ошибка распознавания.",
+      fakty: ["9010-fakt-raspoznavanie"], proces: "raspoznavanie", chered: "A", mir: "0002", istinnost: 0, status: "chernovik" },
+    { id: "9023-zadanie-probnoe-1", tip: "zadanie", vid: "vybor", ekran: "9002-ekran-aktualizaciya",
+      vopros: "Машина превратила звук вашей речи в текст. Как называется это действие?",
+      varianty: ["Распознавание речи", "Синтез речи", "Генерация музыки"],
+      otvet: "Распознавание речи",
+      podskazki: ["Одно действие идёт от звука, другое — от текста.", "Здесь исходное — звук, результат — текст.", "«Распознать» — узнать в звуке слова."],
+      obyasnenie: "Распознавание речи — превращение звучащей речи в текст.",
+      fakty: ["9010-fakt-raspoznavanie"], proces: "raspoznavanie", chered: "A", mir: "0002", istinnost: 0, status: "chernovik" },
+    { id: "9024-zadanie-probnoe-2", tip: "zadanie", vid: "vybor", ekran: "9002-ekran-aktualizaciya",
+      vopros: "А если наоборот: машина читает готовый текст вслух — это…",
+      varianty: ["Синтез речи", "Распознавание речи", "Печать текста"],
+      otvet: "Синтез речи",
+      podskazki: ["Исходное здесь — текст, результат — звук.", "Машина не узнаёт слова, а создаёт звучание.", "Синтез — соединение звуков в речь."],
+      obyasnenie: "Синтез речи — превращение текста в звучащую речь.",
+      fakty: ["9011-fakt-sintez"], proces: "sintez", chered: "B", mir: "0002", istinnost: 0, status: "chernovik" },
+    { id: "9025-zadanie-prichina", tip: "zadanie", vid: "vybor", ekran: "9003-ekran-zatrudnenie",
+      vopros: "Оба задания похожи, но мы засомневались. В чём причина затруднения?",
+      varianty: ["Не знаем названий и порядка станций конвейера", "Не умеем включать ноутбук", "В классе слишком тихо"],
+      otvet: "Не знаем названий и порядка станций конвейера",
+      podskazki: ["Затруднение — нехватка знания, а не техники.", "Чего не хватило: названий? порядка?", "Нам не хватает названий и порядка станций."],
+      obyasnenie: "Затруднение в том, что мы пока не знаем названий и порядка станций конвейера.",
+      fakty: [], proces: "", chered: "A", mir: "0002", istinnost: 0, status: "chernovik" },
+    { id: "9026-zadanie-plan", tip: "zadanie", vid: "poryadok", ekran: "9003-ekran-zatrudnenie",
+      vopros: "Расставьте шаги нашего плана по порядку.",
+      varianty: ["Сравнить результаты и сделать вывод", "Практикум «Распознавание»", "Практикум «Синтез»"],
+      otvet: ["Практикум «Распознавание»", "Практикум «Синтез»", "Сравнить результаты и сделать вывод"],
+      podskazki: ["Сначала одно действие, потом встречное.", "Вывод — в конце.", "Порядок: распознавание → синтез → вывод."],
+      obyasnenie: "План: сначала практикум на распознавание, затем на синтез, и только потом вывод.",
+      fakty: [], proces: "", chered: "A", mir: "0002", istinnost: 0, status: "chernovik" },
+    { id: "9027-zadanie-konveer-stancii", tip: "zadanie", vid: "poryadok", ekran: "9005-ekran-zakreplenie",
+      vopros: "Расставьте станции конвейера распознавания по порядку.",
+      varianty: ["Слова", "Звук", "Буквы/подслова (гипотезы)", "Предложение", "Фонемы"],
+      otvet: ["Звук", "Фонемы", "Буквы/подслова (гипотезы)", "Слова", "Предложение"],
+      podskazki: ["В ДРАКОН-схеме: чем ниже — тем позже.", "Звук — самый верхний блок.", "Звук → фонемы → буквы/подслова → слова → предложение."],
+      obyasnenie: "Конвейер распознавания: звук → фонемы → буквы/подслова (гипотезы) → слова → предложение.",
+      fakty: ["9012-fakt-konveer", "9015-fakt-drakon-shcema"], proces: "raspoznavanie", chered: "A", mir: "0002", istinnost: 0, status: "chernovik" },
+    { id: "9028-zadanie-procenty", tip: "zadanie", vid: "vybor", ekran: "9004-ekran-realizaciya",
+      vopros: "Модель показала: кот 71 %, код 24 %, кит 5 %. Какое слово она выбрала?",
+      varianty: ["Кот", "Код", "Кит"],
+      otvet: "Кот",
+      podskazki: ["Смотрите на проценты: где больше?", "Больше всего — 71 %.", "Модель выбрала «кот»."],
+      obyasnenie: "Модель выбирает слово с наибольшей вероятностью — здесь «кот» 71 %.",
+      fakty: ["9013-fakt-veroyatnost", "9019-primer-procenty"], proces: "raspoznavanie", chered: "A", mir: "0002", istinnost: 0, status: "chernovik" },
+    { id: "9029-zadanie-sintez-punktuaciya", tip: "zadanie", vid: "vybor", ekran: "9006-ekran-samostoyatelnaya",
+      vopros: "Послушайте три варианта (кнопки «Озвучить»). Какой знак делает голос вопросительным?",
+      varianty: ["Точка", "Запятая", "Вопросительный знак"],
+      otvet: "Вопросительный знак",
+      podskazki: ["Слушайте не слова, а интонацию.", "Где голос идёт вверх?", "Вопросительный знак — голос вверх."],
+      obyasnenie: "Вопросительный знак задаёт вопросительную интонацию — голос идёт вверх.",
+      fakty: ["9014-fakt-punktuaciya"], proces: "sintez", chered: "B",
+      frazy: ["Маша пришла домой", "Маша, пришла домой", "Маша, пришла домой?"],
+      mir: "0002", istinnost: 0, status: "chernovik" },
+    { id: "9030-zadanie-zhivoj-ili-sintez", tip: "zadanie", vid: "vybor", ekran: "9006-ekran-samostoyatelnaya",
+      vopros: "Чем синтезированный голос обычно отличается от живого?",
+      varianty: ["Ровной интонацией и паузами по правилам", "Он всегда громче", "Он не умеет говорить"],
+      otvet: "Ровной интонацией и паузами по правилам",
+      podskazki: ["Живой голос дышит, колеблется.", "Синтез ставит паузы по знакам.", "Синтез — ровная интонация, паузы по правилам."],
+      obyasnenie: "Синтезированный голос ровнее: паузы и интонация заданы правилами.",
+      fakty: ["9014-fakt-punktuaciya"], proces: "sintez", chered: "A", mir: "0002", istinnost: 0, status: "chernovik" },
+    { id: "9031-zadanie-para-primery", tip: "zadanie", vid: "para", ekran: "9004-ekran-realizaciya",
+      vopros: "Соедините пример и процесс.",
+      varianty: ["Распознавание речи", "Синтез речи"],
+      pravo: ["Эхо печатает текст вашей голосовой команды", "Эхо читает прогноз погоды голосом"],
+      otvet: [["Распознавание речи", "Эхо печатает текст вашей голосовой команды"], ["Синтез речи", "Эхо читает прогноз погоды голосом"]],
+      podskazki: ["Где появляется текст, а где звук?", "Печатает — получила текст из звука.", "Печать команды — распознавание, чтение — синтез."],
+      obyasnenie: "Печать голосовой команды — распознавание; чтение голосом — синтез.",
+      fakty: ["9010-fakt-raspoznavanie", "9011-fakt-sintez"], proces: "", chered: "B", mir: "0002", istinnost: 0, status: "chernovik" },
+    { id: "9032-zadanie-drakon-shcema", tip: "zadanie", vid: "vybor", ekran: "9005-ekran-zakreplenie",
+      vopros: "В ДРАКОН-схеме блок стоит ниже. Что это значит?",
+      varianty: ["Этот шаг выполняется позже", "Этот шаг важнее", "Этот шаг выполняется раньше"],
+      otvet: "Этот шаг выполняется позже",
+      podskazki: ["Вспомните: «чем ниже — тем позже».", "Верхний блок — самый первый.", "Ниже — позже."],
+      obyasnenie: "В ДРАКОН-схеме: чем ниже блок — тем позже выполняется шаг.",
+      fakty: ["9015-fakt-drakon-shcema"], proces: "", chered: "B", mir: "0002", istinnost: 0, status: "chernovik" },
+    { id: "9033-zadanie-samostoyatelnaya-1", tip: "zadanie", vid: "vybor", ekran: "9006-ekran-samostoyatelnaya",
+      vopros: "Машина только читает текст вслух. Какой процесс НЕ участвует?",
+      varianty: ["Распознавание речи", "Синтез речи", "Оба участвуют"],
+      otvet: "Распознавание речи",
+      podskazki: ["Откуда берётся текст: из звука или он уже готов?", "Если текст готов, узнавать нечего.", "Не участвует распознавание."],
+      obyasnenie: "Если текст уже готов, распознавать нечего — работает только синтез.",
+      fakty: ["9011-fakt-sintez"], proces: "sintez", chered: "B", mir: "0002", istinnost: 0, status: "chernovik" },
+    { id: "9034-zadanie-chislo", tip: "zadanie", vid: "chislo", ekran: "9005-ekran-zakreplenie",
+      vopros: "Сколько станций в конвейере распознавания? Запишите число.",
+      varianty: [], otvet: 5, dopusk: 0,
+      podskazki: ["Посчитайте блоки ДРАКОН-схемы.", "Звук, фонемы, буквы/подслова, слова, предложение.", "Их пять."],
+      obyasnenie: "В конвейере распознавания пять станций.",
+      fakty: ["9012-fakt-konveer"], proces: "raspoznavanie", chered: "A", mir: "0002", istinnost: 0, status: "chernovik" },
+    { id: "9035-zadanie-sistema-1", tip: "zadanie", vid: "vybor", ekran: "9007-ekran-sistema",
+      vopros: "В схеме голосового помощника пропущено звено: звук → распознавание → текст → ? → текст → синтез → звук. Что это?",
+      varianty: ["Языковая модель", "Микрофон", "Динамик"],
+      otvet: "Языковая модель",
+      podskazki: ["Между двумя текстами что-то решает, что ответить.", "Это то, что «думает» над ответом.", "Языковая модель."],
+      obyasnenie: "Среднее звено — языковая модель: она решает, каким будет ответный текст.",
+      fakty: ["9017-fakt-yazykovaya-model"], proces: "", chered: "A", mir: "0002", istinnost: 0, status: "chernovik" },
+    { id: "9036-zadanie-refleksiya", tip: "zadanie", vid: "tekst", ekran: "9008-ekran-refleksiya",
+      vopros: "Рефлексия. Что было самым трудным? Что вы теперь можете объяснить своими словами?",
+      varianty: [], otvet: "",
+      podskazki: ["Назовите один процесс и его направление.", "Вспомните, где ошиблись и что помогло.", "Одно предложение о распознавании, одно — о синтезе."],
+      obyasnenie: "Главное открытие: распознавание идёт от звука к тексту, синтез — от текста к звуку.",
+      fakty: ["9010-fakt-raspoznavanie", "9011-fakt-sintez"], proces: "", chered: "B", mir: "0002", istinnost: 0, status: "chernovik" }
+  ],
+  pravila: [
+    { id: "P1",
+      narush: "нарушено, если ответ задания не входит в его варианты; для para левая часть пары не из varianty, правая — не из pravo",
+      primer: { id: "primer-p1", vid: "vybor", varianty: ["а", "б"], otvet: "а" },
+      kontrprimer: { id: "kontr-p1", vid: "vybor", varianty: ["а", "б"], otvet: "в" } },
+    { id: "P2",
+      narush: "нарушено, если у задания не 1–3 подсказки или нет объяснения",
+      primer: { id: "primer-p2", podskazki: ["одна"], obyasnenie: "есть" },
+      kontrprimer: { id: "kontr-p2", podskazki: [], obyasnenie: "" } },
+    { id: "P3",
+      narush: "нарушено, если ссылка (ekran, fakty) указывает на несуществующий атом",
+      primer: { id: "primer-p3", ekran: "9001-ekran-motivaciya", fakty: [] },
+      kontrprimer: { id: "kontr-p3", ekran: "9999-ekran-net", fakty: [] } },
+    { id: "P4",
+      narush: "нарушено, если факт мира 0001 имеет истинность не 1",
+      primer: { id: "primer-p4", tip: "fakt", mir: "0001", istinnost: 1 },
+      kontrprimer: { id: "kontr-p4", tip: "fakt", mir: "0001", istinnost: 0 } },
+    { id: "P5",
+      narush: "нарушено, если задание ссылается на факт с истинностью 0 или -1, а мир задания не 0002",
+      primer: { id: "primer-p5", mir: "0002", fakty: ["9010-fakt-raspoznavanie"] },
+      kontrprimer: { id: "kontr-p5", mir: "0001", fakty: ["9010-fakt-raspoznavanie"] } },
+    { id: "L1",
+      narush: "нарушено, если у экрана практикума не ровно две роли",
+      primer: { id: "primer-l1", tip: "ekran", praktikum: true, roli: ["А", "Б"] },
+      kontrprimer: { id: "kontr-l1", tip: "ekran", praktikum: true, roli: ["А"] } },
+    { id: "L2",
+      narush: "нарушено, если в уроке нет задания на распознавание или нет задания на синтез",
+      primer: { id: "primer-l2", proces: "raspoznavanie" },
+      kontrprimer: { id: "kontr-l2", proces: "" } }
+  ]
+};
+
+// ===== СЛОВАРЬ (действия) =====
+var PROGRESS = { nomer: 1, otvety: {}, podskazki: {} };
+
+// najti: найти элемент по id | вход: id | выход: элемент | изменяет: —
+function najti(id){
+  return document.getElementById(id);
+}
+
+// sozdat: создать элемент | вход: тег, класс, текст | выход: элемент | изменяет: —
+function sozdat(teg, klass, tekst){
+  var el = document.createElement(teg);
+  if (klass) { el.className = klass; }
+  if (tekst) { el.textContent = tekst; }
+  return el;
+}
+
+// ochistit: убрать всех детей | вход: элемент | выход: — | изменяет: элемент
+function ochistit(el){
+  while (el.firstChild) { el.removeChild(el.firstChild); }
+}
+
+// sohranit: сохранить прогресс | вход: — | выход: — | изменяет: localStorage
+function sohranit(){
+  try {
+    localStorage.setItem(VSELENNAYA.urok.id, JSON.stringify(PROGRESS));
+  } catch (e) { }
+}
+
+// zagruzit: загрузить прогресс | вход: — | выход: — | изменяет: PROGRESS
+function zagruzit(){
+  PROGRESS = { nomer: 1, otvety: {}, podskazki: {} };
+  try {
+    var s = localStorage.getItem(VSELENNAYA.urok.id);
+    if (s) { PROGRESS = JSON.parse(s); }
+  } catch (e) { }
+  if (!PROGRESS.nomer) { PROGRESS.nomer = 1; }
+  if (!PROGRESS.otvety) { PROGRESS.otvety = {}; }
+  if (!PROGRESS.podskazki) { PROGRESS.podskazki = {}; }
+}
+
+// cvet: прочитать цвет из :root | вход: имя переменной | выход: строка | изменяет: —
+function cvet(imya){
+  return getComputedStyle(document.documentElement).getPropertyValue(imya).trim();
+}
+
+// atom: найти атом вселенной | вход: id | выход: атом или null | изменяет: —
+function atom(id){
+  var rez = null;
+  var i = 0;
+  while (i < VSELENNAYA.atomy.length && rez === null) {
+    if (VSELENNAYA.atomy[i].id === id) { rez = VSELENNAYA.atomy[i]; }
+    i = i + 1;
+  }
+  return rez;
+}
+
+// estVSpiske: есть ли значение в списке | вход: список, значение | выход: true или false | изменяет: —
+function estVSpiske(spisok, znachenie){
+  var rez = false;
+  if (znachenie) {
+    if (Array.isArray(znachenie)) {
+      rez = true;
+      var i;
+      for (i = 0; i < znachenie.length; i++) {
+        if (!estVSpiske(spisok, znachenie[i])) { rez = false; }
+      }
+    } else {
+      rez = spisok.indexOf(znachenie) >= 0;
+    }
+  }
+  return rez;
+}
+
+// zadaniyaVse: все задания урока | вход: — | выход: список атомов | изменяет: —
+function zadaniyaVse(){
+  return VSELENNAYA.atomy.filter(function(a){ return a.tip === "zadanie"; });
+}
+
+// zadaniyaEkrana: задания одного экрана | вход: id экрана | выход: список атомов | изменяет: —
+function zadaniyaEkrana(id){
+  return VSELENNAYA.atomy.filter(function(a){ return a.tip === "zadanie" && a.ekran === id; });
+}
+
+// strokiRavny: равны ли два списка строк | вход: два списка | выход: true или false | изменяет: —
+function strokiRavny(a, b){
+  var rez = true;
+  if (!a || !b || a.length !== b.length) {
+    rez = false;
+  } else {
+    var i;
+    for (i = 0; i < a.length; i++) {
+      if (a[i] !== b[i]) { rez = false; }
+    }
+  }
+  return rez;
+}
+
+// paraEst: есть ли пара в эталоне | вход: пара, эталон | выход: true или false | изменяет: —
+function paraEst(para, etalon){
+  var rez = false;
+  var j;
+  for (j = 0; j < etalon.length; j++) {
+    if (para[0] === etalon[j][0] && para[1] === etalon[j][1]) { rez = true; }
+  }
+  return rez;
+}
+
+// paryRavny: совпадают ли наборы пар | вход: два списка пар | выход: true или false | изменяет: —
+function paryRavny(a, b){
+  var rez = true;
+  if (!a || !b || a.length !== b.length) {
+    rez = false;
+  } else {
+    var i;
+    for (i = 0; i < a.length; i++) {
+      if (!paraEst(a[i], b)) { rez = false; }
+    }
+  }
+  return rez;
+}
+
+// zadanieVerno: верно ли отвечено задание | вход: id задания | выход: true или false | изменяет: —
+function zadanieVerno(id){
+  var z = atom(id);
+  var otvet = PROGRESS.otvety[id];
+  var rez = false;
+  if (z && otvet !== undefined && otvet !== null) {
+    rez = proveritOtvet(z, otvet);
+  }
+  return rez;
+}
+
+// risovatRoli: показать роли в паре | вход: список ролей | выход: элемент | изменяет: —
+function risovatRoli(roli){
+  var blok = sozdat("div", "roli");
+  blok.appendChild(sozdat("span", "roli-podpis", "Роли в паре:"));
+  roli.forEach(function(r){ blok.appendChild(sozdat("span", "rol", r)); });
+  return blok;
+}
+
+// pokazatSpisok: показать знания экрана | вход: список id | выход: — | изменяет: экран
+function pokazatSpisok(ids){
+  var m = najti("ekran");
+  var i, a, klass;
+  for (i = 0; i < ids.length; i++) {
+    a = atom(ids[i]);
+    if (a) {
+      klass = "znanie";
+      if (a.id.indexOf("krasnyj") >= 0) { klass = "krasnyj-flag"; }
+      m.appendChild(sozdat("div", klass, a.tekst));
+    }
+  }
+}
+
+// risovatStanciyu: один блок ДРАКОН-схемы | вход: svg, ns, y, текст, жёлтый | выход: — | изменяет: svg
+function risovatStanciyu(svg, ns, y, tekst, zheltyj){
+  var r = document.createElementNS(ns, "rect");
+  r.setAttribute("x", "60");
+  r.setAttribute("y", String(y));
+  r.setAttribute("width", "300");
+  r.setAttribute("height", "70");
+  r.setAttribute("rx", "12");
+  r.setAttribute("fill", zheltyj ? cvet("--podskazka") : cvet("--panel2"));
+  r.setAttribute("stroke", cvet("--akcent"));
+  r.setAttribute("stroke-width", "2");
+  svg.appendChild(r);
+  var t = document.createElementNS(ns, "text");
+  t.setAttribute("x", "210");
+  t.setAttribute("y", String(y + 44));
+  t.setAttribute("text-anchor", "middle");
+  t.setAttribute("fill", zheltyj ? cvet("--fon") : cvet("--tekst"));
+  t.setAttribute("font-size", "18");
+  t.textContent = tekst;
+  svg.appendChild(t);
+}
+
+// risovatStrelku: стрелка между блоками | вход: svg, ns, y | выход: — | изменяет: svg
+function risovatStrelku(svg, ns, y){
+  var l = document.createElementNS(ns, "line");
+  l.setAttribute("x1", "210");
+  l.setAttribute("y1", String(y + 70));
+  l.setAttribute("x2", "210");
+  l.setAttribute("y2", String(y + 120));
+  l.setAttribute("stroke", cvet("--akcent"));
+  l.setAttribute("stroke-width", "3");
+  svg.appendChild(l);
+}
+
+// risovatDrakon: ДРАКОН-схема конвейера | вход: — | выход: svg | изменяет: —
+function risovatDrakon(){
+  var ns = "http://www.w3.org/2000/svg";
+  var svg = document.createElementNS(ns, "svg");
+  svg.setAttribute("viewBox", "0 0 420 620");
+  svg.setAttribute("class", "drakon");
+  var stancii = ["Звук", "Фонемы", "Буквы/подслова (гипотезы)", "Слова", "Предложение"];
+  var i;
+  for (i = 0; i < stancii.length; i++) {
+    risovatStanciyu(svg, ns, 20 + i * 120, stancii[i], i === 0);
+    if (i < stancii.length - 1) { risovatStrelku(svg, ns, 20 + i * 120); }
+  }
+  return svg;
+}
+
+// pokazatDrakon: показать схему после верного 9027 | вход: — | выход: — | изменяет: экран
+function pokazatDrakon(){
+  var m = najti("ekran");
+  if (!najti("drakon-konveer")) {
+    var svg = risovatDrakon();
+    svg.id = "drakon-konveer";
+    m.appendChild(svg);
+  }
+}
+
+// ozvuchit: озвучить текст | вход: текст | выход: — | изменяет: речь браузера
+function ozvuchit(tekst){
+  if (window.speechSynthesis && window.SpeechSynthesisUtterance) {
+    window.speechSynthesis.cancel();
+    var u = new window.SpeechSynthesisUtterance(tekst);
+    u.lang = "ru-RU";
+    u.rate = 0.9;
+    window.speechSynthesis.speak(u);
+  }
+}
+
+// skazatPomoshnik: реплика помощника | вход: текст | выход: — | изменяет: помощника
+function skazatPomoshnik(tekst){
+  var el = najti("pomoshnik-tekst");
+  el.textContent = tekst;
+  el.classList.remove("prygaet");
+  void el.offsetWidth;
+  el.classList.add("prygaet");
+}
+
+// knopkaVybora: кнопка одного варианта | вход: задание, текст | выход: кнопка | изменяет: —
+function knopkaVybora(zadanie, v){
+  var k = sozdat("button", "variant", v);
+  k.type = "button";
+  k.setAttribute("data-otvet", v);
+  k.addEventListener("click", function(){ vybratVariant(zadanie, k); });
+  return k;
+}
+
+// risovatVybor: нарисовать выбор | вход: задание, контейнер | выход: — | изменяет: контейнер
+function risovatVybor(zadanie, telo){
+  zadanie.varianty.forEach(function(v){
+    telo.appendChild(knopkaVybora(zadanie, v));
+  });
+}
+
+// vybratVariant: отметить вариант и проверить | вход: задание, кнопка | выход: — | изменяет: карточку
+function vybratVariant(zadanie, knopka){
+  var karta = najti("karta-" + zadanie.id);
+  var knopki = karta.querySelectorAll(".variant");
+  var i;
+  for (i = 0; i < knopki.length; i++) { knopki[i].classList.remove("vybran"); }
+  knopka.classList.add("vybran");
+  proveritIZapomnit(zadanie, knopka.getAttribute("data-otvet"));
+}
+
+// strokaPoryadka: строка одного шага | вход: задание, номер шага | выход: строка | изменяет: —
+function strokaPoryadka(zadanie, i){
+  var stroka = sozdat("div", "stroka-poryadka");
+  stroka.appendChild(sozdat("span", "nomer-shaga", "Шаг " + (i + 1)));
+  var s = sozdat("select", "vybor-shaga");
+  s.setAttribute("data-shag", String(i));
+  s.appendChild(sozdat("option", "", "— выберите —"));
+  zadanie.varianty.forEach(function(v){ s.appendChild(sozdat("option", "", v)); });
+  stroka.appendChild(s);
+  return stroka;
+}
+
+// risovatPoryadok: нарисовать порядок | вход: задание, контейнер | выход: — | изменяет: контейнер
+function risovatPoryadok(zadanie, telo){
+  var i;
+  for (i = 0; i < zadanie.varianty.length; i++) {
+    telo.appendChild(strokaPoryadka(zadanie, i));
+  }
+}
+
+// strokaPary: строка одной пары | вход: задание, левая часть | выход: строка | изменяет: —
+function strokaPary(zadanie, l){
+  var stroka = sozdat("div", "stroka-pary");
+  stroka.appendChild(sozdat("span", "levo", l));
+  var s = sozdat("select", "para-vybor");
+  s.setAttribute("data-levo", l);
+  s.appendChild(sozdat("option", "", "— выберите —"));
+  zadanie.pravo.forEach(function(p){ s.appendChild(sozdat("option", "", p)); });
+  stroka.appendChild(s);
+  return stroka;
+}
+
+// risovatPara: нарисовать пары | вход: задание, контейнер | выход: — | изменяет: контейнер
+function risovatPara(zadanie, telo){
+  zadanie.varianty.forEach(function(l){ telo.appendChild(strokaPary(zadanie, l)); });
+}
+
+// risovatChislo: поле числа | вход: задание, контейнер | выход: — | изменяет: контейнер
+function risovatChislo(zadanie, telo){
+  var p = sozdat("input", "pole-chislo");
+  p.type = "number";
+  p.setAttribute("inputmode", "numeric");
+  telo.appendChild(p);
+}
+
+// risovatTekst: поле текста | вход: задание, контейнер | выход: — | изменяет: контейнер
+function risovatTekst(zadanie, telo){
+  var p = sozdat("textarea", "pole-tekst");
+  p.setAttribute("rows", "3");
+  p.setAttribute("placeholder", "Запишите ответ…");
+  telo.appendChild(p);
+}
+
+// risovatFrazy: фразы с озвучиванием | вход: задание, контейнер | выход: — | изменяет: контейнер
+function risovatFrazy(zadanie, telo){
+  zadanie.frazy.forEach(function(f){
+    var stroka = sozdat("div", "stroka-frazy");
+    stroka.appendChild(sozdat("span", "fraza-tekst", f));
+    var k = sozdat("button", "knopka-ozvuchit", "Озвучить");
+    k.type = "button";
+    k.addEventListener("click", function(){ ozvuchit(f); });
+    stroka.appendChild(k);
+    telo.appendChild(stroka);
+  });
+}
+
+// risovatVid: выбрать вид задания | вход: задание, контейнер | выход: — | изменяет: контейнер
+function risovatVid(zadanie, telo){
+  if (zadanie.vid === "vybor") { risovatVybor(zadanie, telo); }
+  else if (zadanie.vid === "poryadok") { risovatPoryadok(zadanie, telo); }
+  else if (zadanie.vid === "para") { risovatPara(zadanie, telo); }
+  else if (zadanie.vid === "chislo") { risovatChislo(zadanie, telo); }
+  else { risovatTekst(zadanie, telo); }
+}
+
+// knopkaProverki: кнопка проверки | вход: задание | выход: кнопка | изменяет: —
+function knopkaProverki(zadanie){
+  var k = sozdat("button", "knopka-proverit", "Проверить");
+  k.type = "button";
+  k.addEventListener("click", function(){ proveritNazhato(zadanie); });
+  return k;
+}
+
+// knopkaPodskazki: кнопка подсказки | вход: задание | выход: кнопка | изменяет: —
+function knopkaPodskazki(zadanie){
+  var k = sozdat("button", "knopka-podskazka", "Подсказка");
+  k.type = "button";
+  k.addEventListener("click", function(){ datPodskazku(zadanie); });
+  return k;
+}
+
+// risovatUpravlenie: кнопки задания | вход: задание | выход: блок | изменяет: —
+function risovatUpravlenie(zadanie){
+  var blok = sozdat("div", "upravlenie");
+  if (zadanie.vid !== "vybor") { blok.appendChild(knopkaProverki(zadanie)); }
+  blok.appendChild(knopkaPodskazki(zadanie));
+  return blok;
+}
+
+// risovatZadanie: нарисовать задание | вход: задание | выход: карточка | изменяет: —
+function risovatZadanie(zadanie){
+  var karta = sozdat("div", "zadanie");
+  karta.id = "karta-" + zadanie.id;
+  if (zadanie.chered) {
+    karta.appendChild(sozdat("span", "hod", "Сейчас действует: " + zadanie.chered));
+  }
+  karta.appendChild(sozdat("p", "vopros", zadanie.vopros));
+  var telo = sozdat("div", "telo");
+  karta.appendChild(telo);
+  if (zadanie.frazy) { risovatFrazy(zadanie, telo); }
+  risovatVid(zadanie, telo);
+  karta.appendChild(risovatUpravlenie(zadanie));
+  karta.appendChild(sozdat("div", "podskazki"));
+  karta.appendChild(sozdat("div", "itog"));
+  karta.appendChild(sozdat("div", "obyasnenie"));
+  return karta;
+}
+
+// risovatEkran: нарисовать экран | вход: атом-экран | выход: — | изменяет: main
+function risovatEkran(ekran){
+  var m = najti("ekran");
+  ochistit(m);
+  m.appendChild(sozdat("h2", "ekran-nazvanie", ekran.zagolovok));
+  m.appendChild(sozdat("p", "ekran-tekst", ekran.tekst));
+  if (ekran.roli) { m.appendChild(risovatRoli(ekran.roli)); }
+  pokazatSpisok(ekran.pokazat);
+  zadaniyaEkrana(ekran.id).forEach(function(z){ m.appendChild(risovatZadanie(z)); });
+  if (ekran.drakonPosle && zadanieVerno(ekran.drakonPosle)) {
+    var svg = risovatDrakon();
+    svg.id = "drakon-konveer";
+    m.appendChild(svg);
+  }
+  skazatPomoshnik(ekran.pomoshnik);
+}
+
+// proveritOtvet: сверить ответ с эталоном | вход: задание, ответ | выход: true или false | изменяет: —
+function proveritOtvet(zadanie, otvet){
+  var rez = true;
+  if (zadanie.vid === "vybor") { rez = otvet === zadanie.otvet; }
+  else if (zadanie.vid === "chislo") { rez = Math.abs(Number(otvet) - zadanie.otvet) <= zadanie.dopusk; }
+  else if (zadanie.vid === "poryadok") { rez = strokiRavny(otvet, zadanie.otvet); }
+  else if (zadanie.vid === "para") { rez = paryRavny(otvet, zadanie.otvet); }
+  return rez;
+}
+
+// sobratPoryadok: собрать порядок из полей | вход: карточка | выход: список или null | изменяет: —
+function sobratPoryadok(karta){
+  var rez = [];
+  var vybory = karta.querySelectorAll(".vybor-shaga");
+  var polno = true;
+  var i;
+  for (i = 0; i < vybory.length; i++) {
+    if (!vybory[i].value) { polno = false; }
+  }
+  if (polno) {
+    for (i = 0; i < vybory.length; i++) { rez.push(vybory[i].value); }
+  } else {
+    rez = null;
+  }
+  return rez;
+}
+
+// sobratPary: собрать пары из полей | вход: карточка | выход: список пар или null | изменяет: —
+function sobratPary(karta){
+  var rez = [];
+  var vybory = karta.querySelectorAll(".para-vybor");
+  var polno = true;
+  var i;
+  for (i = 0; i < vybory.length; i++) {
+    if (!vybory[i].value) { polno = false; }
+  }
+  if (polno) {
+    for (i = 0; i < vybory.length; i++) {
+      rez.push([vybory[i].getAttribute("data-levo"), vybory[i].value]);
+    }
+  } else {
+    rez = null;
+  }
+  return rez;
+}
+
+// sobratOtvet: прочитать ответ с карточки | вход: задание | выход: ответ или null | изменяет: —
+function sobratOtvet(zadanie){
+  var karta = najti("karta-" + zadanie.id);
+  var rez = null;
+  if (zadanie.vid === "poryadok") { rez = sobratPoryadok(karta); }
+  else if (zadanie.vid === "para") { rez = sobratPary(karta); }
+  else if (zadanie.vid === "chislo") { rez = karta.querySelector(".pole-chislo").value; }
+  else if (zadanie.vid === "tekst") { rez = karta.querySelector(".pole-tekst").value; }
+  return rez;
+}
+
+// proveritNazhato: проверить ответ по кнопке | вход: задание | выход: — | изменяет: карточку
+function proveritNazhato(zadanie){
+  var otvet = sobratOtvet(zadanie);
+  if (!otvet) {
+    skazatPomoshnik("Сначала дайте ответ.");
+  } else {
+    proveritIZapomnit(zadanie, otvet);
+  }
+}
+
+// pokazatItog: показать итог проверки | вход: задание, верно ли | выход: — | изменяет: карточку
+function pokazatItog(zadanie, ok){
+  var karta = najti("karta-" + zadanie.id);
+  var itog = karta.querySelector(".itog");
+  ochistit(itog);
+  if (zadanie.vid === "tekst") {
+    itog.appendChild(sozdat("p", "itog-verno", "Ответ принят — его проверит учитель."));
+    pokazatObyasnenie(zadanie);
+  } else if (ok) {
+    itog.appendChild(sozdat("p", "itog-verno", "Верно!"));
+    pokazatObyasnenie(zadanie);
+    if (zadanie.id === "9027-zadanie-konveer-stancii") { pokazatDrakon(); }
+  } else {
+    itog.appendChild(sozdat("p", "itog-neverno", "Пока неверно. Попробуйте ещё или возьмите подсказку."));
+  }
+}
+
+// proveritIZapomnit: проверить и запомнить ответ | вход: задание, ответ | выход: — | изменяет: PROGRESS
+function proveritIZapomnit(zadanie, otvet){
+  PROGRESS.otvety[zadanie.id] = otvet;
+  if (!PROGRESS.podskazki[zadanie.id]) { PROGRESS.podskazki[zadanie.id] = 0; }
+  var ok = proveritOtvet(zadanie, otvet);
+  pokazatItog(zadanie, ok);
+  sohranit();
+}
+
+// pokazatPodskazku: вывести ступень подсказки | вход: задание, номер | выход: — | изменяет: карточку
+function pokazatPodskazku(zadanie, nomer){
+  var karta = najti("karta-" + zadanie.id);
+  var blok = karta.querySelector(".podskazki");
+  var tekst = "Подсказка " + (nomer + 1) + " из " + zadanie.podskazki.length + ": " + zadanie.podskazki[nomer];
+  blok.appendChild(sozdat("p", "podskazka", tekst));
+  skazatPomoshnik(zadanie.podskazki[nomer]);
+}
+
+// datPodskazku: следующая ступень подсказки | вход: задание | выход: — | изменяет: PROGRESS
+function datPodskazku(zadanie){
+  var nomer = PROGRESS.podskazki[zadanie.id] || 0;
+  if (nomer >= zadanie.podskazki.length) {
+    skazatPomoshnik("Подсказки закончились. Сформулируйте ответ сами.");
+  } else {
+    PROGRESS.podskazki[zadanie.id] = nomer + 1;
+    pokazatPodskazku(zadanie, nomer);
+    sohranit();
+  }
+}
+
+// pokazatObyasnenie: показать объяснение | вход: задание | выход: — | изменяет: карточку
+function pokazatObyasnenie(zadanie){
+  var karta = najti("karta-" + zadanie.id);
+  var blok = karta.querySelector(".obyasnenie");
+  ochistit(blok);
+  blok.appendChild(sozdat("p", "obyasnenie-tekst", zadanie.obyasnenie));
+}
+
+// tochkaHoda: одна точка хода (только показ) | вход: id экрана, номер | выход: span | изменяет: —
+function tochkaHoda(id, i){
+  var t = sozdat("span", "tochka", String(i + 1));
+  if (i + 1 === PROGRESS.nomer) { t.classList.add("tekushaya"); }
+  return t;
+}
+
+// obnovitTochki: обновить точки хода | вход: — | выход: — | изменяет: шапку
+function obnovitTochki(){
+  var blok = najti("tochki");
+  ochistit(blok);
+  VSELENNAYA.ekrany.forEach(function(id, i){ blok.appendChild(tochkaHoda(id, i)); });
+}
+
+// strokaMenyu: строка меню учителя | вход: id экрана, номер | выход: кнопка | изменяет: —
+function strokaMenyu(id, i){
+  var a = atom(id);
+  var k = sozdat("button", "menyu-stroka", (i + 1) + ". " + a.zagolovok + " — " + a.minuty + " мин");
+  k.type = "button";
+  k.addEventListener("click", function(){ perejti(i + 1); });
+  return k;
+}
+
+// sbrositProgress: сбросить прогресс | вход: — | выход: — | изменяет: PROGRESS
+function sbrositProgress(){
+  PROGRESS = { nomer: 1, otvety: {}, podskazki: {} };
+  sohranit();
+  perejti(1);
+}
+
+// knopkaSbrosa: кнопка сброса | вход: — | выход: кнопка | изменяет: —
+function knopkaSbrosa(){
+  var k = sozdat("button", "menyu-knopka", "Сбросить прогресс");
+  k.type = "button";
+  k.addEventListener("click", function(){ sbrositProgress(); });
+  return k;
+}
+
+// narushenieP1: проверка P1 для задания | вход: задание | выход: текст нарушения или "" | изменяет: —
+function narushenieP1(z){
+  var rez = "";
+  if (z.vid === "para") {
+    rez = proveritP1Para(z);
+  } else if (z.vid !== "tekst" && z.vid !== "chislo") {
+    if (!estVSpiske(z.varianty, z.otvet)) { rez = "P1: " + z.id + " — ответ не входит в варианты"; }
+  }
+  return rez;
+}
+
+// proveritP1Para: проверка P1 для пар | вход: задание | выход: текст нарушения или "" | изменяет: —
+function proveritP1Para(z){
+  var rez = "";
+  var i, p;
+  for (i = 0; i < z.otvet.length; i++) {
+    p = z.otvet[i];
+    if (!estVSpiske(z.varianty, p[0])) { rez = "P1: " + z.id + " — левая часть пары не из вариантов"; }
+    else if (!estVSpiske(z.pravo, p[1])) { rez = "P1: " + z.id + " — правая часть пары не из списка"; }
+  }
+  return rez;
+}
+
+// proveritP1: правило P1 по всем заданиям | вход: — | выход: текст нарушения или "" | изменяет: —
+function proveritP1(){
+  var rez = "";
+  var spisok = zadaniyaVse();
+  var i, n;
+  for (i = 0; i < spisok.length; i++) {
+    n = narushenieP1(spisok[i]);
+    if (n && !rez) { rez = n; }
+  }
+  return rez;
+}
+
+// proveritP2: правило P2 | вход: — | выход: текст нарушения или "" | изменяет: —
+function proveritP2(){
+  var rez = "";
+  var spisok = zadaniyaVse();
+  var i, z;
+  for (i = 0; i < spisok.length; i++) {
+    z = spisok[i];
+    if (!z.podskazki || z.podskazki.length < 1 || z.podskazki.length > 3) { rez = "P2: " + z.id + " — подсказок не 1–3"; }
+    if (!z.obyasnenie && !rez) { rez = "P2: " + z.id + " — нет объяснения"; }
+  }
+  return rez;
+}
+
+// narushenieP3Atom: проверка ссылок атома | вход: атом | выход: текст нарушения или "" | изменяет: —
+function narushenieP3Atom(a){
+  var rez = "";
+  var j, f;
+  if (a.ekran && !atom(a.ekran)) { rez = "P3: " + a.id + " — нет экрана " + a.ekran; }
+  if (!rez) {
+    for (j = 0; j < (a.fakty || []).length; j++) {
+      f = a.fakty[j];
+      if (!atom(f)) { rez = "P3: " + a.id + " — нет факта " + f; }
+    }
+  }
+  return rez;
+}
+
+// proveritP3: правило P3 | вход: — | выход: текст нарушения или "" | изменяет: —
+function proveritP3(){
+  var rez = "";
+  var spisok = zadaniyaVse();
+  var i, n;
+  for (i = 0; i < spisok.length; i++) {
+    n = narushenieP3Atom(spisok[i]);
+    if (n && !rez) { rez = n; }
+  }
+  return rez;
+}
+
+// proveritP4: правило P4 | вход: — | выход: текст нарушения или "" | изменяет: —
+function proveritP4(){
+  var rez = "";
+  var i, a;
+  for (i = 0; i < VSELENNAYA.atomy.length; i++) {
+    a = VSELENNAYA.atomy[i];
+    if (a.tip === "fakt" && a.mir === "0001" && a.istinnost !== 1) {
+      rez = "P4: " + a.id + " — факт мира 0001 с истинностью " + a.istinnost;
+    }
+  }
+  return rez;
+}
+
+// estSlabyjFakt: есть ли у задания условный факт | вход: задание | выход: true или false | изменяет: —
+function estSlabyjFakt(z){
+  var rez = false;
+  var j, f;
+  for (j = 0; j < (z.fakty || []).length; j++) {
+    f = atom(z.fakty[j]);
+    if (f && f.istinnost !== 1) { rez = true; }
+  }
+  return rez;
+}
+
+// proveritP5: правило P5 | вход: — | выход: текст нарушения или "" | изменяет: —
+function proveritP5(){
+  var rez = "";
+  var spisok = zadaniyaVse();
+  var i, z;
+  for (i = 0; i < spisok.length; i++) {
+    z = spisok[i];
+    if (z.mir !== "0002" && estSlabyjFakt(z)) { rez = "P5: " + z.id + " — условный факт вне мира 0002"; }
+  }
+  return rez;
+}
+
+// proveritL1: правило L1 | вход: — | выход: текст нарушения или "" | изменяет: —
+function proveritL1(){
+  var rez = "";
+  var i, a;
+  for (i = 0; i < VSELENNAYA.atomy.length; i++) {
+    a = VSELENNAYA.atomy[i];
+    if (a.tip === "ekran" && a.praktikum && (!a.roli || a.roli.length !== 2)) {
+      rez = "L1: " + a.id + " — у практикума не две роли";
+    }
+  }
+  return rez;
+}
+
+// proveritL2: правило L2 | вход: — | выход: текст нарушения или "" | изменяет: —
+function proveritL2(){
+  var rez = "";
+  var i, a, r = 0, s = 0;
+  for (i = 0; i < VSELENNAYA.atomy.length; i++) {
+    a = VSELENNAYA.atomy[i];
+    if (a.proces === "raspoznavanie") { r = r + 1; }
+    if (a.proces === "sintez") { s = s + 1; }
+  }
+  if (r === 0 || s === 0) { rez = "L2: нет заданий на распознавание или на синтез"; }
+  return rez;
+}
+
+// proveritPravilo: проверить одно правило | вход: правило | выход: текст нарушения или "" | изменяет: —
+function proveritPravilo(p){
+  var rez = "";
+  if (p.id === "P1") { rez = proveritP1(); }
+  else if (p.id === "P2") { rez = proveritP2(); }
+  else if (p.id === "P3") { rez = proveritP3(); }
+  else if (p.id === "P4") { rez = proveritP4(); }
+  else if (p.id === "P5") { rez = proveritP5(); }
+  else if (p.id === "L1") { rez = proveritL1(); }
+  else if (p.id === "L2") { rez = proveritL2(); }
+  return rez;
+}
+
+// itogSamoproverki: блок итога самопроверки | вход: — | выход: блок | изменяет: —
+function itogSamoproverki(){
+  var narusheniya = samoproverka();
+  var blok = sozdat("div", "samoproverka");
+  blok.appendChild(sozdat("h4", "samoproverka-zagolovok", "Самопроверка: нарушений " + narusheniya.length));
+  narusheniya.forEach(function(n){ blok.appendChild(sozdat("p", "narushenie", n)); });
+  return blok;
+}
+
+// samoproverka: пройти все правила | вход: — | выход: список нарушений | изменяет: —
+function samoproverka(){
+  var spisok = [];
+  VSELENNAYA.pravila.forEach(function(p){
+    var b = proveritPravilo(p);
+    if (b) { spisok.push(b); }
+  });
+  return spisok;
+}
+
+// otklikKlavishi: реакция на Ctrl+Alt+M | вход: событие | выход: — | изменяет: меню
+function otklikKlavishi(e){
+  if (e.ctrlKey && e.altKey && e.code === "KeyM") {
+    e.preventDefault();
+    menyuUchitelya();
+  }
+}
+
+// slushatKlavishu: слушать горячую клавишу | вход: — | выход: — | изменяет: документ
+function slushatKlavishu(){
+  document.addEventListener("keydown", otklikKlavishi);
+}
+
+// perejti: сменить экран | вход: номер | выход: — | изменяет: PROGRESS, экран
+function perejti(nomer){
+  if (nomer && nomer >= 1 && nomer <= VSELENNAYA.ekrany.length) {
+    PROGRESS.nomer = nomer;
+    risovatEkran(atom(VSELENNAYA.ekrany[nomer - 1]));
+    obnovitTochki();
+    sohranit();
+  }
+}
+
+// menyuUchitelya: скрытое меню учителя | вход: — | выход: — | изменяет: меню
+function menyuUchitelya(){
+  var m = najti("menyu");
+  if (m.classList.contains("otkryto")) {
+    m.classList.remove("otkryto");
+    ochistit(m);
+  } else {
+    ochistit(m);
+    m.classList.add("otkryto");
+    m.appendChild(sozdat("h3", "menyu-zagolovok", "Меню учителя — " + VSELENNAYA.urok.nazvanie));
+    VSELENNAYA.ekrany.forEach(function(id, i){ m.appendChild(strokaMenyu(id, i)); });
+    m.appendChild(knopkaSbrosa());
+    m.appendChild(itogSamoproverki());
+  }
+}
+
+// urokNachat: запустить урок | вход: — | выход: — | изменяет: весь экран
+function urokNachat(){
+  zagruzit();
+  slushatKlavishu();
+  najti("shapka-nazvanie").textContent = VSELENNAYA.urok.nazvanie;
+  perejti(PROGRESS.nomer);
+  var n = samoproverka();
+  if (n.length > 0) { skazatPomoshnik("Самопроверка: нарушений " + n.length + ". Меню учителя: Ctrl+Alt+M."); }
+}
+
+// ===== ЗАПУСК =====
+urokNachat();
+</script>
+</body>
+</html>
