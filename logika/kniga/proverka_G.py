@@ -174,6 +174,8 @@ def proverki_G1_G4():
         "Г.3 = [x + y ≤ z]": otvet_G3(),
         "Г.3 ответ 220": podschet(zadacha_G3) == 220,
         "Г.3 контрпример 1000": podschet(kontrprimer_G3) == 1000,
+        "Г.3 подстановка (1, 1, 2) = 1": bool(zadacha_G3(1, 1, 2)) is True,
+        "Г.3 подстановка (3, 2, 2) = 0": bool(zadacha_G3(3, 2, 2)) is False,
         "Г.4 отрезки 24 и 90": otrezki_G4(),
     }
     return otvet
