@@ -86,6 +86,38 @@ def otvet_G3():
     return otvet
 
 
+# otrezok: бит [x ∈ [a; b]]
+def otrezok(a, b):
+    otvet = lambda x: a <= x <= b
+    return otvet
+
+
+# TOCHKI: точки прямой с шагом 0,25 — для перебора отрезков Г.4
+TOCHKI = [i / 4 for i in range(0, 600)]
+P_G4 = otrezok(25, 64)
+Q_G4 = otrezok(40, 115)
+
+
+# demo_G4: выражение демоверсии истинно при любом x
+def demo_G4(a):
+    otvet = all(impl(P_G4(x), impl(Q_G4(x) and not a(x), not P_G4(x))) for x in TOCHKI)
+    return otvet
+
+
+# naoborot_G4: A → (P ∨ Q) истинно при любом x
+def naoborot_G4(a):
+    otvet = all(impl(a(x), P_G4(x) or Q_G4(x)) for x in TOCHKI)
+    return otvet
+
+
+# otrezki_G4: [40; 64] годится, короче — нет; [25; 115] годится, длиннее — нет
+def otrezki_G4():
+    minimum = demo_G4(otrezok(40, 64)) and not demo_G4(otrezok(40.25, 64)) and not demo_G4(otrezok(40, 63.75))
+    maksimum = naoborot_G4(otrezok(25, 115)) and not naoborot_G4(otrezok(24.75, 115)) and not naoborot_G4(otrezok(25, 115.25))
+    otvet = minimum and maksimum
+    return otvet
+
+
 # glavnoe: все проверки шага Г
 def glavnoe():
     itogi = {
@@ -96,6 +128,7 @@ def glavnoe():
         "Г.3 = [x + y ≤ z]": otvet_G3(),
         "Г.3 ответ 220": podschet(zadacha_G3) == 220,
         "Г.3 контрпример 1000": podschet(kontrprimer_G3) == 1000,
+        "Г.4 отрезки 24 и 90": otrezki_G4(),
     }
     for imya, verno in itogi.items():
         print(imya, "ок" if verno else "ОШИБКА")

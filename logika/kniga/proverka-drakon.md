@@ -38,6 +38,7 @@ itogi["пример Г.2"] = primer_G2()
 itogi["шаги Г.3"] = shagi_G3()
 itogi["ответ Г.3"] = podschet(zadacha_G3) == 220
 itogi["контрпример Г.3"] = podschet(kontrprimer_G3) == 1000
+itogi["отрезки Г.4"] = otrezki_G4()
 для: imya из itogi
   если: itogi[imya]
     да:
@@ -63,7 +64,7 @@ itogi["контрпример Г.3"] = podschet(kontrprimer_G3) == 1000
 
 - пример: ввод chast-1-bit/B-zakony.md → вывод «проверено равенств: 78, неверных: 0»
 - контрпример: ввод «¬(a ∧ b) = ¬a ∧ ¬b» → ravenstvo_verno даёт True
-- пример: python3 proverka_G.py → «проверок: 7 ошибок: 0»
+- пример: python3 proverka_G.py → «проверок: 8 ошибок: 0»
 - контрпример: ошибка переноса в Г.3 (x + y ≤ z вместо x + y ≥ z) → ответ 220
 
 ## Пополнение словаря
@@ -87,4 +88,5 @@ itogi["контрпример Г.3"] = podschet(kontrprimer_G3) == 1000
 - shagi_G3 — средний — на допустимых A, B формула равна ¬A — formula_G3
 - podschet — средний — число троек 0…9 с истиной — (встроенные)
 - otvet_G3 — средний — выражение = [x + y ≤ z] на −20…20 — zadacha_G3
+- otrezok, demo_G4, naoborot_G4, otrezki_G4 — нижний/средний — бит «x на отрезке», выражения Г.4, проверка 24 и 90 — impl, TOCHKI
 - glavnoe (Г) — верхний — все проверки шага Г — все слова выше
