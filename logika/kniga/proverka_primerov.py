@@ -6,13 +6,16 @@ from itertools import product
 from pathlib import Path
 
 # очередь действий (А.1): чем больше число, тем раньше выполняется
-STUPEN = {"≡": 1, "→": 2, "∨": 3, "⊕": 3, "∧": 4}
+# Шеффер (|) и Пирс (↓) в книге всегда в скобках; ступень — как у И
+STUPEN = {"≡": 1, "→": 2, "∨": 3, "⊕": 3, "∧": 4, "|": 4, "↓": 4}
 DEJSTVIE = {
     "≡": lambda x, y: int(x == y),
     "→": lambda x, y: int((not x) or y),
     "∨": lambda x, y: x | y,
     "⊕": lambda x, y: x ^ y,
     "∧": lambda x, y: x & y,
+    "|": lambda x, y: 1 - (x & y),
+    "↓": lambda x, y: 1 - (x | y),
 }
 
 
@@ -67,15 +70,15 @@ def ravenstvo_verno(stroka):
 
 # tolko_formula: в ячейке только знаки логики (не заголовок, не название, не арифметика)
 def tolko_formula(yachejka):
-    razresheno = set("abcdxyz¬∧∨→≡⊕()01=★ ")
+    razresheno = set("abcdxyz¬∧∨→≡⊕|↓()01=★ ")
     da = set(yachejka) <= razresheno
     return da
 
 
 # ravenstva: первая и последняя ячейки строк таблиц, где есть « = »
 def ravenstva(tekst):
-    stroki = [s for s in tekst.splitlines() if s.startswith("| ") and " = " in s]
-    spisok = [[ya.strip() for ya in s.strip("|").split("|")] for s in stroki]
+    stroki = [s.replace("\\|", "¦") for s in tekst.splitlines() if s.startswith("| ") and " = " in s]
+    spisok = [[ya.strip().replace("¦", "|") for ya in s.strip("|").split("|")] for s in stroki]
     krai = [ya for yachejki in spisok for ya in (yachejki[0], yachejki[-1])]
     vse = [ya for ya in krai if " = " in ya and tolko_formula(ya)]
     return vse
