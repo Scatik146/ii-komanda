@@ -70,6 +70,13 @@
 - А. Блох. *Murphy's Law, and Other Reasons Why Things Go Wrong* (1977) — сборник «законов»; сведения о книге — по той же статье и странице издательства Penguin Random House (обращение 19.11.2026). Книгу не читали.
 - Закон Сегала («человек с одними часами…») — фольклор; автор не установлен, надо проверить.
 
+## 7. Именованные троичные операторы (19.11, правила осторожного человека, § В)
+
+- Fitting M. Kleene's Three Valued Logics and Their Children — охранная связка (guard) в логике Белнапа; https://id144254.securedata.net/melvinfitting/bookspapers/pdf/papers/KleeneThree.pdf (обращение 19.11.2026; определение не сверено).
+- Fitting M. Bilattices and the semantics of logic programming / Kleene's logic, generalized (1991) — согласие (consensus) ⊗ в порядке знания; https://id144254.securedata.net/melvinfitting/bookspapers/pdf/papers/KleeneGen.pdf (обращение 19.11.2026).
+- Rosser J. B., Turquette A. R. Many-valued Logics. — Amsterdam: North-Holland, 1952. — операторы J (по памяти; книгу не читали, надо проверить).
+- Брусенцов Н. П. — модальности L («необходимо»), M («возможно»), σ («случайно»): `brusentsov.md` § 6.
+
 ## Авторство чужих идей в проекте
 
 Кому принадлежит то, что мы взяли. Программы и библиотеки — drakon-graf `docs/STORONNIE.md`.
