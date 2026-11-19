@@ -54,9 +54,56 @@ def bazis(nabor, konstanty=()):
     return da
 
 
+# вектор каждого действия и константы (НЕ — от первой буквы)
+VEKTORY = {d: primenit(d, X, Y) for d in DEJSTVIYA}
+VEKTORY.update({"0": NOL, "1": EDINICA})
+
+# классы Поста на векторе 00, 01, 10, 11
+KLASSY = {
+    "T0": lambda v: v[0] == 0,
+    "T1": lambda v: v[3] == 1,
+    "S": lambda v: all(v[i] == 1 - v[3 - i] for i in range(4)),
+    "M": lambda v: v[0] <= v[1] <= v[3] and v[0] <= v[2] <= v[3],
+    "L": lambda v: v[0] ^ v[1] ^ v[2] ^ v[3] == 0,
+}
+
+
+# v_klasse: действие или константа лежит в классе
+def v_klasse(imya, klass):
+    da = KLASSY[klass](VEKTORY[imya])
+    return da
+
+
+# post: набор не лежит целиком ни в одном классе (теорема Поста)
+def post(nabor):
+    da = all(any(not v_klasse(d, k) for d in nabor) for k in KLASSY)
+    return da
+
+
+# polnyj_nabor: замыкание набора, где цифры — константы
+def polnyj_nabor(nabor):
+    dejstviya = "".join(d for d in nabor if d in DEJSTVIYA)
+    konstanty = tuple(VEKTORY[d] for d in nabor if d in "01")
+    da = polnyj(dejstviya, konstanty)
+    return da
+
+
+# teorema_sovpadaet: для всех 1023 наборов Пост = прямая сборка
+def teorema_sovpadaet():
+    imena = list(VEKTORY)
+    nabory = [[d for d, vzyat in zip(imena, maska) if vzyat]
+              for maska in product((0, 1), repeat=len(imena)) if any(maska)]
+    rashozhdeniya = [n for n in nabory if post(n) != polnyj_nabor(n)]
+    return len(nabory), rashozhdeniya
+
+
 if __name__ == "__main__":
     for nabor, k in [("¬∧∨", ()), ("¬∧", ()), ("¬∨", ()), ("∧∨", ()), ("¬", ()),
                      ("|", ()), ("↓", ()), ("→¬", ()), ("→", (NOL,)), ("→", ()),
                      ("∧⊕", (EDINICA,)), ("∧⊕", ()), ("⊕≡¬", ())]:
         print(nabor, "+".join("0" if c == NOL else "1" for c in k), len(zamykanie(nabor, k)), polnyj(nabor, k), bazis(nabor, k))
-    sys.exit(0)
+    for d in VEKTORY:
+        print(d, "".join("+" if v_klasse(d, k) else "−" for k in KLASSY))
+    vsego, rashozhdeniya = teorema_sovpadaet()
+    print(f"теорема Поста: наборов {vsego}, расхождений {len(rashozhdeniya)}")
+    sys.exit(1 if rashozhdeniya else 0)
