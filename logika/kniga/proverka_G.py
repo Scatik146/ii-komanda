@@ -118,9 +118,55 @@ def otrezki_G4():
     return otvet
 
 
-# glavnoe: все проверки шага Г
-def glavnoe():
-    itogi = {
+# delit: бит ДЕЛ(n, m)
+def delit(n, m):
+    otvet = n % m == 0
+    return otvet
+
+
+# IKSY_G5: натуральные x для проверок Г.5
+IKSY_G5 = range(1, 2000)
+
+
+# nok_G5: Д6 ∧ Д9 = Д18; Д54 — контрпример на x = 18; Д4 ∧ Д5 = Д20
+def nok_G5():
+    nok = all((delit(x, 6) and delit(x, 9)) == delit(x, 18) for x in IKSY_G5)
+    vzaimno = all((delit(x, 4) and delit(x, 5)) == delit(x, 20) for x in IKSY_G5)
+    kontr = delit(18, 6) and delit(18, 9) and not delit(18, 54)
+    otvet = nok and vzaimno and kontr
+    return otvet
+
+
+# sledstvie_G5: ДЕЛ(x, a) → ДЕЛ(x, b) всегда ⇔ b делит a (a, b до 40)
+def sledstvie_G5():
+    r = range(1, 41)
+    otvet = all(all(impl(delit(x, a), delit(x, b)) for x in range(1, 400)) == delit(a, b) for a in r for b in r)
+    return otvet
+
+
+# demo_G5: формула демоверсии 2021 при данном A истинна для всех x
+def demo_G5(a):
+    otvet = all(impl(not delit(x, a), impl(delit(x, 6), not delit(x, 9))) for x in IKSY_G5)
+    return otvet
+
+
+# otvet_G5: подходят ровно делители 18, наибольший 18; A = 36 ломается на x = 18
+def otvet_G5():
+    podhodyat = [a for a in range(1, 501) if demo_G5(a)]
+    slom36 = not impl(not delit(18, 36), impl(delit(18, 6), not delit(18, 9)))
+    otvet = podhodyat == [1, 2, 3, 6, 9, 18] and slom36
+    return otvet
+
+
+# ili_G5: Д6 ∨ Д9 ≠ Д3 (x = 3)
+def ili_G5():
+    otvet = delit(3, 3) and not (delit(3, 6) or delit(3, 9))
+    return otvet
+
+
+# proverki_G1_G4: проверки Г.1–Г.4
+def proverki_G1_G4():
+    otvet = {
         "Г.1 примеры": primery_G1(),
         "Г.2 шесть связок": svyazki_verny(),
         "Г.2 пример": primer_G2(),
@@ -130,6 +176,29 @@ def glavnoe():
         "Г.3 контрпример 1000": podschet(kontrprimer_G3) == 1000,
         "Г.4 отрезки 24 и 90": otrezki_G4(),
     }
+    return otvet
+
+
+# proverki_G5: проверки Г.5 «Делители»
+def proverki_G5():
+    otvet = {
+        "Г.5 И = НОК, 54 не годится": nok_G5(),
+        "Г.5 следование = делитель": sledstvie_G5(),
+        "Г.5 демо 2021 ответ 18": otvet_G5(),
+        "Г.5 ИЛИ не НОД": ili_G5(),
+    }
+    return otvet
+
+
+# proverki: все проверки шага Г — имя и результат
+def proverki():
+    otvet = {**proverki_G1_G4(), **proverki_G5()}
+    return otvet
+
+
+# glavnoe: запустить проверки и напечатать итог
+def glavnoe():
+    itogi = proverki()
     for imya, verno in itogi.items():
         print(imya, "ок" if verno else "ОШИБКА")
     print("проверок:", len(itogi), "ошибок:", sum(not v for v in itogi.values()))
