@@ -190,9 +190,68 @@ def proverki_G5():
     return otvet
 
 
+# lozh_G4: (¬P → Q) ∧ ¬A тождественно ложна; [10; 78] годится, короче — нет; [35; 45] ломается на x = 20
+def lozh_G4(a, b):
+    p = otrezok(10, 45)
+    q = otrezok(35, 78)
+    otvet = all(not (impl(not p(x), q(x)) and not (a <= x <= b)) for x in TOCHKI)
+    return otvet
+
+
+# otrezki_lozh_G4: ответ 68 и контрпример «пересечение»
+def otrezki_lozh_G4():
+    otvet = lozh_G4(10, 78) and not lozh_G4(10.25, 78) and not lozh_G4(10, 77.75) and not lozh_G4(35, 45)
+    return otvet
+
+
+# polyakov_G5: Д18 → (Д54 → ДA); подходят делители 54; A = 972 ломается на x = 54
+def polyakov_G5():
+    formula = lambda x, a: impl(delit(x, 18), impl(delit(x, 54), delit(x, a)))
+    podhodyat = [a for a in range(1, 1001) if all(formula(x, a) for x in range(1, 3000))]
+    otvet = podhodyat == [1, 2, 3, 6, 9, 18, 27, 54] and not formula(54, 972)
+    return otvet
+
+
+# mnozhestvo_G6: наименьшее A для КомпЕГЭ — {1,2,3,4}; объединение годится; {5,6,7,8} ломается на x = 1
+def mnozhestvo_G6():
+    p, q = {1, 2, 3, 4}, {1, 2, 3, 4, 5, 6}
+    formula = lambda x, a: impl(x not in a, (x not in p) or (x not in q))
+    godno = lambda a: all(formula(x, a) for x in range(1, 100))
+    otvet = godno(p & q) and len(p & q) == 4 and godno(p | q) and not godno({5, 6, 7, 8}) and not godno({1, 2, 3})
+    return otvet
+
+
+# razryady_G7: 14 & 5 = 4; склейка ИЛИ через | верна; склейка через & ломается на x = 2
+def razryady_G7():
+    skleika = all(((x & 26 != 0) or (x & 13 != 0)) == (x & (26 | 13) != 0) for x in range(0, 1024))
+    kontr = (2 & 26 != 0) and (2 & (26 & 13) == 0)
+    otvet = (14 & 5) == 4 and skleika and kontr and (26 | 13) == 31
+    return otvet
+
+
+# otvet_G7: наименьшее A = 2; A = 1 ломается на x = 2
+def otvet_G7():
+    formula = lambda x, a: impl((x & 26 != 0) or (x & 13 != 0), impl(x & 29 == 0, x & a != 0))
+    podhodyat = [a for a in range(1, 201) if all(formula(x, a) for x in range(1, 4096))]
+    otvet = podhodyat[:5] == [2, 3, 6, 7, 10] and not formula(2, 1)
+    return otvet
+
+
+# proverki_G6_G7: проверки Г.4 (ложна), Г.5 (вторая), Г.6, Г.7
+def proverki_G6_G7():
+    otvet = {
+        "Г.4 ложна, ответ 68": otrezki_lozh_G4(),
+        "Г.5 Поляков ответ 54": polyakov_G5(),
+        "Г.6 КомпЕГЭ ответ 4": mnozhestvo_G6(),
+        "Г.7 склейка ИЛИ": razryady_G7(),
+        "Г.7 ответ 2": otvet_G7(),
+    }
+    return otvet
+
+
 # proverki: все проверки шага Г — имя и результат
 def proverki():
-    otvet = {**proverki_G1_G4(), **proverki_G5()}
+    otvet = {**proverki_G1_G4(), **proverki_G5(), **proverki_G6_G7()}
     return otvet
 
 
