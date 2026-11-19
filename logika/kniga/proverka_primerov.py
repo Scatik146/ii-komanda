@@ -65,10 +65,11 @@ def ravenstvo_verno(stroka):
     return len(vektory) == 1
 
 
-# kirillica: в ячейке есть русские буквы (заголовок или название, не формула)
-def kirillica(yachejka):
-    est = any("а" <= z.lower() <= "я" or z in "ёЁ" for z in yachejka)
-    return est
+# tolko_formula: в ячейке только знаки логики (не заголовок, не название, не арифметика)
+def tolko_formula(yachejka):
+    razresheno = set("abcdxyz¬∧∨→≡⊕()01=★ ")
+    da = set(yachejka) <= razresheno
+    return da
 
 
 # ravenstva: первая и последняя ячейки строк таблиц, где есть « = »
@@ -76,7 +77,7 @@ def ravenstva(tekst):
     stroki = [s for s in tekst.splitlines() if s.startswith("| ") and " = " in s]
     spisok = [[ya.strip() for ya in s.strip("|").split("|")] for s in stroki]
     krai = [ya for yachejki in spisok for ya in (yachejki[0], yachejki[-1])]
-    vse = [ya for ya in krai if " = " in ya and not kirillica(ya)]
+    vse = [ya for ya in krai if " = " in ya and tolko_formula(ya)]
     return vse
 
 
