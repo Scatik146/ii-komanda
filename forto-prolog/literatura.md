@@ -114,6 +114,9 @@
 
 - Boole G. An Investigation of the Laws of Thought. — London: Macmillan, 1854, гл. III, предложение IV: закон противоречия — следствие «основного закона мышления» x² = x. Сверено по: Beziau J.-Y. Is the Principle of Contradiction a Consequence of x² = x? // Logica Universalis. — 2018. — 12(1–2). — С. 55–81, https://core.ac.uk/download/148070305.pdf (обращение 19.11.2026). [В]. Используется: книга, А.0.
 
+- Жегалкин И. И. О технике вычислений предложений в символической логике // Математический сборник. — 1927. — Т. 34. — С. 9–28. https://eudml.org/doc/64539 (обращение 19.11.2026; карточка, подлинник не читали). Лузин о Жегалкине — en.wikipedia.org/wiki/Ivan_Zhegalkin. [В]. Используется: книга, В.4.
+- Post E. L. The Two-Valued Iterative Systems of Mathematical Logic. — Princeton University Press, 1941 (Annals of Mathematics Studies, № 5) — критерий полноты, классы Поста; Post E. L. Introduction to a General Theory of Elementary Propositions // Amer. J. Math. — 1921. — 43(3). — С. 163–185. Даты сверены по ссылкам в рецензиях (JSL 1941; Pelletier, Martin, NDJFL 1990). [В]. Используется: книга, В.5.
+
 ## Авторство чужих идей в проекте
 
 Кому принадлежит то, что мы взяли. Программы и библиотеки — drakon-graf `docs/STORONNIE.md`.
