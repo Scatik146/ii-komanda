@@ -117,6 +117,8 @@
 - Жегалкин И. И. О технике вычислений предложений в символической логике // Математический сборник. — 1927. — Т. 34. — С. 9–28. https://eudml.org/doc/64539 (обращение 19.11.2026; карточка, подлинник не читали). Лузин о Жегалкине — en.wikipedia.org/wiki/Ivan_Zhegalkin. [В]. Используется: книга, В.4.
 - Post E. L. The Two-Valued Iterative Systems of Mathematical Logic. — Princeton University Press, 1941 (Annals of Mathematics Studies, № 5) — критерий полноты, классы Поста; Post E. L. Introduction to a General Theory of Elementary Propositions // Amer. J. Math. — 1921. — 43(3). — С. 163–185. Даты сверены по ссылкам в рецензиях (JSL 1941; Pelletier, Martin, NDJFL 1990). [В]. Используется: книга, В.5.
 
+- О де Моргане: De Morgan A. Formal Logic. — London: Taylor & Walton, 1847; спор с У. Гамильтоном и книга, возвращённая неразрезанной, — Dictionary of National Biography, т. 14; Буль издал «Mathematical Analysis of Logic» под впечатлением от спора — MacFarlane A. Lectures on Ten British Mathematicians, 1916, гл. 4; рождение в Мадуре — Encyclopedia.com, «De Morgan, Augustus». Обращение 19.11.2026. [В]. Используется: книга, Б.1, группа 5.
+
 ## Авторство чужих идей в проекте
 
 Кому принадлежит то, что мы взяли. Программы и библиотеки — drakon-graf `docs/STORONNIE.md`.
