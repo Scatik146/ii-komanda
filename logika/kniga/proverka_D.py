@@ -135,6 +135,59 @@ def kontr_D2_D3():
     return otvet
 
 
+# lineinaya: в многочлене нет произведений двух и более букв
+def lineinaya(f, n):
+    otvet = all(len(chlen) <= 1 for chlen in koefficienty(f, n))
+    return otvet
+
+
+# lineinost_D4: ≡ линейна (1 ⊕ x ⊕ y), → и ∨ нет; ∨ = x ⊕ y ⊕ xy (Яблонский, пример 12)
+def lineinost_D4():
+    ekv = lambda x, y: int(x == y)
+    ili = lambda x, y: x | y
+    ekv_ok = koefficienty(ekv, 2) == [(), (0,), (1,)] and lineinaya(ekv, 2)
+    ili_ok = koefficienty(ili, 2) == [(0,), (1,), (0, 1)] and not lineinaya(ili, 2)
+    otvet = ekv_ok and ili_ok and not lineinaya(impl, 2)
+    return otvet
+
+
+# summa_D4: сумма трёх битов — A ⊕ B ⊕ C одной строкой; в СДНФ — 4 слагаемых
+def summa_D4():
+    summa = lambda a, b, c: (a + b + c) % 2
+    otvet = koefficienty(summa, 3) == [(0,), (1,), (2,)] and sum(summa(*n) for n in nabory(3)) == 4
+    return otvet
+
+
+# registr: регистр сдвига из 4 ячеек, новый бит = первая ⊕ последняя; выход — первые k битов
+def registr(sostoyanie, k):
+    yachejki = list(sostoyanie)
+    otvet = []
+    for _ in range(k):
+        otvet.append(yachejki[-1])
+        novyj = xor(yachejki[0], yachejki[-1])
+        yachejki = [novyj] + yachejki[:-1]
+    return otvet
+
+
+# period: через сколько шагов регистр с отводами (u, v) вернётся в начальное состояние
+def period(sostoyanie, u, v):
+    yachejki = tuple(sostoyanie)
+    shag = 0
+    while shag == 0 or yachejki != tuple(sostoyanie):
+        yachejki = (xor(yachejki[u], yachejki[v]),) + yachejki[:-1]
+        shag = shag + 1
+    otvet = shag
+    return otvet
+
+
+# registr_D4: выход 000111101011001, период 15; отводы 2 и 4 — период 6; из 0000 — одни нули
+def registr_D4():
+    vyhod = "".join(map(str, registr((1, 0, 0, 0), 15))) == "000111101011001"
+    periody = period((1, 0, 0, 0), 0, 3) == 15 and period((1, 0, 0, 0), 1, 3) == 6
+    zadacha = registr((0, 0, 0, 1), 8) == [1, 0, 0, 0, 1, 1, 1, 1]
+    otvet = vyhod and periody and zadacha and registr((0, 0, 0, 0), 20) == [0] * 20
+    return otvet
+
 # proverki: все проверки шага Д — имя и результат
 def proverki():
     otvet = {
@@ -143,6 +196,9 @@ def proverki():
         "Д.2–Д.3 примеры": primery_D2_D3(),
         "Д.2–Д.3 все функции 2 и 3 переменных": vse_16_D(),
         "Д.2–Д.3 контрпримеры": kontr_D2_D3(),
+        "Д.4 линейность": lineinost_D4(),
+        "Д.4 сумма одной строкой": summa_D4(),
+        "Д.4 регистр сдвига": registr_D4(),
     }
     return otvet
 
