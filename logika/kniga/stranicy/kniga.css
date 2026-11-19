@@ -1,0 +1,18 @@
+/* Страницы книги «Логика»: оформление. Цвета и размеры — переменными. */
+:root {
+  --fon: #fdfcf8;
+  --tekst: #1f2328;
+  --akcent: #2f5d8a;
+  --linija: #d0d7de;
+  --fon-tablicy: #f3f6f9;
+  --shirina: 46rem;
+  --shrift: Georgia, "PT Serif", serif;
+}
+body { margin: 0; background: var(--fon); color: var(--tekst); font-family: var(--shrift); font-size: 1.1rem; line-height: 1.6; }
+main { max-width: var(--shirina); margin: 0 auto; padding: 1.5rem 1rem 4rem; }
+h1, h2 { color: var(--akcent); line-height: 1.25; }
+h2 { margin-top: 2.5rem; border-bottom: 1px solid var(--linija); padding-bottom: 0.3rem; }
+table { border-collapse: collapse; margin: 1rem 0; }
+th, td { border: 1px solid var(--linija); padding: 0.3rem 0.8rem; text-align: center; }
+th { background: var(--fon-tablicy); }
+code { background: var(--fon-tablicy); padding: 0 0.25rem; border-radius: 3px; }
