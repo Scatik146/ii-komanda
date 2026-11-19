@@ -112,6 +112,8 @@
 
 - История бинарности (Аристотель, Лейбниц, Буль, Порецкий, Блейк, Шеннон, Лукасевич, Пост, Брусенцов, Шеффер, Пирс) — сводка `logika/istoriya-binarnosti.md`, источники — `komanda/zadaniya/proverki/030/otvet-alisa.md` (нашла Алиса, 19.11.2026). [В, часть — сверить]. Для начала раздела А.
 
+- Boole G. An Investigation of the Laws of Thought. — London: Macmillan, 1854, гл. III, предложение IV: закон противоречия — следствие «основного закона мышления» x² = x. Сверено по: Beziau J.-Y. Is the Principle of Contradiction a Consequence of x² = x? // Logica Universalis. — 2018. — 12(1–2). — С. 55–81, https://core.ac.uk/download/148070305.pdf (обращение 19.11.2026). [В]. Используется: книга, А.0.
+
 ## Авторство чужих идей в проекте
 
 Кому принадлежит то, что мы взяли. Программы и библиотеки — drakon-graf `docs/STORONNIE.md`.
