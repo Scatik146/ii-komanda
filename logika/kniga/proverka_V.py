@@ -1,4 +1,5 @@
-"""Проверка шага В части 2: В.1 — согласие.
+"""Проверка шага В части 2: В.1 — согласие, В.2 — основание.
+Основание: основание есть (b = 1) — x, иначе 0.
 Согласие: одинаково — это значение, разное — 0.
 Проверяет таблицу текста, примеры и контрпримеры, порядок, троих, x и ¬x,
 НЕ насквозь, формулу с 0 и то, что без 0 согласие не собрать.
@@ -38,6 +39,18 @@ def soglasie(x, y):
 # formula_s_nulem: (x ∧ y) ∨ ((x ∨ y) ∧ 0)
 def formula_s_nulem(x, y):
     otvet = ili(i_(x, y), i_(ili(x, y), 0))
+    return otvet
+
+
+# osnovanie: есть основание (b = 1) — x, нет или не знаем — 0
+def osnovanie(x, b):
+    otvet = x if b == 1 else 0
+    return otvet
+
+
+# formula_osnovaniya: (x ∧ b) ∨ (0 ∧ ¬b)
+def formula_osnovaniya(x, b):
+    otvet = ili(i_(x, b), i_(0, ne(b)))
     return otvet
 
 
@@ -168,15 +181,112 @@ def bez_nulya():
     return oshibki
 
 
-# proverit: вся проверка и итог
-def proverit(put):
-    tekst = Path(put).read_text(encoding="utf-8")
+# sverit_stroku_osn: одна строка таблицы основания «**x = 1** | …» против osnovanie
+def sverit_stroku_osn(shapka, stroka):
+    x = chislo(stroka[0].replace("x =", ""))
+    oshibki = [f"основание({x}, {chislo(b.replace('b =', ''))}) в книге {z}"
+               for b, z in zip(shapka[1:], stroka[1:])
+               if osnovanie(x, chislo(b.replace("b =", ""))) != chislo(z)]
+    return oshibki
+
+
+# sverit_tablicu_osn: таблица «основание» В.2; (сверено, ошибки)
+def sverit_tablicu_osn(tekst):
+    nuzhnye = [t for t in tablicy(razdel(tekst, "## В.2")) if t[0][0] == "основание"]
+    oshibki = [o for t in nuzhnye for stroka in t[1:] for o in sverit_stroku_osn(t[0], stroka)]
+    otvet = (len(nuzhnye), oshibki)
+    return otvet
+
+
+# PRIMERY_OSN: что утверждает текст В.2
+PRIMERY_OSN = [
+    ("сайт видели: основание(1, 1)", osnovanie(1, 1), 1),
+    ("слышал от кого-то: основание(1, 0)", osnovanie(1, 0), 0),
+    ("журнал: основание(−1, 1)", osnovanie(-1, 1), -1),
+    ("соседка без основания: основание(−1, 0)", osnovanie(-1, 0), 0),
+    ("И на соседке: −1 ∧ 0", i_(-1, 0), -1),
+    ("нечем доказать: основание(1, −1)", osnovanie(1, -1), 0),
+    ("два подряд: основание(основание(1, 1), 0)", osnovanie(osnovanie(1, 1), 0), 0),
+    ("формула на соседе", formula_osnovaniya(1, -1), 0),
+    ("формула по шагам: 1 ∧ −1", i_(1, -1), -1),
+    ("формула по шагам: 0 ∧ ¬(−1)", i_(0, ne(-1)), 0),
+]
+# LOMAETSYA_OSN: И и «нет основания — неправда» НЕ дают основание
+LOMAETSYA_OSN = [
+    ("И вместо основания у соседки", i_(-1, 0), osnovanie(-1, 0)),
+    ("«нет основания — неправда»", -1, osnovanie(1, -1)),
+    ("порядок не важен", osnovanie(-1, 1), osnovanie(1, -1)),
+]
+
+
+# sverit_primery_osn: примеры В.2 совпадают, контрпримеры — нет
+def sverit_primery_osn():
+    oshibki = [f"пример В.2: {chto} → {vyshlo}, нужно {nado}"
+               for chto, vyshlo, nado in PRIMERY_OSN if vyshlo != nado]
+    oshibki += [f"контрпример В.2 совпал: {chto}"
+                for chto, odno, drugoe in LOMAETSYA_OSN if odno == drugoe]
+    return oshibki
+
+
+# svojstva_osn_dvoih: x или 0, НЕ насквозь, формула с 0 — на 9 наборах
+def svojstva_osn_dvoih():
+    oshibki = []
+    for x, b in product(TRITY, repeat=2):
+        if osnovanie(x, b) not in (x, 0):
+            oshibki.append(f"основание({x}, {b}) — не x и не 0")
+        if ne(osnovanie(x, b)) != osnovanie(ne(x), b):
+            oshibki.append(f"НЕ не проходит через основание на ({x}, {b})")
+        if formula_osnovaniya(x, b) != osnovanie(x, b):
+            oshibki.append(f"формула основания не сошлась на ({x}, {b})")
+    return oshibki
+
+
+# svojstva_osn_troih: два основания подряд = основание(x, a ∧ b), порядок оснований не важен
+def svojstva_osn_troih():
+    oshibki = []
+    for x, a, b in product(TRITY, repeat=3):
+        podryad = osnovanie(osnovanie(x, a), b)
+        if {podryad, osnovanie(osnovanie(x, b), a)} != {osnovanie(x, i_(a, b))}:
+            oshibki.append(f"два основания ({x}, {a}, {b}): {podryad}")
+    return oshibki
+
+
+# bez_nulya_osn: на битах основание(1, −1) = 0 — И, ИЛИ, НЕ так не могут
+def bez_nulya_osn():
+    oshibki = [] if osnovanie(1, -1) == 0 else ["основание(1, −1) не 0"]
+    return oshibki
+
+
+# proverit_V1: всё о согласии; (сверено таблиц, ошибки)
+def proverit_V1(tekst):
     svereno, oshibki = sverit_tablicu(tekst)
     if svereno != 1:
         oshibki.append(f"таблиц согласия найдено {svereno}, нужна 1")
     oshibki += sverit_primery() + svojstva() + bez_nulya()
+    otvet = (svereno, oshibki)
+    return otvet
+
+
+# proverit_V2: всё об основании; (сверено таблиц, ошибки)
+def proverit_V2(tekst):
+    svereno, oshibki = sverit_tablicu_osn(tekst)
+    if svereno != 1:
+        oshibki.append(f"таблиц основания найдено {svereno}, нужна 1")
+    oshibki += sverit_primery_osn() + svojstva_osn_dvoih() + svojstva_osn_troih() + bez_nulya_osn()
+    otvet = (svereno, oshibki)
+    return otvet
+
+
+# proverit: вся проверка и итог
+def proverit(put):
+    tekst = Path(put).read_text(encoding="utf-8")
+    svereno, oshibki = proverit_V1(tekst)
+    svereno_osn, oshibki_osn = proverit_V2(tekst)
     print(f"В.1 — таблиц: {svereno}, примеров: {len(PRIMERY)}, "
           f"контрпримеров: {len(LOMAETSYA)}, свойства: 9 + 27 наборов, без 0 — нельзя")
+    print(f"В.2 — таблиц: {svereno_osn}, примеров: {len(PRIMERY_OSN)}, "
+          f"контрпримеров: {len(LOMAETSYA_OSN)}, свойства: 9 + 27 наборов, без 0 — нельзя")
+    oshibki += oshibki_osn
     print("\n".join(oshibki) if oshibki else "Всё верно.")
     kod = 1 if oshibki else 0
     return kod
