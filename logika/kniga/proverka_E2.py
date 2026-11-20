@@ -176,6 +176,15 @@ for nashel in (-1, 1):
 assert EST_TABLICA == [0, -1, 1, 1]
 print("есть ли вектором:", EST_TABLICA, "| 0.1 + 0.2 =", 0.1 + 0.2)
 
+# 10. Формулы из готовых слов (по-фортовски: собрали - пользуемся)
+assert [vorota(x) for x in TRITY] == [-1, -1, 1]              # делаю
+assert [ne_znayu_li(x) for x in TRITY] == [-1, 1, -1]         # ищу
+assert [vorota(ne(x)) for x in TRITY] == [1, -1, -1]          # не делаю
+assert [srabatyvaet(x) for x in TRITY + (OTSUTSTVUET,)] == [1, 1, 1, -1]
+for x in TRITY:
+    assert ILI(I_(x, -1), I_(ne(-1), 0)) == 0                 # пересказ: подлинник = -1 -> 0
+assert ILI(I_(-1, 1), I_(ne(1), 0)) == -1                     # «очевидно» с примером: -1
+
 print("согласие вектором:", TABLICA)
 print("0.1 + 0.2 == 0.3:", OCHEVIDNO, "| 1900 по-простому:", visokosnyj_naivno(1900), "на деле:", visokosnyj(1900))
 print("спор 3 «да» и 1 «нет»:", spor([1, 1, 1, -1]))
