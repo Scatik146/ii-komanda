@@ -92,6 +92,11 @@ assert po_broskam([1, 0] * 3) == [0] * 6
 KART = {n: kartochka(n) for n in range(1, 11)}
 assert KART[3] == (None, 0) and KART[4] == (4, 0) and KART[10] == (7, 4)
 
+# Карточка-таблица из книги: строка - бросил, столбец - попал
+SETKA = {n: [reshenie(schet(h, n - h)) for h in range(n + 1)] for n in range(1, 7)}
+assert SETKA == {1: [0, 0], 2: [0, 0, 0], 3: [-1, 0, 0, 0], 4: [-1, 0, 0, 0, 1],
+                 5: [-1, -1, 0, 0, 0, 1], 6: [-1, -1, -1, 0, 0, 1, 1]}
+
 # Ошибки и число бросков - точно, по дробям
 HOR = igra(HOROSHIJ)
 SLAB = igra(SLABYJ)
