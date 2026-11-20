@@ -438,6 +438,9 @@ def bity_V4():
     sheffer = lambda x, y: ne(i_(x, y))
     oshibki += [] if sheffer(-1, -1) == 1 and sheffer(1, 1) == -1 else ["Шеффер"]
     oshibki += [] if i_(-1, -1) == ili(-1, -1) == -1 and ne(-1) == 1 else ["замок «нет» для битов"]
+    oshibki += [f"константы на битах при x = {x}" for x in BITY
+                if ili(x, ne(x)) != 1 or i_(x, ne(x)) != -1]
+    oshibki += [] if ili(0, ne(0)) == 0 else ["x ∨ ¬x при x = 0 не 0"]
     return oshibki
 
 
