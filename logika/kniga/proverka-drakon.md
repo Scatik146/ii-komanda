@@ -261,10 +261,11 @@ x ∨ ¬x -> прибор: 1, если x известен, 0, если нет
 ## Действия: proverka_V.py
 
 ```дракон
-название: Проверка шага В части 2 (В.1 согласие, В.2 основание)
+название: Проверка шага В части 2 (В.1 согласие, В.2 основание, В.3 ворота)
 svereno, oshibki = proverit_V1(tekst)
 svereno_osn, oshibki_osn = proverit_V2(tekst)
-oshibki = oshibki + oshibki_osn
+svereno_vor, oshibki_vor = proverit_V3(tekst)
+oshibki = oshibki + oshibki_osn + oshibki_vor
 вывод: oshibki
 ```
 
@@ -281,11 +282,18 @@ oshibki = oshibki + oshibki_osn
 основание(x, b) = (x ∧ b) ∨ (0 ∧ ¬b)
 ¬ проходит насквозь через оба
 без 0 -> из И, ИЛИ, НЕ не собрать ни одно
+ворота(x) = 1, если x = 1, иначе −1
+возможно(x) = −1, если x = −1, иначе 1
+не знаю?(x) = 1, если x = 0, иначе −1
+ворота(x) | ворота(¬x) | не знаю?(x) -> ровно одно 1
+возможно(x) = ¬ворота(¬x)
+из x, чисел, И, ИЛИ, НЕ -> 11 из 27, ворот нет
 ```
 
 пример: chast-2-trit/V-dejstviya.md как есть → строки «В.1 — …», «В.2 — таблиц: 1, примеров: 10, контрпримеров: 3, …», «Всё верно.», код 0
 контрпример: в таблице согласие(1, 0) = 1 → «согласие(1, 0) в книге 1», код 1
 контрпример: в таблице основания x = 1, b = 0 → 1 → «основание(1, 0) в книге 1», код 1
+контрпример: в таблице ворот возможно(0) = −1 → «возможно(x) при x = 0 в книге −1», код 1
 контрпример: soglasie через min (как И) → «контрпример совпал: И вместо согласия на споре», код 1
 
 Пополнение словаря (proverka_V.py):
@@ -293,6 +301,7 @@ oshibki = oshibki + oshibki_osn
 - formula_s_nulem — нижний — (x ∧ y) ∨ ((x ∨ y) ∧ 0) — i_, ili
 - osnovanie — нижний — b = 1 — x, иначе 0 — сравнение
 - formula_osnovaniya — нижний — (x ∧ b) ∨ (0 ∧ ¬b) — i_, ili, ne
+- vorota, vozmozhno, ne_znayu — нижний — трит → решение-бит — сравнение
 - troe — нижний — свести двоих, потом с третьим — soglasie
 - sverit_stroku, sverit_tablicu — средний — таблица В.1 — razdel, tablicy, soglasie
 - sverit_stroku_osn, sverit_tablicu_osn — средний — таблица В.2 — razdel, tablicy, osnovanie
@@ -300,5 +309,9 @@ oshibki = oshibki + oshibki_osn
 - svojstva_dvoih, svojstva_troih, svojstva — средний — согласие: порядок, трое, x и ¬x, НЕ, формула — product
 - svojstva_osn_dvoih, svojstva_osn_troih — средний — основание: x или 0, НЕ, формула, два подряд — product
 - bez_nulya, bez_nulya_osn — средний — И, ИЛИ, НЕ не выводят из битов — product
-- proverit_V1, proverit_V2 — средний — всё о согласии / основании — sverit_*, svojstva*
-- proverit — верхний — вся проверка и итог — proverit_V1, proverit_V2
+- sverit_tablicu_vorot — средний — таблица В.3 — razdel, tablicy, VOROTA
+- sverit_primery_vor, svojstva_vorot — средний — примеры, только биты, ровно одно из трёх, возможно = ¬ворота(¬x) — VOROTA
+- sobrat_iz_x — средний — всё из x, чисел, И, ИЛИ, НЕ — ne, i_, ili
+- bez_vorot — средний — 11 из 27, при 0 — 0, ворот нет — sobrat_iz_x
+- proverit_V1, proverit_V2, proverit_V3 — средний — всё о согласии / основании — sverit_*, svojstva*
+- proverit — верхний — вся проверка и итог — proverit_V1, proverit_V2, proverit_V3
