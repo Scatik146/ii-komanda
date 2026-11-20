@@ -203,6 +203,9 @@
 - **Д.1, Д.2** — строки «Источник» в `logika/kniga/chast-2-trit/D-vremya.md` (Аристотель; ван Фраассен 1966, Томасон 1970, Прайор 1967 - по Эрстрёму 2023 и Крессуэллу 2007, см. § 7). Проверки - `proverka_D1.py`, `proverka_D2.py`.
 - **Д.3 Вальд** — O'Connor J. J., Robertson E. F. Abraham Wald // MacTutor History of Mathematics, https://mathshistory.st-andrews.ac.uk/Biographies/Wald/ (обращение 20.11.2026, по выдаче поиска). Wald, Abraham // International Encyclopedia of the Social Sciences, encyclopedia.com (обращение 20.11.2026, по выдаче поиска; автора статьи не смотрели). Wald 1945, Wald-Wolfowitz 1948 - см. § 7, не читали. Пример с баскетболом, числа 8/10, 3/10, 5/100 - наши. Проверка - `logika/kniga/proverka_D3.py`.
 
+### Часть 2. Трит. Шаг Е. Правила осторожного человека и Мерфи (20.11)
+- **Е.0 «На авторе»** — Casselman B. The Legend of Abraham Wald // AMS Feature Column. - June 2016. - https://www.ams.org/samplings/feature-column/fc-2016-06 (обращение 20.11.2026, по выдаче поиска: зерно правды есть, для лучших подробностей свидетельств мало). Mangel M., Samaniego F. J. Abraham Wald's Work on Aircraft Survivability // JASA. - 1984. - Vol. 79, № 386. - P. 259-267 - не читали. Эпиграф - учителя (афоризм в стиле Ландау); табличка, постмортем - наши.
+
 ### Действующие лица (сводки 1–33, `logika/kniga/dejstvuyushchie-lica.md`)
 
 Копия строк «Источники:» под сводками, по номерам (перенесено 20.11). Правится в сводке, сюда — копией.
