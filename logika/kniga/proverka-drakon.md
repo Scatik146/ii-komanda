@@ -90,3 +90,33 @@ itogi["отрезки Г.4"] = otrezki_G4()
 - otvet_G3 — средний — выражение = [x + y ≤ z] на −20…20 — zadacha_G3
 - otrezok, demo_G4, naoborot_G4, otrezki_G4 — нижний/средний — бит «x на отрезке», выражения Г.4, проверка 24 и 90 — impl, TOCHKI
 - glavnoe (Г) — верхний — все проверки шага Г — все слова выше
+
+## Действия: proverka_P.py
+
+```дракон
+название: Проверка таблицы «Кто за кем»
+stroki = stroki_tablicy(tekst)
+oshibki = 0
+для: s из stroki
+  если: oshibki_stroki(s)
+    да:
+      oshibki = oshibki + 1
+    нет:
+если: poryadok == sorted(poryadok)
+  да:
+  нет:
+    oshibki = oshibki + 1
+вывод: oshibki
+```
+
+пример: таблица П.1 как есть → строк 24, людей 21, ошибок 0
+контрпример: у Шеффера 1912 вместо 1913 → «нет в В.2: Шеффер ['1912']», ошибок 1
+
+Пополнение словаря (proverka_P.py):
+- stroki_tablicy — нижний — строки таблицы П.1 ячейками — splitlines, split
+- gody — нижний — четырёхзначные годы из ячейки — re.findall
+- osnova — нижний — основа фамилии без окончания — split, срез
+- kusok_razdela — средний — текст раздела «## Х.n.» — FAJLY, re.split
+- oshibki_stroki — средний — чего из строки нет в разделе — kusok_razdela, osnova, gody
+- pervyj_god — средний — первый год строки (до н. э. = −1) — gody
+- proverit — верхний — расхождения и порядок годов — stroki_tablicy, oshibki_stroki, pervyj_god
