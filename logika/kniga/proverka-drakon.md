@@ -128,13 +128,15 @@ oshibki = oshibki + oshibki_p5(stroki, tekst)
 ## Действия: proverka_A2.py
 
 ```дракон
-название: Проверка шага А части 2 (НЕ, И, ИЛИ на тритах)
+название: Проверка шага А части 2 (А.1 НЕ, И, ИЛИ; А.2 девять вариантов)
 svereno, oshibki = sverit_tablicy(tekst)
 oshibki = oshibki + sverit_primery() + ugly()
 если: svereno < 3
   да:
     oshibki = oshibki + ["таблиц меньше трёх"]
   нет:
+svereno_A2, oshibki_A2 = sverit_A2(tekst)
+oshibki = oshibki + oshibki_A2
 вывод: oshibki
 ```
 
@@ -146,10 +148,14 @@ oshibki = oshibki + sverit_primery() + ugly()
 ИЛИ(x, y) = большее(x, y)
 бит 1 -> трит 1
 бит 0 -> трит −1
+вместе(сказано, верить) = И(сказано, верить)
+ворота(x) = 1, если x = 1, иначе −1
+наружу = ворота(вместе) -> только (1, 1)
 ```
 
-пример: chast-2-trit/A-osnova.md как есть → «таблиц сверено: 3, примеров: 6, контрпримеров: 5, углов: 4 × 2», «Всё верно.», код 0
+пример: chast-2-trit/A-osnova.md как есть → «А.1 — таблиц: 3, примеров: 6, контрпримеров: 5, углов: 4 × 2», «А.2 — таблиц: 2, примеров: 5, контрпримеров: 3, наружу — только (1, 1)», «Всё верно.», код 0
 контрпример: в таблице ИЛИ 0 ∨ 0 = 1 → «**0** ∨ 0 в книге 1», код 1
+контрпример: в таблице А.2 у Пети (−1, −1) «вместе» 1 и «наружу» 1 → «вместе (−1, −1) в книге 1», «наружу (−1, −1) в книге 1», код 1
 
 Пополнение словаря (proverka_A2.py):
 - ne — нижний — НЕ трита: −x — унарный минус
@@ -166,4 +172,11 @@ oshibki = oshibki + sverit_primery() + ugly()
 - sverit_tablicy — средний — все таблицы А.1 — razdel, tablicy, sverit_ne, sverit_dvuh
 - ugly — средний — углы {−1, 1} = старые И, ИЛИ — bit_v_trit, i_, ili
 - sverit_primery — средний — примеры совпадают, старые формулы ломаются — PRIMERY, LOMAETSYA
-- proverit — верхний — вся проверка и итог — sverit_tablicy, sverit_primery, ugly
+- vorota — нижний — пропускают только 1 — сравнение
+- vmeste — нижний — пара → один трит — i_
+- naruzhu — нижний — выдавать ли — vorota, vmeste
+- sverit_devyat — средний — таблица девяти вариантов — chislo, vmeste, naruzhu, product
+- sverit_vorota — средний — таблица ворот — chislo, vorota
+- tolko_odin — средний — наружу проходит только (1, 1) — naruzhu, product
+- sverit_A2 — средний — таблицы, примеры, контрпримеры А.2 — razdel, tablicy, sverit_devyat, sverit_vorota, tolko_odin
+- proverit — верхний — вся проверка и итог — sverit_tablicy, sverit_primery, ugly, sverit_A2
