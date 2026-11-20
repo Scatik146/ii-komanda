@@ -184,16 +184,16 @@ oshibki = oshibki + oshibki_A2
 ## Действия: proverka_B2.py
 
 ```дракон
-название: Проверка шага Б части 2 (Б.1 законы на тритах)
+название: Проверка шага Б части 2 (Б.1 законы на тритах, Б.2 что ломается)
 ввод: argumenty
-если: argumenty[0] = "--tablica"
+если: argumenty[0] = "--tablica" или "--tablica-b2"
   да:
-    вывод: tablica()
+    вывод: tablica() или tablica_b2()
   нет:
-oshibki = proverit_zakony() + sverit_zvezdy() + proverit_primery()
+oshibki = proverit_zakony() + sverit_zvezdy() + proverit_primery() + proverit_b2()
 если: есть файл текста
   да:
-    oshibki = oshibki + sverit_tekst(fajl)
+    oshibki = oshibki + sverit_tekst(fajl) + sverit_tekst_b2(fajl)
   нет:
 pechat_zvezd()
 вывод: itog(), oshibki
@@ -207,11 +207,15 @@ x ≡ y = И(x → y, y → x): договор
 закон на тритах -> держится: совпало на всех 3 / 9 / 27 наборах
 закон на тритах -> ★: есть набор с 0, где не совпало
 биты (−1, 1) -> все 33 держатся
+★ -> поломки: 54 набора, ломаются 10 (7 законов - по одному, модус поненс - 3)
+поломка -> в наборе есть 0
+поломка -> слева 0, справа 1 или −1: закон не врёт, а молчит
 ```
 
 пример: `python3 proverka_B2.py chast-2-trit/B-zakony.md` → 8 строк «★ …: ломается на …», «законов 33, на тритах держатся 25, ★ ломаются 8», «ошибок: 0», код 0
 контрпример: убрать ★ у «x → x = 1» в ZAKONY → «ОШИБКА ★ не совпала: x → x = 1 (0,)» и «ОШИБКА ★: у нас …, в части 1 …», код 2
 контрпример: дописать в таблицу Б.1 строку «x ∨ ¬x = 1» → «ОШИБКА таблица текста: лишние {'x ∨ ¬x = 1'}», код 1
+контрпример: в таблице Б.2 текста поменять «Слева» у x ∨ ¬x = 1 на 1 → «ОШИБКА таблица Б.2 в тексте не совпала с программой», код 1
 
 Пополнение словаря (proverka_B2.py):
 - sl — нижний — стрелка трита: ¬x ∨ y — ne, ili
@@ -229,3 +233,11 @@ x ≡ y = И(x → y, y → x): договор
 - pechat_zvezd — нижний — где ломается каждый ★ — kontrprimer
 - proverit_vse — верхний — все проверки и отчёт — proverit_*, sverit_*
 - glavnoe — верхний — таблица или проверки — tablica, proverit_vse
+
+- vse_polomki — нижний — все наборы, где части закона не совпали — product
+- trit, nabor_slovami — нижний — трит и набор строкой для таблицы — str
+- zamechaniya_polomki — нижний — поломка без 0 или не «молчит» — сравнение
+- proverit_polomki — средний — все поломки всех законов — vse_polomki, zamechaniya_polomki
+- proverit_chisla_b2 — средний — 54 набора, 10 поломок — vse_polomki
+- proverit_b2 — средний — поломки, примеры, числа Б.2 — proverit_polomki, proverit_chisla_b2
+- tablica_b2, sverit_tekst_b2 — средний — таблица Б.2 для текста и сверка с текстом — vse_polomki, nabor_slovami

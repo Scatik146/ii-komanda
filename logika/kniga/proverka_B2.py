@@ -1,9 +1,10 @@
-"""Проверка шага Б части 2 (Б.1): 33 закона части 1 на тритах.
+"""Проверка шага Б части 2: Б.1 — 33 закона части 1 на тритах; Б.2 — где и как ломаются ★.
 Каждый закон — на всех наборах: 3 для одной буквы, 9 для двух, 27 для трёх.
 Бит 1 → 1, бит 0 (ложь) → −1; НЕ = −x, И = min, ИЛИ = max,
 x → y = ¬x ∨ y, x ≡ y = (x → y) ∧ (y → x).
 Запуск: python3 proverka_B2.py chast-2-trit/B-zakony.md
-        python3 proverka_B2.py --tablica   (таблица держащихся законов для текста)"""
+        python3 proverka_B2.py --tablica   (таблица держащихся законов для текста)
+        python3 proverka_B2.py --tablica-b2   (таблица Б.2: где ломается каждый ★)"""
 import sys
 from itertools import product
 from pathlib import Path
@@ -230,11 +231,108 @@ def pechat_zvezd():
             print(f"★ {z[1]}: ломается на {kontrprimer(z, TRITY)}")
 
 
+# ---- Б.2. Что ломается ----
+
+# vse_polomki: все наборы, где части не совпали — (набор, слева, справа)
+def vse_polomki(zakon):
+    _, _, _, _, bukv, levaya, pravaya = zakon
+    nabory = product(TRITY, repeat=bukv)
+    otvet = [(n, levaya(*n), pravaya(*n)) for n in nabory if levaya(*n) != pravaya(*n)]
+    return otvet
+
+
+# trit: трит строкой, минус — настоящий
+def trit(t):
+    otvet = "−1" if t == -1 else str(t)
+    return otvet
+
+
+# nabor_slovami: (1, 0) → «x = 1, y = 0»
+def nabor_slovami(nabor):
+    otvet = ", ".join(f"{b} = {trit(t)}" for b, t in zip("xyz", nabor))
+    return otvet
+
+
+# PRIMERY_B2: что утверждает текст Б.2 — (что, получилось, должно быть)
+PRIMERY_B2 = [
+    ("противоречия: 0 ∧ ¬0 = 0", i_(0, ne(0)), 0),
+    ("склеивание: (1 ∧ 0) ∨ (1 ∧ ¬0) = 0", ili(i_(1, 0), i_(1, ne(0))), 0),
+    ("Блейк - Порецкий: 0 ∨ (¬0 ∧ 1) = 0", ili(0, i_(ne(0), 1)), 0),
+    ("Блейк - Порецкий справа: 0 ∨ 1 = 1", ili(0, 1), 1),
+    ("модус поненс: 1 → 0 = 0", sl(1, 0), 0),
+    ("модус поненс: 1 ∧ 0 = 0", i_(1, 0), 0),
+    ("модус поненс: 0 → 0 = 0", sl(0, 0), 0),
+    ("x → x при x = 0 — это 0 ∨ 0", sl(0, 0), ili(ne(0), 0)),
+    ("починка: 0 ∨ ¬0 — это то же 0 ∨ 0", ili(0, ne(0)), ili(0, 0)),
+] + [
+    (f"модус поненс = ¬x ∨ (x ∧ ¬y) ∨ y при {n}",
+     sl(i_(n[0], sl(n[0], n[1])), n[1]), ili(ili(ne(n[0]), i_(n[0], ne(n[1]))), n[1]))
+    for n in product(TRITY, repeat=2)
+]
+# NABOROV_B2: (всего наборов у ★, из них ломаются) — числа из текста
+NABOROV_B2 = (54, 10)
+
+
+# zamechaniya_polomki: ошибки одной поломки — без 0 или не «молчит»
+def zamechaniya_polomki(zakon, nabor, sleva, sprava):
+    otchet = []
+    if 0 not in nabor:
+        otchet.append(f"ОШИБКА Б.2 ломается без 0: {zakon[1]} {nabor}")
+    if sleva != 0 or sprava == 0:
+        otchet.append(f"ОШИБКА Б.2 не «молчит»: {zakon[1]} {nabor} {sleva} {sprava}")
+    return otchet
+
+
+# proverit_polomki: строки ошибок — в каждой поломке есть 0; слева «не знаю», справа знание
+def proverit_polomki():
+    otchet = [s for z in ZAKONY for n, l, p in vse_polomki(z) for s in zamechaniya_polomki(z, n, l, p)]
+    return otchet
+
+
+# proverit_chisla_b2: строки ошибок — сколько наборов у ★ и сколько ломается
+def proverit_chisla_b2():
+    zvezdy = [z for z in ZAKONY if z[3]]
+    vsego = sum(3 ** z[4] for z in zvezdy)
+    lomaetsya = sum(len(vse_polomki(z)) for z in zvezdy)
+    otchet = [] if (vsego, lomaetsya) == NABOROV_B2 else [f"ОШИБКА Б.2 наборов: {vsego}, ломается {lomaetsya}"]
+    return otchet
+
+
+# proverit_b2: (ошибок, строки отчёта) — поломки, примеры, числа раздела Б.2
+def proverit_b2():
+    primery = [f"ОШИБКА пример Б.2: {c} → {v}" for c, v, n in PRIMERY_B2 if v != n]
+    otchet = proverit_polomki() + primery + proverit_chisla_b2()
+    return len(otchet), otchet
+
+
+# tablica_b2: где ломается каждый ★ — строки Markdown для текста
+def tablica_b2():
+    stroki = ["| Закон | Название | Где ломается | Слева | Должно быть |", "|---|---|---|---|---|"]
+    for z in ZAKONY:
+        polomki = vse_polomki(z)
+        if z[3]:
+            gde = "; ".join(nabor_slovami(n) for n, _, _ in polomki)
+            stroki.append(f"| {z[1]} | {z[2]} | {gde} | {trit(polomki[0][1])} | {trit(polomki[0][2])} |")
+    return "\n".join(stroki)
+
+
+# sverit_tekst_b2: таблица раздела Б.2 текста = tablica_b2()
+def sverit_tekst_b2(put):
+    tekst = put.read_text(encoding="utf-8")
+    razdel = tekst.split("## Б.2", 1)[1].split("\n## ", 1)[0] if "## Б.2" in tekst else ""
+    v_tekste = [s for s in razdel.splitlines() if s.startswith("|")]
+    nado = tablica_b2().splitlines()
+    oshibki = 0 if v_tekste == nado else 1
+    otchet = [] if oshibki == 0 else ["ОШИБКА таблица Б.2 в тексте не совпала с программой"]
+    return oshibki, otchet
+
+
 # proverit_vse: все проверки, напечатать отчёт, вернуть число ошибок
 def proverit_vse(argumenty):
-    chasti = [proverit_zakony(), sverit_zvezdy(), proverit_primery()]
+    chasti = [proverit_zakony(), sverit_zvezdy(), proverit_primery(), proverit_b2()]
     if argumenty:
         chasti.append(sverit_tekst(ZDES / argumenty[0]))
+        chasti.append(sverit_tekst_b2(ZDES / argumenty[0]))
     oshibki = sum(o for o, _ in chasti)
     for _, otchet in chasti:
         print("\n".join(otchet)) if otchet else None
@@ -244,10 +342,11 @@ def proverit_vse(argumenty):
     return oshibki
 
 
-# glavnoe: --tablica печатает таблицу, иначе проверки; код выхода = число ошибок
+# glavnoe: --tablica / --tablica-b2 печатают таблицу, иначе проверки; код выхода = число ошибок
 def glavnoe(argumenty):
-    tolko_tablica = bool(argumenty) and argumenty[0] == "--tablica"
-    print(tablica()) if tolko_tablica else None
+    tolko_tablica = bool(argumenty) and argumenty[0].startswith("--tablica")
+    print(tablica()) if tolko_tablica and argumenty[0] == "--tablica" else None
+    print(tablica_b2()) if tolko_tablica and argumenty[0] == "--tablica-b2" else None
     oshibki = 0 if tolko_tablica else proverit_vse(argumenty)
     return oshibki
 
