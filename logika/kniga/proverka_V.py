@@ -1,4 +1,4 @@
-"""Проверка шага В части 2: В.1 — согласие, В.2 — основание, В.3 — ворота.
+"""Проверка шага В части 2: В.1 — согласие, В.2 — основание, В.3 — ворота, В.4 — базисы.
 Основание: основание есть (b = 1) — x, иначе 0.
 Согласие: одинаково — это значение, разное — 0.
 Проверяет таблицу текста, примеры и контрпримеры, порядок, троих, x и ¬x,
@@ -344,15 +344,15 @@ def svojstva_vorot():
     return oshibki
 
 
-# sobrat_iz_x: всё, что собирается из x, чисел, И, ИЛИ, НЕ — столбцы по x = −1, 0, 1
-def sobrat_iz_x():
+# sobrat_iz_x: всё из x, чисел, НЕ и данных действий двух букв — столбцы по x = −1, 0, 1
+def sobrat_iz_x(dejstviya=(i_, ili)):
     sobrano = {TRITY, (-1, -1, -1), (0, 0, 0), (1, 1, 1)}
     proshloe = set()
     while sobrano != proshloe:
         proshloe = set(sobrano)
         for f in proshloe:
             sobrano.add(tuple(ne(v) for v in f))
-            sobrano |= {tuple(map(d, f, g)) for g in proshloe for d in (i_, ili)}
+            sobrano |= {tuple(map(d, f, g)) for g in proshloe for d in dejstviya}
     return sobrano
 
 
@@ -376,6 +376,118 @@ def proverit_V3(tekst):
     return otvet
 
 
+# okoshko: 1, если x равен a, иначе −1 — из ворот, НЕ, И
+def okoshko(a, x):
+    po_znacheniyu = {1: vorota(x), -1: vorota(ne(x)), 0: i_(ne(vorota(x)), ne(vorota(ne(x))))}
+    otvet = po_znacheniyu[a]
+    return otvet
+
+
+# sobrat_okoshkami: значение таблицы (клетка → ответ) в точке — ИЛИ по клеткам (окошки ∧ ответ)
+def sobrat_okoshkami(tablica, tochka):
+    otvet = -1
+    for kletka, c in tablica.items():
+        okna = [okoshko(a, x) for a, x in zip(kletka, tochka)]
+        otvet = ili(otvet, i_(min(okna), c))
+    return otvet
+
+
+# sobrat_vse: все 27 и 19 683 таблицы собраны окошками и совпали; ошибки
+def sobrat_vse():
+    oshibki = []
+    for bukv in (1, 2):
+        kletki = list(product(TRITY, repeat=bukv))
+        for otvety in product(TRITY, repeat=len(kletki)):
+            tablica = {k: c for k, c in zip(kletki, otvety) if c != -1}
+            oshibki += [f"окошки: {otvety} в {k}" for k, c in zip(kletki, otvety)
+                        if sobrat_okoshkami(tablica, k) != c]
+    return oshibki
+
+
+# sverit_okoshki: таблица окошек В.4 против okoshko
+def sverit_okoshki(tekst):
+    imena = {"ворота(x)": 1, "ворота(¬x)": -1, "¬ворота(x) ∧ ¬ворота(¬x)": 0}
+    nuzhnye = [t for t in tablicy(razdel(tekst, "## В.4")) if t[0][0] == "x"]
+    stroki = [(t[0], st) for t in nuzhnye for st in t[1:] if st[0] in imena]
+    oshibki = [f"{st[0]} при x = {x} в книге {z}" for shapka, st in stroki
+               for x, z in zip(shapka[1:], st[1:]) if okoshko(imena[st[0]], chislo(x)) != chislo(z)]
+    oshibki += [] if len(stroki) == 3 else [f"строк окошек {len(stroki)}, нужно 3"]
+    return oshibki
+
+
+# sdvig: −1 → 0, 0 → 1, 1 → −1
+def sdvig(x):
+    otvet = {-1: 0, 0: 1, 1: -1}[x]
+    return otvet
+
+
+# primery_V4: сдвиг окошками, числа, де Морган, другие ворота
+def primery_V4():
+    oshibki = [f"сдвиг при x = {x}" for x in TRITY
+               if ili(i_(okoshko(-1, x), 0), i_(okoshko(0, x), 1)) != sdvig(x)]
+    oshibki += [] if tuple(sdvig(x) for x in TRITY) not in sobrat_iz_x() else ["сдвиг собрался без ворот"]
+    oshibki += [f"−1 при x = {x}" for x in TRITY if i_(vorota(x), vorota(ne(x))) != -1]
+    oshibki += [f"де Морган на ({x}, {y})" for x, y in product(TRITY, repeat=2)
+                if ili(x, y) != ne(i_(ne(x), ne(y)))]
+    oshibki += [f"ворота из возможно при x = {x}" for x in TRITY if vorota(x) != ne(vozmozhno(ne(x)))]
+    oshibki += [f"ворота из не знаю? при x = {x}" for x in TRITY if vorota(x) != i_(x, ne(ne_znayu(x)))]
+    return oshibki
+
+
+# monotonno: больше на входе — не меньше на выходе (для двух букв — по каждой)
+def monotonno(d, bukv):
+    pary = [(a, b) for a in product(TRITY, repeat=bukv) for b in product(TRITY, repeat=bukv)
+            if all(u <= v for u, v in zip(a, b))]
+    otvet = all(d(*a) <= d(*b) for a, b in pary)
+    return otvet
+
+
+# odna_bukva: таблица на девяти точках зависит не больше чем от одной буквы
+def odna_bukva(f):
+    tochki = list(product(TRITY, repeat=2))
+    po_x = all(f[i] == f[j] for i, a in enumerate(tochki) for j, b in enumerate(tochki) if a[0] == b[0])
+    po_y = all(f[i] == f[j] for i, a in enumerate(tochki) for j, b in enumerate(tochki) if a[1] == b[1])
+    otvet = po_x or po_y
+    return otvet
+
+
+# bez_i: из x, y, 0 через НЕ и ворота — всё от одной буквы, а x ∧ y — от двух
+def bez_i():
+    tochki = list(product(TRITY, repeat=2))
+    sobrano = {tuple(a for a, _ in tochki), tuple(b for _, b in tochki), (0,) * 9}
+    for _ in range(4):
+        sobrano |= {tuple(d(v) for v in f) for f in sobrano for d in (ne, vorota)}
+    i_xy = tuple(i_(a, b) for a, b in tochki)
+    otvet = all(odna_bukva(f) for f in sobrano) and not odna_bukva(i_xy)
+    return otvet
+
+
+# zamki: четыре замка базиса {И, НЕ, ворота, 0} — детали держат, недостающая открывает
+def zamki():
+    oshibki = [] if monotonno(i_, 2) and monotonno(vorota, 1) else ["И или ворота не монотонны"]
+    oshibki += [] if not monotonno(ne, 1) else ["НЕ монотонно"]
+    oshibki += [] if i_(0, 0) == 0 and ne(0) == 0 and vorota(0) != 0 else ["замок нулей"]
+    na_bitah = {i_(a, b) for a, b in product(BITY, repeat=2)} | {ne(a) for a in BITY}
+    oshibki += [] if na_bitah | {vorota(a) for a in BITY} <= set(BITY) else ["замок битов"]
+    oshibki += [] if bez_i() else ["замок одной буквы"]
+    return oshibki
+
+
+# novye_ne_klyuch: с согласием и основанием из x — те же 11
+def novye_ne_klyuch():
+    sobrano = sobrat_iz_x((i_, ili, soglasie, osnovanie))
+    oshibki = [] if sobrano == sobrat_iz_x() else [f"с согласием и основанием {len(sobrano)}"]
+    return oshibki
+
+
+# proverit_V4: всё о базисах; ошибки
+def proverit_V4(tekst):
+    oshibki = sverit_okoshki(tekst) + sobrat_vse() + primery_V4() + zamki() + novye_ne_klyuch()
+    print("В.4 — окошки: 3 строки, собрано 27 + 19 683, сдвиг, четыре замка, другие ворота, "
+          "согласие и основание — не ключ")
+    return oshibki
+
+
 # proverit: вся проверка и итог
 def proverit(put):
     tekst = Path(put).read_text(encoding="utf-8")
@@ -388,7 +500,7 @@ def proverit(put):
     svereno_vor, oshibki_vor = proverit_V3(tekst)
     print(f"В.3 — строк ворот: {svereno_vor}, примеров: {len(PRIMERY_VOR)}, "
           f"контрпримеров: {len(LOMAETSYA_VOR)}, ровно одно из трёх, собрано 11 из 27, ворот нет")
-    oshibki += oshibki_osn + oshibki_vor
+    oshibki += oshibki_osn + oshibki_vor + proverit_V4(tekst)
     print("\n".join(oshibki) if oshibki else "Всё верно.")
     kod = 1 if oshibki else 0
     return kod

@@ -261,11 +261,11 @@ x ∨ ¬x -> прибор: 1, если x известен, 0, если нет
 ## Действия: proverka_V.py
 
 ```дракон
-название: Проверка шага В части 2 (В.1 согласие, В.2 основание, В.3 ворота)
+название: Проверка шага В части 2 (В.1 согласие, В.2 основание, В.3 ворота, В.4 базисы)
 svereno, oshibki = proverit_V1(tekst)
 svereno_osn, oshibki_osn = proverit_V2(tekst)
 svereno_vor, oshibki_vor = proverit_V3(tekst)
-oshibki = oshibki + oshibki_osn + oshibki_vor
+oshibki = oshibki + oshibki_osn + oshibki_vor + proverit_V4(tekst)
 вывод: oshibki
 ```
 
@@ -288,6 +288,9 @@ oshibki = oshibki + oshibki_osn + oshibki_vor
 ворота(x) | ворота(¬x) | не знаю?(x) -> ровно одно 1
 возможно(x) = ¬ворота(¬x)
 из x, чисел, И, ИЛИ, НЕ -> 11 из 27, ворот нет
+окошко(a, x) = 1, если x = a, иначе −1 (из ворот, НЕ, И)
+любая таблица = ИЛИ по клеткам (окошки ∧ ответ)
+{И, НЕ, ворота, 0} -> базис: замки одной буквы, порядка, нулей, битов
 ```
 
 пример: chast-2-trit/V-dejstviya.md как есть → строки «В.1 — …», «В.2 — таблиц: 1, примеров: 10, контрпримеров: 3, …», «Всё верно.», код 0
@@ -313,5 +316,10 @@ oshibki = oshibki + oshibki_osn + oshibki_vor
 - sverit_primery_vor, svojstva_vorot — средний — примеры, только биты, ровно одно из трёх, возможно = ¬ворота(¬x) — VOROTA
 - sobrat_iz_x — средний — всё из x, чисел, И, ИЛИ, НЕ — ne, i_, ili
 - bez_vorot — средний — 11 из 27, при 0 — 0, ворот нет — sobrat_iz_x
-- proverit_V1, proverit_V2, proverit_V3 — средний — всё о согласии / основании — sverit_*, svojstva*
-- proverit — верхний — вся проверка и итог — proverit_V1, proverit_V2, proverit_V3
+- okoshko — нижний — 1 на своём x, иначе −1 — vorota, ne, i_
+- sobrat_okoshkami, sobrat_vse — средний — любая таблица окошками; все 27 и 19 683 — okoshko, product
+- sverit_okoshki, primery_V4 — средний — таблица окошек, сдвиг, −1 и 1, де Морган, другие ворота — okoshko
+- monotonno, odna_bukva, bez_i, zamki — средний — четыре замка базиса — product
+- novye_ne_klyuch — средний — согласие и основание не добавляют к 11 — sobrat_iz_x
+- proverit_V1, proverit_V2, proverit_V3, proverit_V4 — средний — всё о согласии / основании — sverit_*, svojstva*
+- proverit — верхний — вся проверка и итог — proverit_V1, proverit_V2, proverit_V3, proverit_V4
