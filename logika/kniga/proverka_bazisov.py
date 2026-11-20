@@ -98,12 +98,14 @@ def teorema_sovpadaet():
 
 
 if __name__ == "__main__":
-    for nabor, k in [("¬∧∨", ()), ("¬∧", ()), ("¬∨", ()), ("∧∨", ()), ("¬", ()),
+    for nabor, k in [("¬∧∨", (EDINICA,)), ("¬∧∨", ()), ("¬∧", ()), ("¬∨", ()), ("∧∨", ()), ("¬", ()),
                      ("|", ()), ("↓", ()), ("→¬", ()), ("→", (NOL,)), ("→", ()),
                      ("∧⊕", (EDINICA,)), ("∧⊕", ()), ("⊕≡¬", ())]:
         print(nabor, "+".join("0" if c == NOL else "1" for c in k), len(zamykanie(nabor, k)), polnyj(nabor, k), bazis(nabor, k))
     for d in VEKTORY:
         print(d, "".join("+" if v_klasse(d, k) else "−" for k in KLASSY))
+    konstanty_sobrany = {NOL, EDINICA} <= zamykanie("¬∧∨")
+    print("В.1: 1 и 0 собираются из И, ИЛИ, НЕ (x ∨ ¬x, x ∧ ¬x):", konstanty_sobrany)
     vsego, rashozhdeniya = teorema_sovpadaet()
     print(f"теорема Поста: наборов {vsego}, расхождений {len(rashozhdeniya)}")
-    sys.exit(1 if rashozhdeniya else 0)
+    sys.exit(1 if rashozhdeniya or not konstanty_sobrany else 0)
