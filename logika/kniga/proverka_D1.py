@@ -98,7 +98,10 @@ VSE = formuly(2)
 RAZ = rashozhdeniya(VSE)
 assert all(t == 0 and v != 0 for f, t, v in RAZ)          # таблица 0, перебор знает
 assert all("НЕ" in str(f) for f, t, v in RAZ)               # везде есть и p, и НЕ p
-assert any(f == ILI for f, t, v in RAZ) and any(f == I_ for f, t, v in RAZ)
+assert any(f == ILI for f, t, v in RAZ)
+# по сути расхождений два: p ИЛИ НЕ p и p И НЕ p (сверено с 038, DeepSeek)
+TABLICY = {tuple(znachenie(f, {"p": x}) for x in (-1, 0, 1)) for f, t, v in RAZ}
+assert TABLICY == {(1, 0, 1), (-1, 0, -1)} and any(f == I_ for f, t, v in RAZ)
 print("формул глубины <= 2:", len(VSE), "расхождений:", len(RAZ))
 for f, t, v in RAZ[:6]:
     print("  ", f, "таблица", t, "перебор", v)
