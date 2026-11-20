@@ -58,7 +58,7 @@ assert mozhet_byt(OTV["математика"], True) == 1
 assert mozhet_byt(OTV["физкультура"], True) == 1
 assert mozhet_byt(OTV["химия"], True) == -1
 
-# Контрпример: завуч может сделать четвёртый вариант - список неполный
+# Контрпример: нужен четвёртый вариант - список неполный
 assert neotvratimo(OTV["математика"], False) == 0
 assert neotvratimo(OTV["химия"], False) == 0
 assert mozhet_byt(OTV["физкультура"], False) == 1      # найденный вариант никуда не делся

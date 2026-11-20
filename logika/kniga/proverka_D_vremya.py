@@ -53,9 +53,12 @@ def neotvratimo(otvety, polnyj):
     return otvet
 
 
-# mozhet_byt: хоть в одном 1 -> 1; во всех -1 -> -1; иначе 0
-def mozhet_byt(otvety):
-    otvet = svesti(otvety)
+# mozhet_byt: хоть в одном 1 -> 1; во всех -1 и список полный -> -1; иначе 0
+# (учитель 20.11, 22:10: «нет» - только по полному списку, как ОЧ-25)
+def mozhet_byt(otvety, polnyj):
+    otvet = NE_ZNAYU
+    if polnyj:
+        otvet = svesti(otvety)
     if any(x == DA for x in otvety):
         otvet = DA
     return otvet
@@ -110,10 +113,12 @@ assert neotvratimo([NET for _ in PLANY], True) == NET
 assert neotvratimo([NET for _ in PLANY], False) == NE_ZNAYU
 
 # может быть: «двухфакторная» в одном плане из трёх
-assert mozhet_byt([DA, NET, NET]) == DA
-assert mozhet_byt([NET, NET, NET]) == NET
-assert mozhet_byt([NE_ZNAYU, NET, NET]) == NE_ZNAYU
-assert mozhet_byt([]) == NE_ZNAYU
+assert mozhet_byt([DA, NET, NET], True) == DA
+assert mozhet_byt([DA, NET, NET], False) == DA
+assert mozhet_byt([NET, NET, NET], True) == NET
+assert mozhet_byt([NET, NET, NET], False) == NE_ZNAYU
+assert mozhet_byt([NE_ZNAYU, NET, NET], True) == NE_ZNAYU
+assert mozhet_byt([], True) == NE_ZNAYU
 
 # перебор функций глубины <= 2: расхождений два, это p ИЛИ НЕ p и p И НЕ p
 RAZ = rashozhdeniya()
