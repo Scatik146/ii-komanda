@@ -196,6 +196,9 @@
 - **А.0** — Аристотель. Об истолковании, гл. 9, 19a30-b4 / пер. Э. Л. Радлова // Аристотель. Сочинения: в 4 т. - Т. 2. - М.: Мысль, 1978 (текст - Викитека). Łukasiewicz J. O logice trójwartościowej // Ruch Filozoficzny. - 1920. - Т. 5. - С. 170-171; Stanford Encyclopedia of Philosophy, «Jan Łukasiewicz», «Future Contingents»; Woleński J. Łukasiewicz's Many-Valued Logic // Studia Humana. Брусенцов Н. П. Из истории создания троичных цифровых машин в МГУ // Историко-математические исследования. Вторая серия. - Вып. 10 (45). - М.: Янус-К, 2005. - С. 28-53. Сверка - задание 035 (`komanda/zadaniya/proverki/035/analiz.md`).
 - **А.1, А.2** — без внешних источников: таблицы и примеры проверены программой `logika/kniga/proverka_A2.py`.
 
+### Часть 2. Трит. Шаг Г. Следование (черновик 20.11)
+- **Г.1–Г.4** — Филон и Диодор (по Сексту Эмпирику): Dialectical School // Stanford Encyclopedia of Philosophy, https://plato.stanford.edu/entries/dialectical-school/ (обращение 20.11.2026, по выдаче поиска). Аристотель, «всякий - некоторые» (подчинение): The Traditional Square of Opposition // SEP, https://plato.stanford.edu/entries/square/ (обращение 20.11.2026; там же - что это взгляд самого Аристотеля, спорно). Клини - «не определено», частично рекурсивные функции; Лукасевич - сохранил x → x, отсюда ½ → ½ = 1: Three-valued Logics // Open Logic Project, https://builds.openlogicproject.org/ (обращение 20.11.2026, по выдаче поиска); arXiv 2401.03274. Брусенцов Н. П. Блуждание в трёх соснах. - 2000, с. 5-9 (`forto-prolog/brusentsov.md`, § 6). Подлинники не читали. Проверка - `logika/kniga/proverka_G2.py`.
+
 ### Действующие лица (сводки 1–33, `logika/kniga/dejstvuyushchie-lica.md`)
 
 Копия строк «Источники:» под сводками, по номерам (перенесено 20.11). Правится в сводке, сюда — копией.
