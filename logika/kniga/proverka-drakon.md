@@ -124,3 +124,46 @@ oshibki = oshibki + oshibki_p5(stroki, tekst)
 - oshibki_biografij — средний — биографии, чьи разделы не знают героя — biografii, kusok_razdela, osnova
 - oshibki_p5 — средний — печать и число ошибок П.5 — bez_biografii, oshibki_biografij
 - proverit — верхний — вся проверка — oshibki_tablicy, pervyj_god, oshibki_p5
+
+## Действия: proverka_A2.py
+
+```дракон
+название: Проверка шага А части 2 (НЕ, И, ИЛИ на тритах)
+svereno, oshibki = sverit_tablicy(tekst)
+oshibki = oshibki + sverit_primery() + ugly()
+если: svereno < 3
+  да:
+    oshibki = oshibki + ["таблиц меньше трёх"]
+  нет:
+вывод: oshibki
+```
+
+```конспект
+тема: Трит и три действия
+трит: −1 | 0 | 1
+НЕ(x) = −x
+И(x, y) = меньшее(x, y)
+ИЛИ(x, y) = большее(x, y)
+бит 1 -> трит 1
+бит 0 -> трит −1
+```
+
+пример: chast-2-trit/A-osnova.md как есть → «таблиц сверено: 3, примеров: 6, контрпримеров: 5, углов: 4 × 2», «Всё верно.», код 0
+контрпример: в таблице ИЛИ 0 ∨ 0 = 1 → «**0** ∨ 0 в книге 1», код 1
+
+Пополнение словаря (proverka_A2.py):
+- ne — нижний — НЕ трита: −x — унарный минус
+- i_ — нижний — И трита: меньшее — min
+- ili — нижний — ИЛИ трита: большее — max
+- bit_v_trit — нижний — бит части 1 → трит (0 → −1) — сравнение
+- chislo — нижний — ячейка таблицы → трит — replace, int
+- stroki_tablicy — нижний — строка Markdown → ячейки — split
+- razdel — нижний — текст раздела «## А.1» — split, find
+- tablicy — средний — все таблицы раздела — stroki_tablicy
+- sverit_ne — средний — таблица НЕ против ne — chislo, ne
+- sverit_stroku — средний — строка 3 × 3 против действия — chislo
+- sverit_dvuh — средний — таблица И или ИЛИ — sverit_stroku, i_, ili
+- sverit_tablicy — средний — все таблицы А.1 — razdel, tablicy, sverit_ne, sverit_dvuh
+- ugly — средний — углы {−1, 1} = старые И, ИЛИ — bit_v_trit, i_, ili
+- sverit_primery — средний — примеры совпадают, старые формулы ломаются — PRIMERY, LOMAETSYA
+- proverit — верхний — вся проверка и итог — sverit_tablicy, sverit_primery, ugly
