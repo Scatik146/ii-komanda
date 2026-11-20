@@ -185,6 +185,32 @@ for x in TRITY:
     assert ILI(I_(x, -1), I_(ne(-1), 0)) == 0                 # пересказ: подлинник = -1 -> 0
 assert ILI(I_(-1, 1), I_(ne(1), 0)) == -1                     # «очевидно» с примером: -1
 
+# 11. Слова нижнего уровня - базис {И, НЕ, ворота, 0}; всё остальное собрано из него
+def b_i(x, y):
+    otvet = min(x, y)
+    return otvet
+
+
+def b_ili(x, y):                                    # ИЛИ = ¬(¬x ∧ ¬y)
+    otvet = ne(b_i(ne(x), ne(y)))
+    return otvet
+
+
+def b_ne_znayu(x):                                  # не знаю? = ¬ворота(x) ∧ ¬ворота(¬x)
+    otvet = b_i(ne(vorota(x)), ne(vorota(ne(x))))
+    return otvet
+
+
+for x in TRITY:
+    assert b_ne_znayu(x) == ne_znayu_li(x)
+    for y in TRITY:
+        assert b_ili(x, y) == max(x, y)
+        assert b_ili(b_i(x, y), b_i(ne(y), 0)) == osnovanie(x, y)
+        assert b_ili(b_i(x, y), b_i(b_ili(x, y), 0)) == soglasie(x, y)
+for nashel in (-1, 1):
+    for polnyj in (-1, 1):
+        assert b_ili(nashel, b_i(ne(polnyj), 0)) == est_li({"x"} if nashel == 1 else set(), "x", polnyj == 1)
+
 print("согласие вектором:", TABLICA)
 print("0.1 + 0.2 == 0.3:", OCHEVIDNO, "| 1900 по-простому:", visokosnyj_naivno(1900), "на деле:", visokosnyj(1900))
 print("спор 3 «да» и 1 «нет»:", spor([1, 1, 1, -1]))
