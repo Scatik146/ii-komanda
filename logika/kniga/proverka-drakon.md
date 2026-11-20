@@ -180,3 +180,52 @@ oshibki = oshibki + oshibki_A2
 - tolko_odin — средний — наружу проходит только (1, 1) — naruzhu, product
 - sverit_A2 — средний — таблицы, примеры, контрпримеры А.2 — razdel, tablicy, sverit_devyat, sverit_vorota, tolko_odin
 - proverit — верхний — вся проверка и итог — sverit_tablicy, sverit_primery, ugly, sverit_A2
+
+## Действия: proverka_B2.py
+
+```дракон
+название: Проверка шага Б части 2 (Б.1 законы на тритах)
+ввод: argumenty
+если: argumenty[0] = "--tablica"
+  да:
+    вывод: tablica()
+  нет:
+oshibki = proverit_zakony() + sverit_zvezdy() + proverit_primery()
+если: есть файл текста
+  да:
+    oshibki = oshibki + sverit_tekst(fajl)
+  нет:
+pechat_zvezd()
+вывод: itog(), oshibki
+```
+
+```конспект
+тема: Закон части 1 -> трит
+закон части 1 -> закон на тритах: 0 части 1 пишем как −1 (ложь)
+x → y = ИЛИ(НЕ(x), y): договор
+x ≡ y = И(x → y, y → x): договор
+закон на тритах -> держится: совпало на всех 3 / 9 / 27 наборах
+закон на тритах -> ★: есть набор с 0, где не совпало
+биты (−1, 1) -> все 33 держатся
+```
+
+пример: `python3 proverka_B2.py chast-2-trit/B-zakony.md` → 8 строк «★ …: ломается на …», «законов 33, на тритах держатся 25, ★ ломаются 8», «ошибок: 0», код 0
+контрпример: убрать ★ у «x → x = 1» в ZAKONY → «ОШИБКА ★ не совпала: x → x = 1 (0,)» и «ОШИБКА ★: у нас …, в части 1 …», код 2
+контрпример: дописать в таблицу Б.1 строку «x ∨ ¬x = 1» → «ОШИБКА таблица текста: лишние {'x ∨ ¬x = 1'}», код 1
+
+Пополнение словаря (proverka_B2.py):
+- sl — нижний — стрелка трита: ¬x ∨ y — ne, ili
+- ekv — нижний — x ≡ y через стрелки — sl, i_
+- kontrprimer — нижний — первый набор, где части закона не совпали — product
+- derzhitsya — нижний — закон верен на всех наборах — kontrprimer
+- proverit_zakony — средний — ★ ломаются, остальные держатся, на битах все — derzhitsya
+- zvezdy_chasti_1 — нижний — названия законов со ★ из Б.1 части 1 — split
+- sverit_zvezdy — средний — ★ у нас = ★ части 1 — zvezdy_chasti_1
+- proverit_primery — средний — примеры и контрпримеры текста Б.1 — сравнение
+- stroki_tablicy_teksta — нижний — законы из таблицы Б.1 текста — split
+- sverit_tekst — средний — в таблице ровно 25 держащихся — stroki_tablicy_teksta
+- tablica — средний — таблица для текста — ZAKONY
+- itog — нижний — сводка 33 / 25 / 8 — derzhitsya
+- pechat_zvezd — нижний — где ломается каждый ★ — kontrprimer
+- proverit_vse — верхний — все проверки и отчёт — proverit_*, sverit_*
+- glavnoe — верхний — таблица или проверки — tablica, proverit_vse
