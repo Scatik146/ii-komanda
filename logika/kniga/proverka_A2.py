@@ -206,6 +206,14 @@ def tolko_odin():
     return oshibki
 
 
+# dve_stroki: наружу проходят прямо или через НЕ ровно две пары — (−1, 1) и (1, 1)
+def dve_stroki():
+    prohodyat = [p for p in product(TRITY, repeat=2)
+                 if naruzhu(*p) == 1 or naruzhu(ne(p[0]), p[1]) == 1]
+    oshibki = [] if prohodyat == [(-1, 1), (1, 1)] else [f"две строки: {prohodyat}"]
+    return oshibki
+
+
 # sverit_A2: таблицы, примеры и контрпримеры А.2; (сколько таблиц, ошибки)
 def sverit_A2(tekst):
     svereno, oshibki = 0, []
@@ -221,7 +229,7 @@ def sverit_A2(tekst):
                 if est == nado]
     if svereno < 2:
         oshibki.append(f"таблиц А.2 найдено {svereno}, нужно 2")
-    return svereno, oshibki + tolko_odin()
+    return svereno, oshibki + tolko_odin() + dve_stroki()
 
 
 # proverit: верхнее слово — сверить таблицы, примеры и углы, напечатать итог
@@ -236,7 +244,7 @@ def proverit(put):
     print(f"А.1 — таблиц: {svereno}, примеров: {len(PRIMERY)}, "
           f"контрпримеров: {len(LOMAETSYA)}, углов: 4 × 2")
     print(f"А.2 — таблиц: {svereno_A2}, примеров: {len(PRIMERY_A2)}, "
-          f"контрпримеров: {len(LOMAETSYA_A2)}, наружу — только (1, 1)")
+          f"контрпримеров: {len(LOMAETSYA_A2)}, наружу — только (1, 1), с НЕ — две строки")
     print("\n".join(oshibki) if oshibki else "Всё верно.")
     kod = 1 if oshibki else 0
     return kod

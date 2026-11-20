@@ -178,7 +178,8 @@ oshibki = oshibki + oshibki_A2
 - sverit_devyat — средний — таблица девяти вариантов — chislo, vmeste, naruzhu, product
 - sverit_vorota — средний — таблица ворот — chislo, vorota
 - tolko_odin — средний — наружу проходит только (1, 1) — naruzhu, product
-- sverit_A2 — средний — таблицы, примеры, контрпримеры А.2 — razdel, tablicy, sverit_devyat, sverit_vorota, tolko_odin
+- dve_stroki — средний — прямо или через НЕ проходят две пары: (−1, 1), (1, 1) — биты — naruzhu, ne, product
+- sverit_A2 — средний — таблицы, примеры, контрпримеры А.2 — razdel, tablicy, sverit_devyat, sverit_vorota, tolko_odin, dve_stroki
 - proverit — верхний — вся проверка и итог — sverit_tablicy, sverit_primery, ugly, sverit_A2
 
 ## Действия: proverka_B2.py
