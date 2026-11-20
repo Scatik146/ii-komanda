@@ -164,6 +164,21 @@ def ili_G5():
     return otvet
 
 
+# troek_pri_summe: сколько троек задачи Г.3 с x + y = s
+def troek_pri_summe(s):
+    r = range(10)
+    otvet = sum(bool(zadacha_G3(x, y, z)) for x in r for y in r for z in r if x + y == s)
+    return otvet
+
+
+# tablica_G3: шаг 6 — по таблице (s + 1)(10 − s) при s ≤ 9, при s > 9 — ноль
+def tablica_G3():
+    do_9 = all(troek_pri_summe(s) == (s + 1) * (10 - s) for s in range(10))
+    posle_9 = all(troek_pri_summe(s) == 0 for s in range(10, 19))
+    otvet = do_9 and posle_9
+    return otvet
+
+
 # proverki_G1_G4: проверки Г.1–Г.4
 def proverki_G1_G4():
     otvet = {
@@ -173,6 +188,7 @@ def proverki_G1_G4():
         "Г.3 шаги на буквах": shagi_G3(),
         "Г.3 = [x + y ≤ z]": otvet_G3(),
         "Г.3 ответ 220": podschet(zadacha_G3) == 220,
+        "Г.3 таблица до s = 9, дальше ноль": tablica_G3(),
         "Г.3 контрпример 1000": podschet(kontrprimer_G3) == 1000,
         "Г.3 подстановка (1, 1, 2) = 1": bool(zadacha_G3(1, 1, 2)) is True,
         "Г.3 подстановка (3, 2, 2) = 0": bool(zadacha_G3(3, 2, 2)) is False,
@@ -239,6 +255,34 @@ def otvet_G7():
     return otvet
 
 
+# znak_v_skobkah: какие знаки ("∧", "∨") стоят в скобках первого уровня
+def znak_v_skobkah(stroka):
+    glubina, vnutri = 0, ""
+    for bukva in stroka:
+        glubina -= bukva == ")"
+        vnutri += bukva if glubina == 1 else ""
+        glubina += bukva == "("
+    otvet = {z for z in "∧∨" if z in vnutri}
+    return otvet
+
+
+# de_morgan_nazvaniya: в таблицах Г закон де Моргана назван по знаку в скобке
+def de_morgan_nazvaniya():
+    tekst = open("chast-1-bit/G-matematika.md", encoding="utf-8").read()
+    verno = True
+    for stroka in tekst.splitlines():
+        kolonki = stroka.split("|")
+        if len(kolonki) < 5 or "де Моргана" not in kolonki[2]:
+            continue
+        znaki = znak_v_skobkah(kolonki[1] + kolonki[3])
+        nado = "де Моргана для И" if znaki == {"∧"} else "де Моргана для ИЛИ"
+        imya = kolonki[2].replace("де Моргана для ИЛИ", "#")
+        est = "де Моргана для ИЛИ" if "#" in imya else "де Моргана для И"
+        verno = verno and len(znaki) == 1 and est == nado
+    otvet = verno
+    return otvet
+
+
 # proverki_G6_G7: проверки Г.4 (ложна), Г.5 (вторая), Г.6, Г.7
 def proverki_G6_G7():
     otvet = {
@@ -247,6 +291,7 @@ def proverki_G6_G7():
         "Г.6 КомпЕГЭ ответ 4": mnozhestvo_G6(),
         "Г.7 склейка ИЛИ": razryady_G7(),
         "Г.7 ответ 2": otvet_G7(),
+        "Г.3–Г.6 де Морган назван по знаку": de_morgan_nazvaniya(),
     }
     return otvet
 
