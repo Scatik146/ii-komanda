@@ -205,6 +205,7 @@
 
 ### Часть 2. Трит. Шаг Е. Правила осторожного человека и Мерфи (20.11)
 - **Е.0 «На авторе»** — Casselman B. The Legend of Abraham Wald // AMS Feature Column. - June 2016. - https://www.ams.org/samplings/feature-column/fc-2016-06 (обращение 20.11.2026, по выдаче поиска: зерно правды есть, для лучших подробностей свидетельств мало). Mangel M., Samaniego F. J. Abraham Wald's Work on Aircraft Survivability // JASA. - 1984. - Vol. 79, № 386. - P. 259-267 - не читали. Эпиграф - учителя (афоризм в стиле Ландау); табличка, постмортем - наши.
+- **Е.1 «Мерфи»** — по выдаче поиска 20.11.2026, подлинники не читали: Murphy's law // Wikipedia (англ.); The Jargon File, ст. «Murphy's Law» (E. S. Raymond) — 16 датчиков, все наоборот, исходная форма закона; Military.com, «The Real-Life Murphy and How 'Murphy's Law' Came to Be» — нулевые показания; Wordorigins.org, «Murphy's Law» — фраза до 1949 г.; Improbable Research, «The Fastest Man on Earth» (N. Spark) — воспоминания участников расходятся. Законы списка — из сборников под именем Мерфи, авторство не сверено (036). Проверка — `logika/kniga/proverka_E1.py`.
 
 ### Действующие лица (сводки 1–33, `logika/kniga/dejstvuyushchie-lica.md`)
 
