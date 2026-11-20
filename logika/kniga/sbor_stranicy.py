@@ -39,7 +39,7 @@ def zagolovok(md):
 
 # telo: Markdown → HTML с таблицами
 def telo(md):
-    html = markdown.markdown(md, extensions=["tables"])
+    html = markdown.markdown(md, extensions=["tables", "attr_list"])
     return html
 
 

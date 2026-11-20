@@ -94,29 +94,33 @@ itogi["отрезки Г.4"] = otrezki_G4()
 ## Действия: proverka_P.py
 
 ```дракон
-название: Проверка таблицы «Кто за кем»
+название: Проверка приложения «Для любопытных»
 stroki = stroki_tablicy(tekst)
-oshibki = 0
-для: s из stroki
-  если: oshibki_stroki(s)
-    да:
-      oshibki = oshibki + 1
-    нет:
+oshibki = oshibki_tablicy(stroki)
 если: poryadok == sorted(poryadok)
   да:
   нет:
     oshibki = oshibki + 1
+oshibki = oshibki + oshibki_p5(stroki, tekst)
 вывод: oshibki
 ```
 
-пример: таблица П.1 как есть → строк 24, людей 21, ошибок 0
+пример: приложение как есть → строк 24, людей 21, биографий 21, ошибок 0
 контрпример: у Шеффера 1912 вместо 1913 → «нет в В.2: Шеффер ['1912']», ошибок 1
+контрпример: ссылка #karnoX и у Супруна «Где у нас: Д.2» → «нет биографии: Карно», «биография Супрун - в разделах нет героя: ['Д.2']», ошибок 2
 
 Пополнение словаря (proverka_P.py):
 - stroki_tablicy — нижний — строки таблицы П.1 ячейками — splitlines, split
 - gody — нижний — четырёхзначные годы из ячейки — re.findall
-- osnova — нижний — основа фамилии без окончания — split, срез
+- bez_ssylki — нижний — текст ссылки без разметки — re.sub
+- osnova — нижний — основа фамилии без окончания — bez_ssylki, срез
+- yakorya — нижний — все «{#id}» текста — re.findall
 - kusok_razdela — средний — текст раздела «## Х.n.» — FAJLY, re.split
 - oshibki_stroki — средний — чего из строки нет в разделе — kusok_razdela, osnova, gody
+- oshibki_tablicy — средний — печать и число таких строк — oshibki_stroki
 - pervyj_god — средний — первый год строки (до н. э. = −1) — gody
-- proverit — верхний — расхождения и порядок годов — stroki_tablicy, oshibki_stroki, pervyj_god
+- bez_biografii — средний — фамилии без живой ссылки на П.5 — yakorya
+- biografii — средний — (имя, разделы «Где у нас:») из П.5 — re.split, re.findall
+- oshibki_biografij — средний — биографии, чьи разделы не знают героя — biografii, kusok_razdela, osnova
+- oshibki_p5 — средний — печать и число ошибок П.5 — bez_biografii, oshibki_biografij
+- proverit — верхний — вся проверка — oshibki_tablicy, pervyj_god, oshibki_p5
