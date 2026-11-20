@@ -404,14 +404,24 @@ def sobrat_vse():
     return oshibki
 
 
-# sverit_okoshki: таблица окошек В.4 против okoshko
+# STROKI_V4: строки таблиц В.4 — имя → действие от x
+STROKI_V4 = {
+    "ворота(x)": lambda x: okoshko(1, x),
+    "ворота(¬x)": lambda x: okoshko(-1, x),
+    "¬ворота(x) ∧ ¬ворота(¬x)": lambda x: okoshko(0, x),
+    "окошко для −1, ∧ 0": lambda x: i_(okoshko(-1, x), 0),
+    "окошко для 0, ∧ 1": lambda x: i_(okoshko(0, x), 1),
+    "ИЛИ - сдвиг": lambda x: sdvig(x),
+}
+
+
+# sverit_okoshki: таблицы окошек и сдвига В.4 против STROKI_V4
 def sverit_okoshki(tekst):
-    imena = {"ворота(x)": 1, "ворота(¬x)": -1, "¬ворота(x) ∧ ¬ворота(¬x)": 0}
     nuzhnye = [t for t in tablicy(razdel(tekst, "## В.4")) if t[0][0] == "x"]
-    stroki = [(t[0], st) for t in nuzhnye for st in t[1:] if st[0] in imena]
+    stroki = [(t[0], st) for t in nuzhnye for st in t[1:] if st[0] in STROKI_V4]
     oshibki = [f"{st[0]} при x = {x} в книге {z}" for shapka, st in stroki
-               for x, z in zip(shapka[1:], st[1:]) if okoshko(imena[st[0]], chislo(x)) != chislo(z)]
-    oshibki += [] if len(stroki) == 3 else [f"строк окошек {len(stroki)}, нужно 3"]
+               for x, z in zip(shapka[1:], st[1:]) if STROKI_V4[st[0]](chislo(x)) != chislo(z)]
+    oshibki += [] if len(stroki) == 6 else [f"строк окошек и сдвига {len(stroki)}, нужно 6"]
     return oshibki
 
 
@@ -419,6 +429,16 @@ def sverit_okoshki(tekst):
 def sdvig(x):
     otvet = {-1: 0, 0: 1, 1: -1}[x]
     return otvet
+
+
+# bity_V4: напоминание о битах — де Морган, Шеффер, «нет» без НЕ остаётся «нет»
+def bity_V4():
+    oshibki = [f"де Морган на битах ({x}, {y})" for x, y in product(BITY, repeat=2)
+               if ili(x, y) != ne(i_(ne(x), ne(y)))]
+    sheffer = lambda x, y: ne(i_(x, y))
+    oshibki += [] if sheffer(-1, -1) == 1 and sheffer(1, 1) == -1 else ["Шеффер"]
+    oshibki += [] if i_(-1, -1) == ili(-1, -1) == -1 and ne(-1) == 1 else ["замок «нет» для битов"]
+    return oshibki
 
 
 # primery_V4: сдвиг окошками, числа, де Морган, другие ворота
@@ -482,8 +502,9 @@ def novye_ne_klyuch():
 
 # proverit_V4: всё о базисах; ошибки
 def proverit_V4(tekst):
-    oshibki = sverit_okoshki(tekst) + sobrat_vse() + primery_V4() + zamki() + novye_ne_klyuch()
-    print("В.4 — окошки: 3 строки, собрано 27 + 19 683, сдвиг, четыре замка, другие ворота, "
+    oshibki = sverit_okoshki(tekst) + sobrat_vse() + primery_V4() + bity_V4()
+    oshibki += zamki() + novye_ne_klyuch()
+    print("В.4 — биты, окошки и сдвиг: 6 строк, собрано 27 + 19 683, сдвиг, четыре замка, другие ворота, "
           "согласие и основание — не ключ")
     return oshibki
 
