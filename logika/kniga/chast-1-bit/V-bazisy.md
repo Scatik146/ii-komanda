@@ -88,11 +88,19 @@ x ∨ y = ¬(¬x ∧ ¬y)
 
 Генри Шеффер, 1913 год. Додумался до того же сам. И опубликовал.
 
+Только вот какое действие. У Шеффера штрих - это «ни … ни», ИЛИ-НЕ. Вектор 1000. То есть, по-нашему, Пирс. А «И-НЕ» он упомянул в сноске. Без всякого значка.
+
+Штрих для «И-НЕ» первым взял Жан Нико, в 1917 году. За ним - Рассел и Уайтхед. И все решили, что так было у Шеффера.
+
+Традиция так и закрепилась: | - штрих Шеффера, И-НЕ. Мы тоже так пишем. Все так пишут. Но было - по-другому.
+
+А первым в печати показал, что хватает одного действия, вообще Эдвард Штамм. В 1911 году. Про него почти никто не знает.
+
 Так штрих стал Шеффера. А стрелка носит имя Пирса.
 
-Кто первый придумал - не всегда первый назван.
+Кто первый придумал - не всегда первый назван. А иногда назван - и не за то *)
 
-Источники: Sheffer H. M. A Set of Five Independent Postulates for Boolean Algebras, with Application to Logical Constants // Trans. AMS. - 1913. - Т. 14. - С. 481-488 (И-НЕ как единственное действие); Peirce C. S. A Boolian Algebra with One Constant, рукопись ~1880, опубликована в Collected Papers, 1933 (ИЛИ-НЕ) - см. `forto-prolog/literatura.md` § 8. Подлинники не читали. Зачем это на практике - на шаге Е, со схемами, по источникам.
+Источники: Sheffer H. M. A Set of Five Independent Postulates for Boolean Algebras, with Application to Logical Constants // Trans. AMS. - 1913. - Т. 14. - С. 481-488 (штрих - ИЛИ-НЕ; И-НЕ - в сноске, без значка); Nicod J. A Reduction in the Number of Primitive Propositions of Logic // Proc. Cambridge Phil. Soc. - 1917. - Т. 19. - С. 32-41 (штрих - И-НЕ); Stamm E. Beitrag zur Algebra der Logik // Monatshefte für Mathematik und Physik. - 1911. - Т. 22. - С. 137-149; что было у Шеффера, Нико и Штамма - по Википедии («Sheffer stroke») и заметке R. Zach «Sheffer stroke before Sheffer: Edward Stamm» (2023), слабые источники; Peirce C. S. A Boolian Algebra with One Constant, рукопись ~1880, опубликована в Collected Papers, 1933 (ИЛИ-НЕ) - см. `forto-prolog/literatura.md` § 8. Подлинники не читали. Зачем это на практике - на шаге Е, со схемами, по источникам.
 
 ## В.3. Базисы со стрелкой: {→, ¬} и {→, 0}
 

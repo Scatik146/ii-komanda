@@ -96,7 +96,9 @@
 ## 8. Двоичная логика (19.11, мир 0210 «Двоичная логика», свод logika/svod.md часть 1)
 
 - Жегалкин И. И. О технике вычислений предложений в символической логике // Математический сборник. — 1927. — Т. 34. — С. 9–28. — https://eudml.org/doc/64539 (обращение 19.11.2026). Полином Жегалкина. Не читали.
-- Sheffer H. M. A Set of Five Independent Postulates for Boolean Algebras, with Application to Logical Constants // Trans. AMS. — 1913. — Vol. 14. — P. 481–488. — https://doi.org/10.1090/S0002-9947-1913-1500960-1 (обращение 19.11.2026). Штрих Шеффера. Не читали.
+- Sheffer H. M. A Set of Five Independent Postulates for Boolean Algebras, with Application to Logical Constants // Trans. AMS. — 1913. — Vol. 14. — P. 481–488. — https://doi.org/10.1090/S0002-9947-1913-1500960-1 (обращение 19.11.2026). Штрих Шеффера: у самого Шеффера — ИЛИ-НЕ, И-НЕ — в сноске (по Wikipedia «Sheffer stroke», обращение 20.11.2026). Не читали.
+- Nicod J. A Reduction in the Number of Primitive Propositions of Logic // Proc. Cambridge Phil. Soc. — 1917. — Vol. 19. — P. 32–41. Первым взял штрих для И-НЕ (по Wikipedia «Sheffer stroke», обращение 20.11.2026). Не читали.
+- Stamm E. Beitrag zur Algebra der Logik // Monatshefte für Mathematik und Physik. — 1911. — Vol. 22. — P. 137–149. — https://doi.org/10.1007/BF01742795. Первым в печати: одного действия хватает (по Wikipedia «Sheffer stroke» и Zach R. «Sheffer stroke before Sheffer: Edward Stamm», richardzach.org, 2023; обращение 20.11.2026). Не читали.
 - Пирс Ч. С. — ИЛИ-НЕ как единственная связка, 1880, опубликовано в 1933 (по Wikipedia «Henry M. Sheffer», обращение 19.11.2026). Не читали.
 - Нумерация 16 функций (вектор как двоичное число) — принятая в русских учебниках дискретной математики; источник с местом найти (по памяти: Яблонский С. В. «Введение в дискретную математику»).
 
@@ -158,7 +160,7 @@
 ### Часть 1. Бит. Шаг В. Базисы
 
 - **В.1** — Источник определений: Алексеев В. Б. Лекции по дискретной математике. - М.: МГУ, 2004 («полная система», «базис»). «Базовый набор операций» - Поляков К. Ю., Ерёмин Е. А., презентация «Логические основы компьютеров, 10 класс», 2013.
-- **В.2** — Sheffer H. M. A Set of Five Independent Postulates for Boolean Algebras, with Application to Logical Constants // Trans. AMS. - 1913. - Т. 14. - С. 481-488 (И-НЕ как единственное действие); Peirce C. S. A Boolian Algebra with One Constant, рукопись ~1880, опубликована в Collected Papers, 1933 (ИЛИ-НЕ) - см. `forto-prolog/literatura.md` § 8. Подлинники не читали. Зачем это на практике - на шаге Е, со схемами, по источникам.
+- **В.2** — Sheffer H. M. A Set of Five Independent Postulates for Boolean Algebras, with Application to Logical Constants // Trans. AMS. - 1913. - Т. 14. - С. 481-488 (у Шеффера штрих - ИЛИ-НЕ; И-НЕ ему приписала традиция с Нико, 1917; первым в печати - Штамм, 1911); Peirce C. S. A Boolian Algebra with One Constant, рукопись ~1880, опубликована в Collected Papers, 1933 (ИЛИ-НЕ) - см. `forto-prolog/literatura.md` § 8. Подлинники не читали. Зачем это на практике - на шаге Е, со схемами, по источникам.
 - **В.4** — Жегалкин И. И. О технике вычислений предложений в символической логике // Математический сборник. - 1927. - Т. 34. - С. 9-28 - см. `forto-prolog/literatura.md` § 8; подлинник не читали. Лузин о Жегалкине - по статье «Ivan Zhegalkin» (Википедия).
 - **В.5** — Алексеев В. Б. Лекции по дискретной математике. - М.: МГУ, 2004 (теорема Поста, классы T₀, T₁, S, M, L, не больше 4 функций в базисе, пример базиса из четырёх). Теорема Поста и классы - по лекциям Алексеева; подлинник Поста не ищем (решение учителя 19.11). Даты: Post E. Introduction to a General Theory of Elementary Propositions // Amer. J. Math. - 1921. - Т. 43; Post E. The Two-Valued Iterative Systems of Mathematical Logic. - Princeton, 1941.
 
