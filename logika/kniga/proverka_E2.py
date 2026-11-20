@@ -159,6 +159,23 @@ assert spor([1, 1, 1, -1]) == (0, "3 из 4")       # три словаря «д
 assert spor([1, 1, 1, 1]) == (1, "4 из 4")
 assert soglasie(0, 1) == 0                        # «не знаю» и «да» - всё ещё не знаю
 
+# 9. Формулы через НЕ, И (меньшее), ИЛИ (большее) - совпадают с действиями на всех входах
+I_ = min
+ILI = max
+for x in TRITY:
+    for b in TRITY:
+        assert ILI(I_(x, b), I_(ne(b), 0)) == osnovanie(x, b)                 # основание
+        assert ILI(I_(x, b), I_(ILI(x, b), 0)) == soglasie(x, b)              # согласие
+EST_TABLICA = []
+for nashel in (-1, 1):
+    for polnyj in (-1, 1):
+        formula = ILI(nashel, I_(ne(polnyj), 0))                             # есть ли
+        po_pravilu = est_li({"x"} if nashel == 1 else set(), "x", polnyj == 1)
+        assert formula == po_pravilu
+        EST_TABLICA.append(formula)
+assert EST_TABLICA == [0, -1, 1, 1]
+print("есть ли вектором:", EST_TABLICA, "| 0.1 + 0.2 =", 0.1 + 0.2)
+
 print("согласие вектором:", TABLICA)
 print("0.1 + 0.2 == 0.3:", OCHEVIDNO, "| 1900 по-простому:", visokosnyj_naivno(1900), "на деле:", visokosnyj(1900))
 print("спор 3 «да» и 1 «нет»:", spor([1, 1, 1, -1]))
