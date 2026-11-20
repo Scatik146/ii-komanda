@@ -8,7 +8,7 @@
   --shirina: 46rem;
   --shrift: Georgia, "PT Serif", serif;
 }
-body { margin: 0; background: var(--fon); color: var(--tekst); font-family: var(--shrift); font-size: 1.1rem; line-height: 1.6; }
+body { margin: 0; background: var(--fon); color: var(--tekst); font-family: var(--shrift); font-size: 1.1rem; line-height: 1.6; font-variant-numeric: lining-nums tabular-nums; }
 main { max-width: var(--shirina); margin: 0 auto; padding: 1.5rem 1rem 4rem; }
 h1, h2 { color: var(--akcent); line-height: 1.25; }
 h2 { margin-top: 2.5rem; border-bottom: 1px solid var(--linija); padding-bottom: 0.3rem; }
