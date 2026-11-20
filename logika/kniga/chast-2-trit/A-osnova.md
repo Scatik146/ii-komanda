@@ -55,6 +55,8 @@
 
 Считать станет труднее. Зато и обманывать себя - тоже *)
 
+Подробнее - в «Действующих лицах»: [Аристотель](../dejstvuyushchie-lica.md#1-аристотель), [Лукасевич](../dejstvuyushchie-lica.md#32-ян-лукасевич), [Брусенцов](../dejstvuyushchie-lica.md#33-николай-петрович-брусенцов).
+
 Источники: Аристотель. Об истолковании, гл. 9, 19a30-b4 / пер. Э. Л. Радлова // Аристотель. Сочинения: в 4 т. - Т. 2. - М.: Мысль, 1978 (текст - Викитека). Łukasiewicz J. O logice trójwartościowej // Ruch Filozoficzny. - 1920. - Т. 5. - С. 170-171; Stanford Encyclopedia of Philosophy, «Jan Łukasiewicz», «Future Contingents»; Woleński J. Łukasiewicz's Many-Valued Logic // Studia Humana. Брусенцов Н. П. Из истории создания троичных цифровых машин в МГУ // Историко-математические исследования. Вторая серия. - Вып. 10 (45). - М.: Янус-К, 2005. - С. 28-53. Сверка - задание 035 (`komanda/zadaniya/proverki/035/analiz.md`).
 
 ## А.1. НЕ, И, ИЛИ на тритах
