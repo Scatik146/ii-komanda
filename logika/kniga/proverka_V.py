@@ -288,12 +288,34 @@ def proverit_V1(tekst):
     return otvet
 
 
+# podtverdit: «нет» в a остаётся, только если лазейки нет (y = −1): a ∨ (y ∧ 0)
+def podtverdit(a, y):
+    otvet = ili(a, i_(y, 0))
+    return otvet
+
+
+# sverit_podtverdit: таблица, основание и согласие через подтвердить, примеры и контрпримеры В.2
+def sverit_podtverdit():
+    oshibki = [] if [podtverdit(a, y) for a in TRITY for y in TRITY] == [-1, 0, 0, 0, 0, 0, 1, 1, 1] else ["таблица подтвердить"]
+    oshibki += [f"основание через подтвердить ({x}, {b})" for x, b in product(TRITY, repeat=2)
+                if podtverdit(i_(x, b), ne(b)) != osnovanie(x, b)]
+    oshibki += [f"согласие через подтвердить ({x}, {y})" for x, y in product(TRITY, repeat=2)
+                if podtverdit(i_(x, y), ili(x, y)) != soglasie(x, y)]
+    primery = [(podtverdit(i_(-1, 1), ne(1)), -1), (podtverdit(i_(-1, 0), ne(0)), 0),
+               (podtverdit(-1, ili(-1, -1)), -1), (podtverdit(i_(1, -1), ili(1, -1)), 0),
+               (podtverdit(-1, 1), 0), (podtverdit(-1, -1), -1)]
+    oshibki += [f"пример подтвердить {i}" for i, (vyshlo, nado) in enumerate(primery) if vyshlo != nado]
+    oshibki += [] if ili(-1, 0) != podtverdit(-1, -1) else ["контрпример «прибавим 0» совпал"]
+    oshibki += [] if -1 != podtverdit(-1, 0) else ["контрпример «оставим как есть» совпал"]
+    return oshibki
+
+
 # proverit_V2: всё об основании; (сверено таблиц, ошибки)
 def proverit_V2(tekst):
     svereno, oshibki = sverit_tablicu_osn(tekst)
     if svereno != 1:
         oshibki.append(f"таблиц основания найдено {svereno}, нужна 1")
-    oshibki += sverit_primery_osn() + svojstva_osn_dvoih() + svojstva_osn_troih() + bez_nulya_osn()
+    oshibki += sverit_primery_osn() + svojstva_osn_dvoih() + svojstva_osn_troih() + bez_nulya_osn() + sverit_podtverdit()
     otvet = (svereno, oshibki)
     return otvet
 
