@@ -258,3 +258,43 @@ x ∨ ¬x -> прибор: 1, если x известен, 0, если нет
 - zamechaniya_rechi — нижний — где слева «да» или «нет», там слева = справа — product
 - proverit_b3 — средний — константы, пары, «заговорил — прав», примеры Б.3 — zamechaniya_*
 - tablica_b3, sverit_tekst_b3 — средний — таблица Б.3 для текста и сверка с текстом — chto_ostaetsya
+## Действия: proverka_V.py
+
+```дракон
+название: Проверка шага В части 2 (В.1 согласие)
+svereno, oshibki = sverit_tablicu(tekst)
+если: svereno != 1
+  да:
+    oshibki = oshibki + ["таблиц согласия не одна"]
+  нет:
+oshibki = oshibki + sverit_primery() + svojstva() + bez_nulya()
+вывод: oshibki
+```
+
+```конспект
+тема: Согласие
+согласие(x, y) = x, если x = y, иначе 0
+согласие(x, y) = согласие(y, x)
+трое -> общее значение или 0
+согласие(x, ¬x) = 0
+¬согласие(x, y) = согласие(¬x, ¬y)
+согласие(x, y) = (x ∧ y) ∨ ((x ∨ y) ∧ 0)
+без 0 -> из И, ИЛИ, НЕ не собрать
+```
+
+пример: chast-2-trit/V-dejstviya.md как есть → «В.1 — таблиц: 1, примеров: 12, контрпримеров: 3, свойства: 9 + 27 наборов, без 0 — нельзя», «Всё верно.», код 0
+контрпример: в таблице согласие(1, 0) = 1 → «согласие(1, 0) в книге 1», код 1
+контрпример: soglasie через min (как И) → «контрпример совпал: И вместо согласия на споре», код 1
+
+Пополнение словаря (proverka_V.py):
+- soglasie — нижний — одинаково — значение, разное — 0 — сравнение
+- formula_s_nulem — нижний — (x ∧ y) ∨ ((x ∨ y) ∧ 0) — i_, ili
+- troe — нижний — свести двоих, потом с третьим — soglasie
+- sverit_stroku — средний — строка таблицы согласия — chislo, soglasie
+- sverit_tablicu — средний — таблица В.1 — razdel, tablicy, sverit_stroku
+- sverit_primery — средний — примеры совпадают, контрпримеры нет — PRIMERY, LOMAETSYA
+- svojstva_dvoih — средний — порядок, НЕ насквозь, формула с 0 — product
+- svojstva_troih — средний — трое: общее или 0, любой порядок — troe, product
+- svojstva — средний — все свойства и x с ¬x — svojstva_dvoih, svojstva_troih
+- bez_nulya — средний — И, ИЛИ, НЕ не выводят из битов — product
+- proverit — верхний — вся проверка и итог — sverit_tablicu, sverit_primery, svojstva, bez_nulya
