@@ -1,10 +1,12 @@
-"""Проверка шага Б части 2: Б.1 — 33 закона части 1 на тритах; Б.2 — где и как ломаются ★.
+"""Проверка шага Б части 2: Б.1 — 33 закона части 1 на тритах; Б.2 — где и как ломаются ★;
+Б.3 — что от ★ остаётся.
 Каждый закон — на всех наборах: 3 для одной буквы, 9 для двух, 27 для трёх.
 Бит 1 → 1, бит 0 (ложь) → −1; НЕ = −x, И = min, ИЛИ = max,
 x → y = ¬x ∨ y, x ≡ y = (x → y) ∧ (y → x).
 Запуск: python3 proverka_B2.py chast-2-trit/B-zakony.md
         python3 proverka_B2.py --tablica   (таблица держащихся законов для текста)
-        python3 proverka_B2.py --tablica-b2   (таблица Б.2: где ломается каждый ★)"""
+        python3 proverka_B2.py --tablica-b2   (таблица Б.2: где ломается каждый ★)
+        python3 proverka_B2.py --tablica-b3   (таблица Б.3: что остаётся от каждого ★)"""
 import sys
 from itertools import product
 from pathlib import Path
@@ -327,12 +329,134 @@ def sverit_tekst_b2(put):
     return oshibki, otchet
 
 
+# ---- Б.3. Что остаётся ----
+
+# PARY: у каждого ★ — буквы, которые стоят рядом со своим отрицанием (номера: x = 0, y = 1)
+PARY = {
+    "исключённого третьего": (0,),
+    "противоречия": (0,),
+    "склеивание для ИЛИ": (1,),
+    "склеивание для И": (1,),
+    "Блейка - Порецкого для ИЛИ": (0,),
+    "Блейка - Порецкого для И": (0,),
+    "из себя": (0,),
+    "модус поненс": (0, 1),
+}
+# NE_BYVAET: правая часть-константа → что остаётся от закона
+NE_BYVAET = {1: "никогда не ложь", -1: "никогда не правда"}
+
+
+# konstanta: правая часть — одно число на всех наборах, иначе None
+def konstanta(zakon):
+    _, _, _, _, bukv, _, pravaya = zakon
+    vse = {pravaya(*n) for n in product(TRITY, repeat=bukv)}
+    otvet = min(vse) if len(vse) == 1 else None
+    return otvet
+
+
+# znacheniya_levoj: все значения левой части на тритах
+def znacheniya_levoj(zakon):
+    _, _, _, _, bukv, levaya, _ = zakon
+    otvet = {levaya(*n) for n in product(TRITY, repeat=bukv)}
+    return otvet
+
+
+# derzhitsya_pri: закон верен, когда буквы izvestnye — да или нет, остальные — любые триты
+def derzhitsya_pri(zakon, izvestnye):
+    _, _, _, _, bukv, levaya, pravaya = zakon
+    nabory = [n for n in product(TRITY, repeat=bukv) if all(n[k] in BITY for k in izvestnye)]
+    otvet = all(levaya(*n) == pravaya(*n) for n in nabory)
+    return otvet
+
+
+# chto_ostaetsya: что остаётся от ★ — строкой для таблицы
+def chto_ostaetsya(zakon):
+    c = konstanta(zakon)
+    po_bukvam = "держится, если известен " + " и ".join("xyz"[k] for k in PARY[zakon[2]])
+    otvet = NE_BYVAET[c] if c is not None else po_bukvam
+    return otvet
+
+
+# zamechaniya_pary: ошибки пар — держится при известных буквах пары; без любой из них — нет
+def zamechaniya_pary(zakon):
+    para = PARY[zakon[2]]
+    otchet = [] if derzhitsya_pri(zakon, para) else [f"ОШИБКА Б.3 не держится при известных {para}: {zakon[1]}"]
+    lishnie = [k for k in para if derzhitsya_pri(zakon, tuple(b for b in para if b != k))]
+    otchet += [f"ОШИБКА Б.3 буква {k} не нужна: {zakon[1]}" for k in lishnie]
+    return otchet
+
+
+# zamechaniya_konstanty: «никогда не ложь» — нет −1; «никогда не правда» — нет 1; но 0 бывает
+def zamechaniya_konstanty(zakon):
+    c = konstanta(zakon)
+    znacheniya = znacheniya_levoj(zakon)
+    plohie = c is not None and (-c in znacheniya or 0 not in znacheniya)
+    otchet = [f"ОШИБКА Б.3 {zakon[1]}: слева бывает {sorted(znacheniya)}"] if plohie else []
+    return otchet
+
+
+# zamechaniya_rechi: где левая часть сказала «да» или «нет» — она совпала с правой
+def zamechaniya_rechi(zakon):
+    _, _, _, _, bukv, levaya, pravaya = zakon
+    plohie = [n for n in product(TRITY, repeat=bukv) if levaya(*n) in BITY and levaya(*n) != pravaya(*n)]
+    otchet = [f"ОШИБКА Б.3 заговорил и соврал: {zakon[1]} {n}" for n in plohie]
+    return otchet
+
+
+# PRIMERY_B3: что утверждает текст Б.3 — (что, получилось, должно быть)
+PRIMERY_B3 = [
+    ("третьего: 1 ∨ ¬1 = 1", ili(1, ne(1)), 1),
+    ("третьего: −1 ∨ ¬(−1) = 1", ili(-1, ne(-1)), 1),
+    ("третьего: 0 ∨ ¬0 = 0", ili(0, ne(0)), 0),
+    ("противоречия: 1 ∧ ¬1 = −1", i_(1, ne(1)), -1),
+    ("противоречия: −1 ∧ ¬(−1) = −1", i_(-1, ne(-1)), -1),
+    ("склеивание: (1 ∧ 1) ∨ (1 ∧ ¬1) = 1", ili(i_(1, 1), i_(1, ne(1))), 1),
+    ("склеивание: (1 ∧ −1) ∨ (1 ∧ ¬(−1)) = 1", ili(i_(1, -1), i_(1, ne(-1))), 1),
+    ("склеивание: (0 ∧ 1) ∨ (0 ∧ ¬1) = 0", ili(i_(0, 1), i_(0, ne(1))), 0),
+    ("Блейк - Порецкий: −1 ∨ (¬(−1) ∧ 1) = 1", ili(-1, i_(ne(-1), 1)), 1),
+    ("Блейк - Порецкий справа: −1 ∨ 1 = 1", ili(-1, 1), 1),
+    ("Блейк - Порецкий: 1 ∨ (¬1 ∧ 0) = 1", ili(1, i_(ne(1), 0)), 1),
+    ("Блейк - Порецкий справа: 1 ∨ 0 = 1", ili(1, 0), 1),
+] + [
+    (f"прибор: x ∨ ¬x при x = {x} — знаем ли x", ili(x, ne(x)), 1 if x in BITY else 0) for x in TRITY
+] + [
+    (f"де Морган: x ∧ ¬x = ¬(x ∨ ¬x) при x = {x}", i_(x, ne(x)), ne(ili(x, ne(x)))) for x in TRITY
+]
+
+
+# proverit_b3: (ошибок, строки отчёта) — константы, пары, «заговорил — прав», примеры Б.3
+def proverit_b3():
+    zvezdy = [z for z in ZAKONY if z[3]]
+    zakony = [s for z in zvezdy for s in zamechaniya_konstanty(z) + zamechaniya_pary(z) + zamechaniya_rechi(z)]
+    primery = [f"ОШИБКА пример Б.3: {c} → {v}" for c, v, n in PRIMERY_B3 if v != n]
+    otchet = zakony + primery
+    return len(otchet), otchet
+
+
+# tablica_b3: что остаётся от каждого ★ — строки Markdown для текста
+def tablica_b3():
+    stroki = ["| Закон | Название | Что остаётся |", "|---|---|---|"]
+    stroki += [f"| {z[1]} | {z[2]} | {chto_ostaetsya(z)} |" for z in ZAKONY if z[3]]
+    return "\n".join(stroki)
+
+
+# sverit_tekst_b3: таблица раздела Б.3 текста = tablica_b3()
+def sverit_tekst_b3(put):
+    tekst = put.read_text(encoding="utf-8")
+    razdel = tekst.split("## Б.3", 1)[1].split("\n## ", 1)[0] if "## Б.3" in tekst else ""
+    v_tekste = [s for s in razdel.splitlines() if s.startswith("|")]
+    oshibki = 0 if v_tekste == tablica_b3().splitlines() else 1
+    otchet = [] if oshibki == 0 else ["ОШИБКА таблица Б.3 в тексте не совпала с программой"]
+    return oshibki, otchet
+
+
 # proverit_vse: все проверки, напечатать отчёт, вернуть число ошибок
 def proverit_vse(argumenty):
-    chasti = [proverit_zakony(), sverit_zvezdy(), proverit_primery(), proverit_b2()]
+    chasti = [proverit_zakony(), sverit_zvezdy(), proverit_primery(), proverit_b2(), proverit_b3()]
     if argumenty:
         chasti.append(sverit_tekst(ZDES / argumenty[0]))
         chasti.append(sverit_tekst_b2(ZDES / argumenty[0]))
+        chasti.append(sverit_tekst_b3(ZDES / argumenty[0]))
     oshibki = sum(o for o, _ in chasti)
     for _, otchet in chasti:
         print("\n".join(otchet)) if otchet else None
@@ -342,11 +466,12 @@ def proverit_vse(argumenty):
     return oshibki
 
 
-# glavnoe: --tablica / --tablica-b2 печатают таблицу, иначе проверки; код выхода = число ошибок
+# glavnoe: --tablica / --tablica-b2 / --tablica-b3 печатают таблицу, иначе проверки; код выхода = число ошибок
 def glavnoe(argumenty):
     tolko_tablica = bool(argumenty) and argumenty[0].startswith("--tablica")
     print(tablica()) if tolko_tablica and argumenty[0] == "--tablica" else None
     print(tablica_b2()) if tolko_tablica and argumenty[0] == "--tablica-b2" else None
+    print(tablica_b3()) if tolko_tablica and argumenty[0] == "--tablica-b3" else None
     oshibki = 0 if tolko_tablica else proverit_vse(argumenty)
     return oshibki
 

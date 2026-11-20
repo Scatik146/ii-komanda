@@ -185,16 +185,16 @@ oshibki = oshibki + oshibki_A2
 ## Действия: proverka_B2.py
 
 ```дракон
-название: Проверка шага Б части 2 (Б.1 законы на тритах, Б.2 что ломается)
+название: Проверка шага Б части 2 (Б.1 законы на тритах, Б.2 что ломается, Б.3 что остаётся)
 ввод: argumenty
-если: argumenty[0] = "--tablica" или "--tablica-b2"
+если: argumenty[0] = "--tablica", "--tablica-b2" или "--tablica-b3"
   да:
-    вывод: tablica() или tablica_b2()
+    вывод: tablica(), tablica_b2() или tablica_b3()
   нет:
-oshibki = proverit_zakony() + sverit_zvezdy() + proverit_primery() + proverit_b2()
+oshibki = proverit_zakony() + sverit_zvezdy() + proverit_primery() + proverit_b2() + proverit_b3()
 если: есть файл текста
   да:
-    oshibki = oshibki + sverit_tekst(fajl) + sverit_tekst_b2(fajl)
+    oshibki = oshibki + sverit_tekst(fajl) + sverit_tekst_b2(fajl) + sverit_tekst_b3(fajl)
   нет:
 pechat_zvezd()
 вывод: itog(), oshibki
@@ -211,12 +211,18 @@ x ≡ y = И(x → y, y → x): договор
 ★ -> поломки: 54 набора, ломаются 10 (7 законов - по одному, модус поненс - 3)
 поломка -> в наборе есть 0
 поломка -> слева 0, справа 1 или −1: закон не врёт, а молчит
+★ с правой частью 1 -> никогда не ложь: слева 1 или 0
+★ с правой частью −1 -> никогда не правда: слева −1 или 0
+★ -> держится: известны буквы рядом со своим отрицанием (склеивание - y, Блейк - Порецкий - x, модус поненс - x и y)
+★ -> заговорил - прав: слева 1 или −1, значит слева = справа
+x ∨ ¬x -> прибор: 1, если x известен, 0, если нет
 ```
 
 пример: `python3 proverka_B2.py chast-2-trit/B-zakony.md` → 8 строк «★ …: ломается на …», «законов 33, на тритах держатся 25, ★ ломаются 8», «ошибок: 0», код 0
 контрпример: убрать ★ у «x → x = 1» в ZAKONY → «ОШИБКА ★ не совпала: x → x = 1 (0,)» и «ОШИБКА ★: у нас …, в части 1 …», код 2
 контрпример: дописать в таблицу Б.1 строку «x ∨ ¬x = 1» → «ОШИБКА таблица текста: лишние {'x ∨ ¬x = 1'}», код 1
 контрпример: в таблице Б.2 текста поменять «Слева» у x ∨ ¬x = 1 на 1 → «ОШИБКА таблица Б.2 в тексте не совпала с программой», код 1
+контрпример: в PARY у «склеивание для ИЛИ» поставить (0,) → «ОШИБКА Б.3 не держится при известных (0,): (x ∧ y) ∨ (x ∧ ¬y) = x», код 1
 
 Пополнение словаря (proverka_B2.py):
 - sl — нижний — стрелка трита: ¬x ∨ y — ne, ili
@@ -242,3 +248,13 @@ x ≡ y = И(x → y, y → x): договор
 - proverit_chisla_b2 — средний — 54 набора, 10 поломок — vse_polomki
 - proverit_b2 — средний — поломки, примеры, числа Б.2 — proverit_polomki, proverit_chisla_b2
 - tablica_b2, sverit_tekst_b2 — средний — таблица Б.2 для текста и сверка с текстом — vse_polomki, nabor_slovami
+
+- konstanta — нижний — правая часть-число или None — product
+- znacheniya_levoj — нижний — все значения левой части — product
+- derzhitsya_pri — нижний — закон верен, когда заданные буквы известны — product
+- chto_ostaetsya — средний — «никогда не ложь / не правда» или «держится, если известен …» — konstanta, PARY, NE_BYVAET
+- zamechaniya_pary — средний — держится при буквах пары, лишних букв нет — derzhitsya_pri
+- zamechaniya_konstanty — средний — нет −c, но 0 бывает — konstanta, znacheniya_levoj
+- zamechaniya_rechi — нижний — где слева «да» или «нет», там слева = справа — product
+- proverit_b3 — средний — константы, пары, «заговорил — прав», примеры Б.3 — zamechaniya_*
+- tablica_b3, sverit_tekst_b3 — средний — таблица Б.3 для текста и сверка с текстом — chto_ostaetsya
