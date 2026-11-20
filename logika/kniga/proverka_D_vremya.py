@@ -1,180 +1,125 @@
-# logika/kniga/proverka_D_vremya.py
-# Проверка шага Д «Время»: перебор вариантов против таблицы Клини.
+# proverka_D_vremya.py — проверка шага Д «Время»: перебор вариантов против Клини
+# Основа — задание 038 (DeepSeek), переписано по-фортовски (Марьям, 20.11).
+# запуск: python3 logika/kniga/proverka_D_vremya.py
+from itertools import product
 
-НЕТ = -1
-НЕ_ЗНАЮ = 0
-ДА = 1
-
-ЗНАЧЕНИЯ = (НЕТ, НЕ_ЗНАЮ, ДА)
-МОРСКИЕ_ВАРИАНТЫ = (ДА, НЕТ)
-ПЛАНЫ_УРОКА = ("план 1", "план 2", "план 3")
-
-КРАСИВЫЕ_ИМЕНА = {
-    (НЕТ, НЕ_ЗНАЮ, ДА): "p",
-    (ДА, НЕ_ЗНАЮ, НЕТ): "НЕ p",
-    (НЕТ, НЕ_ЗНАЮ, НЕТ): "p И НЕ p",
-    (ДА, НЕ_ЗНАЮ, ДА): "p ИЛИ НЕ p",
-}
+# Данные.
+NET, NE_ZNAYU, DA = -1, 0, 1
+ZNACHENIYA = (NET, NE_ZNAYU, DA)
+BOJ = (DA, NET)                                  # варианты завтра: бой будет / не будет
+PLANY = ("план 1", "план 2", "план 3")           # три плана урока
+# формула: кортеж-дерево ("p",), ("НЕ", f), ("И", f, g), ("ИЛИ", f, g)
+P = ("p",)
+NP = ("НЕ", P)
+ILI = ("ИЛИ", P, NP)
+I_ = ("И", P, NP)
 
 
-# слово не: отрицание Клини, НЕ x = −x.
-def не(x):
-    return -x
+# znachenie: считает формулу при данном p по правилам Клини
+def znachenie(f, p):
+    op = f[0]
+    if op == "НЕ":
+        otvet = -znachenie(f[1], p)
+    elif op == "И":
+        otvet = min(znachenie(f[1], p), znachenie(f[2], p))
+    elif op == "ИЛИ":
+        otvet = max(znachenie(f[1], p), znachenie(f[2], p))
+    else:
+        otvet = p
+    return otvet
 
 
-# слово и: конъюнкция Клини, И = min.
-def и(a, b):
-    return min(a, b)
+# svesti: все 1 -> 1, все -1 -> -1, иначе (и пустой список) 0
+def svesti(otvety):
+    otvet = NE_ZNAYU
+    if otvety and all(x == DA for x in otvety):
+        otvet = DA
+    if otvety and all(x == NET for x in otvety):
+        otvet = NET
+    return otvet
 
 
-# слово или: дизъюнкция Клини, ИЛИ = max.
-def или(a, b):
-    return max(a, b)
-
-
-# слово po_variantam: f считается в каждом варианте; все 1 → 1, все −1 → −1, иначе 0.
+# po_variantam: формула целиком в каждом варианте, потом сверка
 def po_variantam(f, varianty):
-    if not varianty:
-        return НЕ_ЗНАЮ
-    znacheniya = [f(v) for v in varianty]
-    if all(z == ДА for z in znacheniya):
-        return ДА
-    if all(z == НЕТ for z in znacheniya):
-        return НЕТ
-    return НЕ_ЗНАЮ
+    otvet = svesti([znachenie(f, v) for v in varianty])
+    return otvet
 
 
-# слово neotvratimo: все 1 и список полный → 1; все −1 и полный → −1; иначе 0.
-def neotvratimo(sobytie, varianty, polnyj):
-    if not polnyj or not varianty:
-        return НЕ_ЗНАЮ
-    znacheniya = [sobytie(v) for v in varianty]
-    if all(z == ДА for z in znacheniya):
-        return ДА
-    if all(z == НЕТ for z in znacheniya):
-        return НЕТ
-    return НЕ_ЗНАЮ
+# neotvratimo: сверка по вариантам, но только если список полный
+def neotvratimo(otvety, polnyj):
+    otvet = NE_ZNAYU
+    if polnyj:
+        otvet = svesti(otvety)
+    return otvet
 
 
-# слово mozhet_byt: хоть в одном 1 → 1; во всех −1 → −1; иначе 0.
-def mozhet_byt(sobytie, varianty):
-    if not varianty:
-        return НЕ_ЗНАЮ
-    znacheniya = [sobytie(v) for v in varianty]
-    if any(z == ДА for z in znacheniya):
-        return ДА
-    if all(z == НЕТ for z in znacheniya):
-        return НЕТ
-    return НЕ_ЗНАЮ
+# mozhet_byt: хоть в одном 1 -> 1; во всех -1 -> -1; иначе 0
+def mozhet_byt(otvety):
+    otvet = svesti(otvety)
+    if any(x == DA for x in otvety):
+        otvet = DA
+    return otvet
 
 
-# слово таблица: таблица функции на значениях −1, 0, 1.
-def таблица(f):
-    return tuple(f(x) for x in ЗНАЧЕНИЯ)
+# tablica: значения формулы при p = -1, 0, 1 (по ней склеиваем одинаковые)
+def tablica(f):
+    otvet = tuple(znachenie(f, x) for x in ZNACHENIYA)
+    return otvet
 
 
-# слово собрать_функции: все уникальные функции от p из И/ИЛИ/НЕ глубины ≤ 2.
-def собрать_функции():
-    p0 = [("p", 0, lambda p: p)]
-
-    u1 = []
-    for imya, glubina, f in p0:
-        u1.append((f"НЕ ({imya})", glubina + 1, lambda p, f=f: не(f(p))))
-    for imya1, gl1, f1 in p0:
-        for imya2, gl2, f2 in p0:
-            u1.append((
-                f"({imya1}) И ({imya2})",
-                max(gl1, gl2) + 1,
-                lambda p, f1=f1, f2=f2: и(f1(p), f2(p)),
-            ))
-            u1.append((
-                f"({imya1}) ИЛИ ({imya2})",
-                max(gl1, gl2) + 1,
-                lambda p, f1=f1, f2=f2: или(f1(p), f2(p)),
-            ))
-
-    do1 = p0 + u1
-    u2 = []
-    for imya, glubina, f in do1:
-        u2.append((f"НЕ ({imya})", glubina + 1, lambda p, f=f: не(f(p))))
-    for imya1, gl1, f1 in do1:
-        for imya2, gl2, f2 in do1:
-            glubina = max(gl1, gl2) + 1
-            if glubina <= 2:
-                u2.append((
-                    f"({imya1}) И ({imya2})",
-                    glubina,
-                    lambda p, f1=f1, f2=f2: и(f1(p), f2(p)),
-                ))
-                u2.append((
-                    f"({imya1}) ИЛИ ({imya2})",
-                    glubina,
-                    lambda p, f1=f1, f2=f2: или(f1(p), f2(p)),
-                ))
-
-    videli = set()
-    unikalnye = []
-    for imya, glubina, f in p0 + u1 + u2:
-        t = таблица(f)
-        if t not in videli:
-            videli.add(t)
-            unikalnye.append((imya, glubina, f, t))
-    return unikalnye
+# sloj: формулы на шаг глубже из данного списка
+def sloj(spisok):
+    novye = [("НЕ", f) for f in spisok]
+    for op, f, g in product(("И", "ИЛИ"), spisok, spisok):
+        novye.append((op, f, g))
+    return novye
 
 
-# слово найти_расхождения: где перебор вариантов и Клини при p = 0 расходятся.
-def найти_расхождения():
-    ras = []
-    for imya, glubina, f, t in собрать_функции():
-        perebor = po_variantam(f, МОРСКИЕ_ВАРИАНТЫ)
-        klini = f(НЕ_ЗНАЮ)
+# raznye_funkcii: формулы глубины <= 2, по одной на каждую таблицу
+def raznye_funkcii():
+    vse = [P]
+    vse = vse + sloj(vse)
+    vse = vse + sloj(vse)
+    po_tablice = {}
+    for f in vse:
+        po_tablice.setdefault(tablica(f), f)
+    otvet = list(po_tablice.values())
+    return otvet
+
+
+# rashozhdeniya: где перебор и Клини при p = 0 отвечают по-разному
+def rashozhdeniya():
+    otvet = []
+    for f in raznye_funkcii():
+        perebor = po_variantam(f, BOJ)
+        klini = znachenie(f, NE_ZNAYU)
         if perebor != klini:
-            krasivoe = КРАСИВЫЕ_ИМЕНА.get(t, imya)
-            ras.append((krasivoe, perebor, klini))
-    ras.sort(key=lambda x: x[0])
-    return ras
+            otvet.append((tablica(f), perebor, klini))
+    return otvet
 
 
-# --- проверки операторов ---
-assert не(НЕТ) == ДА
-assert не(НЕ_ЗНАЮ) == НЕ_ЗНАЮ
-assert не(ДА) == НЕТ
-assert и(НЕТ, НЕ_ЗНАЮ) == НЕТ
-assert и(ДА, НЕ_ЗНАЮ) == НЕ_ЗНАЮ
-assert или(НЕТ, НЕ_ЗНАЮ) == НЕ_ЗНАЮ
-assert или(ДА, НЕ_ЗНАЮ) == ДА
+# морское сражение
+assert po_variantam(ILI, BOJ) == DA and po_variantam(I_, BOJ) == NET
+assert po_variantam(P, BOJ) == NE_ZNAYU
+assert znachenie(ILI, NE_ZNAYU) == NE_ZNAYU and znachenie(I_, NE_ZNAYU) == NE_ZNAYU
 
-# --- морское сражение ---
-assert po_variantam(lambda p: или(p, не(p)), МОРСКИЕ_ВАРИАНТЫ) == ДА
-assert po_variantam(lambda p: и(p, не(p)), МОРСКИЕ_ВАРИАНТЫ) == НЕТ
-assert po_variantam(lambda p: p, МОРСКИЕ_ВАРИАНТЫ) == НЕ_ЗНАЮ
-assert или(НЕ_ЗНАЮ, не(НЕ_ЗНАЮ)) == НЕ_ЗНАЮ
-assert и(НЕ_ЗНАЮ, не(НЕ_ЗНАЮ)) == НЕ_ЗНАЮ
-assert po_variantam(lambda p: или(p, не(p)), МОРСКИЕ_ВАРИАНТЫ) != или(НЕ_ЗНАЮ, не(НЕ_ЗНАЮ))
-assert po_variantam(lambda p: и(p, не(p)), МОРСКИЕ_ВАРИАНТЫ) != и(НЕ_ЗНАЮ, не(НЕ_ЗНАЮ))
+# неотвратимо: «пароль» во всех трёх планах; список полный / неполный
+assert neotvratimo([DA for _ in PLANY], True) == DA
+assert neotvratimo([DA for _ in PLANY], False) == NE_ZNAYU
+assert neotvratimo([NET for _ in PLANY], True) == NET
+assert neotvratimo([NET for _ in PLANY], False) == NE_ZNAYU
 
-# --- неотвратимо ---
-assert neotvratimo(lambda _: ДА, ПЛАНЫ_УРОКА, True) == ДА
-assert neotvratimo(lambda _: ДА, ПЛАНЫ_УРОКА, False) == НЕ_ЗНАЮ
-assert neotvratimo(lambda _: НЕТ, ПЛАНЫ_УРОКА, True) == НЕТ
-assert neotvratimo(lambda _: НЕТ, ПЛАНЫ_УРОКА, False) == НЕ_ЗНАЮ
+# может быть: «двухфакторная» в одном плане из трёх
+assert mozhet_byt([DA, NET, NET]) == DA
+assert mozhet_byt([NET, NET, NET]) == NET
+assert mozhet_byt([NE_ZNAYU, NET, NET]) == NE_ZNAYU
+assert mozhet_byt([]) == NE_ZNAYU
 
-# --- может быть ---
-assert mozhet_byt(lambda v: v, (ДА, НЕТ)) == ДА
-assert mozhet_byt(lambda v: v, (НЕ_ЗНАЮ, ДА)) == ДА
-assert mozhet_byt(lambda _: НЕТ, ПЛАНЫ_УРОКА) == НЕТ
-assert mozhet_byt(lambda _: НЕ_ЗНАЮ, ПЛАНЫ_УРОКА) == НЕ_ЗНАЮ
-
-# --- перебор функций глубины ≤ 2 ---
-расхождения = найти_расхождения()
-assert len(расхождения) == 2
-assert [x[0] for x in расхождения] == ["p И НЕ p", "p ИЛИ НЕ p"]
-assert расхождения[0][1] == НЕТ
-assert расхождения[0][2] == НЕ_ЗНАЮ
-assert расхождения[1][1] == ДА
-assert расхождения[1][2] == НЕ_ЗНАЮ
+# перебор функций глубины <= 2: расхождений два, это p ИЛИ НЕ p и p И НЕ p
+RAZ = rashozhdeniya()
+assert sorted(RAZ) == [((NET, NE_ZNAYU, NET), NET, NE_ZNAYU), ((DA, NE_ZNAYU, DA), DA, NE_ZNAYU)]
 
 print("Д: все проверки прошли")
-print("Расхождения перебора и Клини:")
-for imya, perebor, klini in расхождения:
-    print(f"{imya}: перебор={perebor}, Клини={klini}")
+print("Расхождения перебора и Клини (таблица при p = -1, 0, 1; перебор; Клини):")
+for t, perebor, klini in RAZ:
+    print("  ", t, perebor, klini)
