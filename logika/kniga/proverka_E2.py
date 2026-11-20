@@ -211,6 +211,24 @@ for nashel in (-1, 1):
     for polnyj in (-1, 1):
         assert b_ili(nashel, b_i(ne(polnyj), 0)) == est_li({"x"} if nashel == 1 else set(), "x", polnyj == 1)
 
+# 12. Правило 10 (ОЧ-33): «нет» - только когда закрыты все лазейки
+def podtverdit(a, lazejka):
+    otvet = b_ili(a, b_i(lazejka, 0))
+    return otvet
+
+
+assert [podtverdit(a, l) for a in TRITY for l in TRITY] == [-1, 0, 0, 0, 0, 0, 1, 1, 1]
+for x in TRITY:
+    for y in TRITY:
+        assert podtverdit(b_i(x, y), ne(y)) == osnovanie(x, y)
+        assert podtverdit(b_i(x, y), b_ili(x, y)) == soglasie(x, y)
+for nashel in (-1, 1):
+    for polnyj in (-1, 1):
+        assert podtverdit(nashel, ne(polnyj)) == est_li({"x"} if nashel == 1 else set(), "x", polnyj == 1)
+assert podtverdit(-1, 1) == 0                      # телефон: искал не везде
+assert podtverdit(-1, -1) == -1                    # обошёл всё по списку
+assert podtverdit(-1, 1) != -1                     # контрпример: «в кармане нет - потерял»
+
 print("согласие вектором:", TABLICA)
 print("0.1 + 0.2 == 0.3:", OCHEVIDNO, "| 1900 по-простому:", visokosnyj_naivno(1900), "на деле:", visokosnyj(1900))
 print("спор 3 «да» и 1 «нет»:", spor([1, 1, 1, -1]))
