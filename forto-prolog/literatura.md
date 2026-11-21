@@ -29,7 +29,7 @@
 11. **[Ф]** Бурцев А. А. Процедурный сшитый код для обеспечения нисходящей разработки структурированных программ в ДССП для троичной машины. — URL: https://ternarycomp.cs.msu.ru/Papers/Burtsev_Procedural_threaded_code.pdf
 12. **[Ф]** Бурцев А. А. Разработка собственных управляющих конструкций в среде ДССП для троичной машины. — URL: https://ternarycomp.cs.msu.ru/Papers/Burtsev_Design_of_own_control_structures_in_DSSP_TVM.pdf → «ФОРТ и ДССП — системы со словарной организацией».
 13. **[Ф]** Владимирова Ю. С. [о ДССП и «Сетуни-70»]. — URL: https://www.iis.nsk.su/files/page/vladimirova_yu.s.pdf → двухстековая архитектура и ПОЛИЗ ДССП.
-14. **[С]** Kleene S. C. Introduction to Metamathematics. — 1952. → сильная трёхзначная логика K3 (`pravila/FORTO-PROLOG.md` § 4; Р30).
+14. **[С]** Kleene S. C. Introduction to Metamathematics. — 1952. → сильная трёхзначная логика K3 (`pravila/FORTO-PROLOG.md` § 4; Р30). §64, с. 335: u - «undefined», также «unknown (or value immaterial)», «value disregarded for the moment» - по пересказу (Wikipedia «Principle of bivalence», Open Logic Project; задание 042, Алиса, 22.11.2026); подлинник не читали. Используется в Е.0 (три варианта нуля).
 15. **[С]** Łukasiewicz J. O logice trójwartościowej. — 1920. → Ł3 (`instrumenty.md` § 7).
 16. **[С]** Бочвар Д. А. Об одном трёхзначном исчислении… — 1938. → B3 (отвергнута в модели).
 17. **[С]** Post E. L. Introduction to a general theory of elementary propositions. — 1921. → функции Поста, критерий полноты.
