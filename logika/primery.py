@@ -13,12 +13,12 @@ V, ne, i, ili, L, M, Q = E["V"], E["ne"], E["i"], E["ili"], E["L"], E["M"], E["Q
 
 # po_spisku: нашли — 1; не нашли по полному списку — −1; иначе 0
 def po_spisku(est, polnyj):
-    return 1 if est == 1 else (-1 if polnyj == 1 else 0)
+    return ili(est, i(ne(polnyj), 0))
 
 
 # k_sroku: до срока 0, после — факт (Т3)
 def k_sroku(sdelano, srok):
-    return 1 if sdelano == 1 else (-1 if srok == 1 else 0)
+    return po_spisku(sdelano, srok)
 
 
 # SLOVA: (имя на Форте, имя на Прологе, число входов, эталон)
