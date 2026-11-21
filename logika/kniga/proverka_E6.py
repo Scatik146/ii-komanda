@@ -106,6 +106,11 @@ def posle(a):                                            # Т6: второе - �
     return otvet
 
 
+def parallelno(nezav, bystree):                          # ОЧ-27: вместе - только точно независимы и точно быстрее
+    otvet = i_(vorota(nezav), vorota(bystree))
+    return otvet
+
+
 def prognoz_v_realnosti(pr):                             # Т7: у прогноза основания нет
     otvet = osnovanie(pr, -1)
     return otvet
@@ -190,17 +195,24 @@ assert godno(1, -1) != -1                                # контрприме�
 assert vektor1(posle) == [-1, -1, 1]
 assert posle(0) == -1                                    # «почти все сдали» - ответы не раздаю
 
-# 6. Прогноз и доля
+# 6. ОЧ-27: не знаешь, что быстрее, - по очереди
+assert vektor2(parallelno) == [-1, -1, -1, -1, -1, -1, -1, -1, 1]
+assert vektor2(parallelno).count(1) == 1
+assert parallelno(1, 1) == 1                             # принтер печатает, я проверяю тетради
+assert parallelno(-1, 1) == -1                           # контрпример: двое правят одну презентацию
+assert parallelno(1, 0) == -1                            # контрпример: 15 ноутбуков, одна сеть - по очереди
+
+# 7. Прогноз и доля
 assert vektor1(prognoz_v_realnosti) == [0, 0, 0]
 assert SBYLOS == Fraction(7, 10)                         # доля - факт о прошлом, подпись к прогнозу
 
-# 7. ОЧ-28: сначала каждый вариант целиком
+# 8. ОЧ-28: сначала каждый вариант целиком
 assert zadacha(0, 1, 1) == 0                             # по частям - не знаю
 assert po_variantam(lambda k: zadacha(k, 1, 1)) == 1     # по вариантам - решаем в любом случае
 assert i_tam_i_tam(0) == 0
 assert po_variantam(i_tam_i_tam) == -1
 
-# 8. ОЧ-20: итог не изменится - хватит
+# 9. ОЧ-20: итог не изменится - хватит
 assert len(varianty_golosov(GOLOS)) == 3 ** 5
 assert neotvratimo(varianty_golosov(GOLOS), 1) == 1      # 14 против 6 + 5 - объявляю
 assert neotvratimo(varianty_golosov(GOLOS_SPOR), 1) == 0  # 11 против 9 + 5 - ждём
@@ -208,12 +220,12 @@ assert vektor2(hvatit) == [-1, -1, 1, -1, -1, 1, 1, 1, 1]
 assert hvatit(1, -1) == 1
 assert hvatit(0, 0) == -1                                # «кажется, всё ясно» - не хватит
 
-# 9. ОЧ-29: та же таблица, что у «хватит»
+# 10. ОЧ-29: та же таблица, что у «хватит»
 assert vektor2(obeshchat) == vektor2(hvatit)
 assert obeshchat(0, 1) == 1                              # «проверю до пятницы» - своё решённое
 assert obeshchat(0, 0) == -1                             # контрпример: «получит пять»
 
-# 10. ОЧ-30: неизбежное - готовиться; пока 0 - ещё не поздно
+# 11. ОЧ-30: неизбежное - готовиться; пока 0 - ещё не поздно
 assert vektor1(gotovitsya) == [-1, -1, 1]
 assert vektor1(eshche_ne_pozdno) == [-1, 1, -1]
 assert neotvratimo([1], 1) == 1                          # интернета до 15:00 не будет - один вариант
