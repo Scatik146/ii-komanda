@@ -1,12 +1,14 @@
 # proverka_E5.py — проверка примеров Е.5 «Хозяйство» (часть 2)
 # запуск: python3 logika/kniga/proverka_E5.py
 # Значения: -1 нет, 0 не знаю, 1 да.
+from fractions import Fraction
 
 # Данные.
 TRITY = (-1, 0, 1)
 CHAT = {"контрольная в 214": 1}                         # объявление в чате, забыли поправить
 SAJT = {"контрольная в 214": -1}                        # расписание на сайте, перенесли в 305
-POROG = 5                                               # разных пустых запросов - решено заранее
+NAHODIT = Fraction(1, 2)                                # доля: есть - запрос находит 1 из 2
+OSHIBKA = Fraction(5, 100)                              # доля: пропустить существующее - не чаще
 
 
 # Слова нижнего уровня.
@@ -96,6 +98,23 @@ def iskat(e):
     return otvet
 
 
+def granica(nahodit=NAHODIT, oshibka=OSHIBKA):           # ОЧ-22 по Вальду: сколько пустых подряд - хватит
+    k = 0
+    while (1 - nahodit) ** k > oshibka:
+        k += 1
+    otvet = k
+    return otvet
+
+
+def srednee_esli_est(nahodit=NAHODIT):                  # среднее число запросов, если задача есть
+    k = granica(nahodit)
+    otvet = sum(n * (1 - nahodit) ** (n - 1) * nahodit for n in range(1, k + 1)) + k * (1 - nahodit) ** k
+    return otvet
+
+
+POROG = granica()
+
+
 def est_li_gde_to(najdeno, pustyh, porog=POROG):         # ОЧ-22: усталости среди входов нет
     otvet = 0
     if pustyh >= porog:
@@ -145,7 +164,10 @@ assert vektor1(iskat) == [-1, 1, -1]
 for e in TRITY:
     assert [sobirat(e), s_nulya(e), iskat(e)].count(1) == 1
 
-# 7. ОЧ-22: придумывать - только после порога пустых запросов
+# 7. ОЧ-22: придумывать - только после границы из долей (Вальд)
+assert POROG == 5                                       # 1/32 < 5/100 <= 1/16
+assert (1 - NAHODIT) ** 4 > OSHIBKA and (1 - NAHODIT) ** 5 <= OSHIBKA
+assert srednee_esli_est() == Fraction(31, 16)           # примерно 2 запроса
 assert pridumyvat(False, 0) == -1                       # не искал - не придумывай
 assert pridumyvat(False, 1) == -1                       # один пустой - спроси по-другому
 assert pridumyvat(False, POROG) == 1                    # порог - придумываю, пометка «наше»
@@ -153,4 +175,5 @@ assert pridumyvat(True, POROG + 3) == -1                # нашлось - со�
 assert est_li_gde_to(False, 2) == 0                     # вечер, устал - всё равно 0
 
 print("найду вектором:", vektor2(najdu))
+print("граница из долей:", POROG, "; среднее, если есть:", srednee_esli_est())
 print("Е.5: все проверки прошли")
