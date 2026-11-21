@@ -2,6 +2,7 @@
 # запуск: python3 logika/kniga/proverka_E5.py
 # Значения: -1 нет, 0 не знаю, 1 да.
 from fractions import Fraction
+from itertools import product
 
 # Данные.
 TRITY = (-1, 0, 1)
@@ -32,6 +33,16 @@ def vorota(x):                                          # пропускают �
     return otvet
 
 
+def oba_tochno(a, b):                                   # ворота(a) ∧ ворота(b), Е.3
+    otvet = i_(vorota(a), vorota(b))
+    return otvet
+
+
+def hot_odno_tochno(a, b):                              # ворота(a) ∨ ворота(b), Е.3
+    otvet = ili(vorota(a), vorota(b))
+    return otvet
+
+
 def ne_znayu(x):                                        # не знаю?(x) = ¬ворота(x) ∧ ¬ворота(¬x)
     otvet = i_(ne(vorota(x)), ne(vorota(ne(x))))
     return otvet
@@ -58,8 +69,8 @@ def vektor2(f):
 
 
 # Слова Е.5.
-def hranit(ch, s):                                      # ОЧ-09: ворота(ч ∧ с)
-    otvet = vorota(i_(ch, s))
+def hranit(ch, s):                                      # ОЧ-09: оба точно(ч, с)
+    otvet = oba_tochno(ch, s)
     return otvet
 
 
@@ -73,8 +84,8 @@ def menyat_na_meste(r):                                 # ОЧ-18: ворота(
     return otvet
 
 
-def zamenit(s, o):                                      # ОЧ-18: ворота(с ∧ о)
-    otvet = vorota(i_(s, o))
+def zamenit(s, o):                                      # ОЧ-18: оба точно(с, о)
+    otvet = oba_tochno(s, o)
     return otvet
 
 
@@ -130,6 +141,10 @@ def pridumyvat(najdeno, pustyh, porog=POROG):
 
 
 # Проверки.
+# 0. Новые слова Е.3 и старая запись - одна таблица
+for x, y in product(TRITY, TRITY):
+    assert oba_tochno(x, y) == vorota(i_(x, y))
+
 # 1. ОЧ-09: хранить - только если точно часто и точно есть сброс
 assert vektor2(hranit) == [-1, -1, -1, -1, -1, -1, -1, -1, 1]
 assert hranit(1, 1) == 1                                # таблица умножения - в голове

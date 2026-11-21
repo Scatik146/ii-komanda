@@ -33,6 +33,16 @@ def vorota(x):                                           # пропускают 
     return otvet
 
 
+def oba_tochno(a, b):                                   # ворота(a) ∧ ворота(b), Е.3
+    otvet = i_(vorota(a), vorota(b))
+    return otvet
+
+
+def hot_odno_tochno(a, b):                              # ворота(a) ∨ ворота(b), Е.3
+    otvet = ili(vorota(a), vorota(b))
+    return otvet
+
+
 def ne_znayu(x):                                         # не знаю?(x) = ¬ворота(x) ∧ ¬ворота(¬x)
     otvet = i_(ne(vorota(x)), ne(vorota(ne(x))))
     return otvet
@@ -107,7 +117,7 @@ def posle(a):                                            # Т6: второе - �
 
 
 def parallelno(nezav, bystree):                          # ОЧ-27: вместе - только точно независимы и точно быстрее
-    otvet = i_(vorota(nezav), vorota(bystree))
+    otvet = oba_tochno(nezav, bystree)
     return otvet
 
 
@@ -142,12 +152,12 @@ def varianty_golosov(golos):                             # оставшиеся:
 
 
 def hvatit(n, v):                                        # ОЧ-20: ворота(н) ∨ ворота(в)
-    otvet = ili(vorota(n), vorota(v))
+    otvet = hot_odno_tochno(n, v)
     return otvet
 
 
 def obeshchat(n, r):                                     # ОЧ-29: ворота(н) ∨ ворота(р)
-    otvet = ili(vorota(n), vorota(r))
+    otvet = hot_odno_tochno(n, r)
     return otvet
 
 
