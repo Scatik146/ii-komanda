@@ -161,6 +161,11 @@ def eshche_ne_pozdno(n):
     return otvet
 
 
+def delat_nechego(n):
+    otvet = vorota(ne(n))
+    return otvet
+
+
 # Проверки.
 # 1. Было и всегда было - по журналу
 assert vektor2(bylo) == [0, 0, -1, 0, 0, 0, 1, 1, 1]
@@ -228,12 +233,13 @@ assert obeshchat(0, 0) == -1                             # контрприме�
 # 11. ОЧ-30: неизбежное - готовиться; пока 0 - ещё не поздно
 assert vektor1(gotovitsya) == [-1, -1, 1]
 assert vektor1(eshche_ne_pozdno) == [-1, 1, -1]
+assert vektor1(delat_nechego) == [1, -1, -1]
 assert neotvratimo([1], 1) == 1                          # интернета до 15:00 не будет - один вариант
 assert gotovitsya(1) == 1
 assert eshche_ne_pozdno(0) == 1                          # «может, отключат» - скачать на флешку
 assert gotovitsya(0) == -1                               # контрпример: тормозит - «всё, сорвано»
 for n in TRITY:
-    assert [gotovitsya(n), eshche_ne_pozdno(n)].count(1) <= 1
+    assert [gotovitsya(n), eshche_ne_pozdno(n), delat_nechego(n)].count(1) == 1
 
 print("было вектором:", vektor2(bylo))
 print("голосование:", neotvratimo(varianty_golosov(GOLOS), 1), neotvratimo(varianty_golosov(GOLOS_SPOR), 1))
