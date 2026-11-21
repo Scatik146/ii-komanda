@@ -202,6 +202,25 @@ assert usomnitsya(1, 1) == 0                       # ИИ назвал год - 
 assert vektor2(mozhno) == [-1, -1, 1, -1, -1, 1, 1, 1, 1]
 assert mozhno(0, 0) == -1                          # «наверное, отменяемо» - не считается
 
+# 14. Два новых слова: оба точно, хоть одно точно (начало Е.3)
+def oba_tochno(a, b):                              # ворота(a) ∧ ворота(b)
+    otvet = i_(vorota(a), vorota(b))
+    return otvet
+
+
+def hot_odno_tochno(a, b):                         # ворота(a) ∨ ворота(b)
+    otvet = ili(vorota(a), vorota(b))
+    return otvet
+
+
+assert vektor2(oba_tochno) == [-1, -1, -1, -1, -1, -1, -1, -1, 1]
+assert vektor2(hot_odno_tochno) == [-1, -1, 1, -1, -1, 1, 1, 1, 1]
+assert oba_tochno(1, 0) == -1                      # каток работает, про лёд не знаем - не идём
+assert hot_odno_tochno(0, 1) == 1                  # прогноз молчит, тучи - беру зонт
+assert vektor2(naruzhu) == vektor2(oba_tochno)     # наружу = оба точно
+assert vektor2(propustit) == vektor2(oba_tochno)   # пропустить = оба точно
+assert vektor2(mozhno) == vektor2(hot_odno_tochno) # можно = хоть одно точно
+
 print("наружу вектором:", vektor2(naruzhu))
 print("усомниться вектором:", vektor2(usomnitsya))
 print("Е.3: все проверки прошли")
