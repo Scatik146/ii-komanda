@@ -12,7 +12,8 @@ PYTHON = [("proverka_A2.py", "chast-2-trit/A-osnova.md"), ("proverka_B2.py", "ch
           ("proverka_D2.py", None), ("proverka_D3.py", None), ("proverka_E1.py", None), ("proverka_E2.py", None),
           ("proverka_E3.py", None), ("proverka_E4.py", None), ("proverka_E5.py", None),
           ("proverka_E6.py", None),
-          ("proverka_E7.py", None)]
+          ("proverka_E7.py", None),
+          ("proverka_E8.py", None)]
 PROLOG_LIB = "site/experiments/prolog/lib"
 FORT_LIB = "site/experiments/forth/lib/index.js"
 
