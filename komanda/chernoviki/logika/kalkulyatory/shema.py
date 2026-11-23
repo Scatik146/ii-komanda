@@ -11,7 +11,7 @@ import numpy as np
 
 DVOICHNYJ, TROICHNYJ = 2, 3
 # NASTROJKA: вариант «ИЛИ у тритов — тоже деталь» (железу Т-КМОП всё равно, И или ИЛИ); по умолчанию — строго базис
-NASTROJKA = {'ИЛИ у тритов': False, 'детали': False}
+NASTROJKA = {'ИЛИ у тритов': False, 'детали': False, 'сдвиг': False}
 # «детали» — инженерный вариант: полусумматор (ПС) и сумматор (СМ) — готовые чёрные ящики, выход «+» — цифра, «→» — перенос
 
 
@@ -60,6 +60,7 @@ DEJSTVIE = {
     (DVOICHNYJ, 'НЕ'): lambda a: 1 - a,
     (TROICHNYJ, 'И'): np.minimum, (TROICHNYJ, 'НЕ'): lambda a: -a,
     (TROICHNYJ, 'ворота'): lambda a: np.where(a == 1, 1, -1), (TROICHNYJ, 'ИЛИ'): np.maximum,
+    (TROICHNYJ, 'цикл'): lambda a: (a + 2) % 3 - 1,
     (DVOICHNYJ, 'ПС+'): lambda a, b: a ^ b, (DVOICHNYJ, 'ПС→'): lambda a, b: a & b,
     (DVOICHNYJ, 'СМ+'): lambda a, b, c: a ^ b ^ c, (DVOICHNYJ, 'СМ→'): lambda a, b, c: (a + b + c) // 2,
     (TROICHNYJ, 'ПС+'): lambda a, b: (a + b + 1) % 3 - 1, (TROICHNYJ, 'ПС→'): lambda a, b: (a + b - ((a + b + 1) % 3 - 1)) // 3,

@@ -9,14 +9,7 @@ import shema
 from shema import Shema, TROICHNYJ, podschet, vychislit, i_, ili
 from uzly import okna, TRITY
 
-shema.DEJSTVIE[(TROICHNYJ, 'цикл')] = lambda a: (a + 2) % 3 - 1
-
-
-# cifra_s_ciklom: цифра суммы: окошко b = 1 → цикл(a); b = 0 → a; b = −1 → цикл(цикл(a))
-def cifra_s_ciklom(s, a, b):
-    ok, c1 = okna(s, b), s.ventil('цикл', a)
-    c2 = s.ventil('цикл', c1)
-    return ili(s, ili(s, i_(s, ok[1], c1), i_(s, ok[0], a)), i_(s, ok[-1], c2))
+from uzly import cifra_sdvigom as cifra_s_ciklom
 
 
 # proverit: все 9 пар; (вентили по видам, глубина)

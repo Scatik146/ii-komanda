@@ -79,9 +79,17 @@ SLOVA['переносы'] = lambda s, x, y: po_tablice(s, [x, y], {(a, b): a + b
                                                          if not a == b != 0})
 
 
-# slovo: действие двух тритов по имени
+# cifra_sdvigom: цифра суммы = a, сдвинутое по кругу b раз (окошки b выбирают a, сдвиг(a), сдвиг(сдвиг(a)))
+def cifra_sdvigom(s, a, b):
+    ok, c1 = okna(s, b), s.ventil('цикл', a)
+    c2 = s.ventil('цикл', c1)
+    return ili(s, ili(s, i_(s, ok[1], c1), i_(s, ok[0], a)), i_(s, ok[-1], c2))
+
+
+# slovo: действие двух тритов по имени (вариант «сдвиг — деталь»: сумма и сложение переносов — сдвигом)
 def slovo(s, imya, x, y):
-    return SLOVA[imya](s, x, y)
+    sdvigom = NASTROJKA['сдвиг'] and imya in ('сумма', 'переносы')
+    return cifra_sdvigom(s, x, y) if sdvigom else SLOVA[imya](s, x, y)
 
 
 # polusummator: (сумма, перенос) двух цифр

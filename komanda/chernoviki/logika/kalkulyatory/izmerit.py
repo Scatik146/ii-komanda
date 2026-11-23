@@ -12,7 +12,7 @@ from uzly import volna, bystryj, slovo
 from umnozhenie import cifry, chislo, umnozhitel, mac_polnyj, mac_sohranyayushchij
 
 K = 4096
-TRANZISTORY = {DVOICHNYJ: {'НЕ': 2, 'И': 6, 'ИЛИ': 6}, TROICHNYJ: {'НЕ': 2, 'И': 6, 'ИЛИ': 6, 'ворота': 4}}
+TRANZISTORY = {DVOICHNYJ: {'НЕ': 2, 'И': 6, 'ИЛИ': 6}, TROICHNYJ: {'НЕ': 2, 'И': 6, 'ИЛИ': 6, 'ворота': 4, 'цикл': 4}}
 PROB = 3000
 random.seed(23112026)
 
