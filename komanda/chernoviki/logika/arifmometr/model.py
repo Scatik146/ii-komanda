@@ -259,4 +259,5 @@ def glavnoe():
     progon_perevoda()
 
 
-glavnoe()
+if __name__ == '__main__':
+    glavnoe()
