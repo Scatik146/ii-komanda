@@ -81,12 +81,41 @@ def pervoe(shablon, tekst):
     return najdeno.group(1).strip() if najdeno else '—'
 
 
+# formula_pravila: формула правила («x = …», «Формулой: …», строки таблицы) или почему её нет
+def formula_pravila(tekst, dejstvie):
+    najdeno = pervoe(r'^Формулой: ([^\n]+)$', tekst)
+    if najdeno == '—':
+        najdeno = pervoe(r'^([а-яё«][^|\n]{0,70}? = [^\n]+)$', tekst)
+    if najdeno == '—':
+        najdeno = pervoe(r'([а-яё]+\([^)\n]*\) = [^.;\n]+)', tekst)
+    stroki_tablicy = re.findall(r'^\| ([а-яё ]+ = [^|]+?) \|', tekst, flags=re.M)
+    if najdeno == '—' and stroki_tablicy:
+        najdeno = '; '.join(stroki_tablicy) + ' (строки таблицы)'
+    if najdeno == '—' and re.match(r'(своего|только набор|выбор по триту)', dejstvie):
+        najdeno = 'своей нет: ' + dejstvie.split(' - ')[0].split('. ')[0]
+    return najdeno
+
+
+# vektor_pravila: вектор из текста правила или пометка, где он и почему его нет
+def vektor_pravila(tekst, dejstvie):
+    najdeno = pervoe(r'(Вектора?м?и?[^:\n]*: [^\n]+?)(?:\.\s|\.$|$)', tekst)
+    ssylka = pervoe(r'((?:Таблица и вектор|Формула|Действие)[^\n]{0,15}(?:те же|та же|то же|тот же|- основание)[^\n]{0,80})', tekst)
+    nabory = pervoe(r'(Наборов на входе \d+\.[^\n]{0,80})', tekst)
+    if najdeno == '—' and re.search(r'^\| [а-яё ]+ = [^|]+ \| [−\d]', tekst, flags=re.M):
+        najdeno = 'в таблице правила (строка на каждое действие)'
+    for zapas in (ssylka, nabory):
+        if najdeno == '—' and zapas != '—':
+            najdeno = zapas
+    if najdeno == '—' and re.match(r'(своего|выбор по триту)', dejstvie):
+        najdeno = 'своего нет: ' + dejstvie.split(' - ')[0].split('. ')[0]
+    return najdeno
+
+
 # atom_knigi: заголовок и текст правила → поля атома
 def atom_knigi(nomer, gruppa, zagolovok, tekst):
-    atom = {'id': f'Л{nomer}', 'gruppa': gruppa, 'pravilo': zagolovok,
-            'formula': pervoe(r'^([а-яё«][^|\n]{0,70}? = [^\n]+)$', tekst),
-            'vektor': pervoe(r'Вектором[^:]*: (\([^)]*\))', tekst),
-            'dejstvie': pervoe(r'^\*Действие: ([^\n]{0,160})', tekst)}
+    dejstvie = pervoe(r'^\*Действие: ([^\n]{0,160})', tekst)
+    atom = {'id': f'Л{nomer}', 'gruppa': gruppa, 'pravilo': zagolovok, 'dejstvie': dejstvie,
+            'formula': formula_pravila(tekst, dejstvie), 'vektor': vektor_pravila(tekst, dejstvie)}
     return atom
 
 
@@ -157,7 +186,7 @@ SHAPKA = ('# Словарь правил очень осторожного че�
           'Источники: книга (`logika/kniga/chast-2-trit/E-pravila.md`), кандидаты (`komanda/zadaniya/045/kandidaty.md`), '
           'случаи (`komanda/zadaniya/045/ispytanie.md`). Решение учителя 23.11, 22:04–22:11: список правил — словарь, растёт; '
           'у каждого правила и кандидата — формула и вектор; по долям случаев за месяц — порядок и слои. '
-          '«Вектор правила» — из книги («—» — в книге его нет, это работа на потом). «Векторы слов» — программа считает по словам таблицы Е.8; это вектор слова, а не правила: у 7 правил формула составная (слово плюс ещё действие), и векторы различаются — так и должно быть. У набора И, ИЛИ, НЕ и у способа записи своего вектора нет.\n\n## Правила листка (46)\n\n')
+          '«Вектор правила» — из книги; если своего вектора нет, сказано почему (так в книге), «—» — в книге не нашлось ни вектора, ни объяснения. «Векторы слов» — программа считает по словам таблицы Е.8; это вектор слова, а не правила: у 7 правил формула составная (слово плюс ещё действие), и векторы различаются — так и должно быть. У набора И, ИЛИ, НЕ и у способа записи своего вектора нет.\n\n## Правила листка (46)\n\n')
 
 
 # chast_pravil: 46 атомов листка текстом
