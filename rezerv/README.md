@@ -8,7 +8,8 @@
 
 | папка | что | откуда |
 |---|---|---|
-| `navyki/<имя>/SKILL.md` | 4 навыка учителя: `ekonomnaya-sessiya`, `teacher-workpad-sajt`, `drakon-shema`, `graficheskij-konspekt` | установленные в claude.ai (13.11); в `ekonomnaya-sessiya` исправлен путь к заданиям (`ii-komanda/komanda/zadaniya/`) |
+| `navyki/<имя>/SKILL.md` | 9 навыков учителя: `brifing`, `drakon-shema`, `ekonomnaya-sessiya`, `graficheskij-konspekt`, `komnata`, `ostorozhnyj-chelovek`, `slovar-forto-prologa`, `teacher-workpad-sajt`, `tri-stilya-koda` | сверено с установленными в claude.ai 23.11.2026 20:30 |
+| `navyki-zip/<имя>.zip` | те же навыки, готовые к загрузке: в настройках claude.ai, раздел навыков (Skills) → загрузить zip | 23.11.2026 |
 | — | **память Claude** (общая и проектов) — с 13.11 только в приватном `Scatik146/memory_maryam_ai` (`pamyat/`); отсюда убрана, старые версии остались в истории коммитов как слепок | решение учителя 13.11 |
 
 Остальные навыки (docx, pdf, pptx, xlsx, браузер и т. п.) — встроенные Anthropic, их копировать не нужно.
@@ -25,7 +26,7 @@
 
 ## Как поднять всё заново
 
-1. **Навыки.** в настройках claude.ai, раздел навыков (Skills), — загрузить: для каждого навыка папку `navyki/<имя>/` запаковать в zip (внутри — `SKILL.md`). Или в чате: «создай навык из этого файла» и приложить `SKILL.md`.
+1. **Навыки.** в настройках claude.ai, раздел навыков (Skills), — загрузить готовые zip из `navyki-zip/` (или запаковать папку `navyki/<имя>/` в zip, внутри — `SKILL.md`). Или в чате: «создай навык из этого файла» и приложить `SKILL.md`.
 2. **Проект.** Создать проект «Разработка уроков» (описание: «Информатика, Искусственный интеллект, Информационная безопасность, Труд(технология)»), добавить в него документы из `teacher-workpad/RAZRABOTANO.md` и `DORABOTKI.md` под именами `Разработано teacher-workpad.md`, `Доработки teacher-workpad.md`.
 3. **Память.** Файлы памяти и полная инструкция «воскрешения» — в приватном `Scatik146/memory_maryam_ai` (`README.md`).
 4. **Первый чат.** «Брифинг»: Claude читает `ii-komanda/komanda/SOSTOYANIE.md` и `BRIFING.md` — и работа продолжается с того же места.
