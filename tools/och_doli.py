@@ -1,10 +1,10 @@
-"""och-doli.py — доли применения правил очень осторожного человека по журналу испытания.
+"""och_doli.py — доли применения правил очень осторожного человека по журналу испытания.
 
 Вход:  komanda/zadaniya/045/ispytanie.md — таблица: когда | момент | правило | что было | итог
        итог начинается со знака: + помогло, − применила — не помогло, ! нужно было, но не применила,
        = ничего не изменило, ? не хватило правила.
 Выход: таблица «правило → применений, +, −, =, ?, доля помогло» и правила листка, которые не применялись.
-Запуск из корня ii-komanda: python3 -I tools/och-doli.py [--md файл]
+Запуск из корня ii-komanda: python3 -I tools/och_doli.py [--md файл]
 Доли — счёт программы, а не вывод: при малом числе случаев это 0 (Л40).
 """
 import re
@@ -13,6 +13,7 @@ from collections import defaultdict
 from pathlib import Path
 
 ZHURNAL = Path('komanda/zadaniya/045/ispytanie.md')
+KANDIDATY = Path('komanda/zadaniya/045/kandidaty.md')
 LISTOK_STROK = 46
 
 
@@ -34,12 +35,23 @@ def znak_itoga(yachejka):
     return najdeno.group(0) if najdeno else '?'
 
 
-# poschitat: метка → счётчики по знакам
-def poschitat(stroki):
+# dubli: кандидат-дубль → строки листка (столбец «Решение» файла кандидатов: «дубль Л16, Л28»)
+def dubli(tekst):
+    karta = {}
+    for s in tekst.splitlines():
+        k = [y.strip() for y in s.strip().strip('|').split('|')]
+        if len(k) > 10 and re.fullmatch(r'ОЧ-\d+', k[0]) and k[10].startswith('дубль'):
+            karta[k[0]] = re.findall(r'Л\d+', k[10])
+    return karta
+
+
+# poschitat: метка → счётчики по знакам; случай кандидата-дубля считается за его строки листка
+def poschitat(stroki, karta=None):
     schet = defaultdict(lambda: defaultdict(int))
+    karta = karta or {}
     for s in stroki:
         znak = znak_itoga(s[4])
-        for m in metki(s[2]):
+        for m in {x for m0 in metki(s[2]) for x in karta.get(m0, [m0])}:
             schet[m][znak] += 1
     return schet
 
@@ -67,7 +79,7 @@ def ne_primenyalis(schet):
 # glavnoe: посчитать и показать
 def glavnoe():
     stroki = stroki_tablicy(ZHURNAL.read_text(encoding='utf-8'))
-    schet = poschitat(stroki)
+    schet = poschitat(stroki, dubli(KANDIDATY.read_text(encoding='utf-8')))
     tekst = (f"Случаев в журнале: {len(stroki)}.\n\n" + tablica(schet) +
              "\n\nСтроки листка, которые ещё не применялись: " + ', '.join(f'Л{n}' for n in ne_primenyalis(schet)) +
              '.\n\nМетки ОЧ-01, ОЧ-Б2 и подобные — номера старого свода; их место в листке сверить (одно знание — одно место).\n')
@@ -76,4 +88,5 @@ def glavnoe():
         Path(sys.argv[sys.argv.index('--md') + 1]).write_text(tekst, encoding='utf-8')
 
 
-glavnoe()
+if __name__ == '__main__':
+    glavnoe()

@@ -58,7 +58,8 @@ def kandidaty(tekst):
     stroki = []
     for s in tekst.splitlines():
         kletki = [k.strip() for k in s.strip().strip("|").split("|")]
-        if len(kletki) >= 3 and re.fullmatch(r"ОЧ-\d+", kletki[0]):
+        reshenie = kletki[10] if len(kletki) > 10 else ""
+        if len(kletki) >= 3 and re.fullmatch(r"ОЧ-\d+", kletki[0]) and not re.match(r"дубль|неверен", reshenie):
             stroki.append(f"- **{kletki[0]}** ({kletki[2]}). {kletki[1]}")
     return stroki
 

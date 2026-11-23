@@ -3,34 +3,14 @@
 Векторы — перебором трёх значений трита (одна переменная) или девяти клеток (две: a = −1, 0, 1; b = −1, 0, 1).
 Совпадение вектора — дубль по формуле. Дубль ли по смыслу — решает вход (что подаётся на a и b), это пишет человек.
 """
-T = (-1, 0, 1)
+import sys
+from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parents[3] / 'tools'))
+from och_slovar import vektor, SLOVA  # noqa: E402  слова — в одном месте, в словаре правил
 
-# vorota: пропускают только 1
-def vorota(x):
-    return 1 if x == 1 else -1
-
-
-# osnovanie: (x ∧ b) ∨ (¬b ∧ 0) — книга, правило 1
-def osnovanie(x, b):
-    return max(min(x, b), min(-b, 0))
-
-
-# oba: оба точно(a, b) = ворота(a) ∧ ворота(b)
-def oba(a, b):
-    return min(vorota(a), vorota(b))
-
-
-# soglasie: согласие — 1 или −1, если оба так; иначе 0 (книга, правило 9)
-def soglasie(a, b):
-    return a if a == b and a != 0 else 0
-
-
-# vektor: вектор слова одной или двух переменных (перебор значений)
-def vektor(slovo, mest):
-    vhody = [(x,) for x in T] if mest == 1 else [(a, b) for a in T for b in T]
-    return tuple(slovo(*v) for v in vhody)
-
+vorota, osnovanie, soglasie = SLOVA['ворота'][0], SLOVA['основание'][0], SLOVA['согласие'][0]
+oba = SLOVA['оба точно'][0]
 
 LISTOK = {  # вектор → строки листка (по книге: «Вектором …» у правил шага Е)
     vektor(osnovanie, 2): 'основание: Л1, Л15, Л31, Л37 (и формулой Л2, Л8)',
