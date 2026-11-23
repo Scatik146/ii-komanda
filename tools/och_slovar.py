@@ -12,6 +12,7 @@ from pathlib import Path
 import och_doli
 
 KNIGA = Path('logika/kniga/chast-2-trit/E-pravila.md')
+SVOD = Path('logika/svod-fp.md')
 VYHOD = Path('pravila/OCH-SLOVAR.md')
 GRUPPY = ['Е.2', 'Е.3', 'Е.4', 'Е.5', 'Е.6', 'Е.7']
 T = (-1, 0, 1)
@@ -144,6 +145,17 @@ def atomy_knigi(tekst):
     return atomy
 
 
+# svod: строка листка → атомы свода (`svod-fp.md`: код и id; строка — в коде «Л34» или в «назначении» «Л3 листка»)
+def svod(tekst):
+    karta = {}
+    for kod, telo in re.findall(r'^### (\S+) · .*?\n(.*?)^```$', tekst, flags=re.M | re.S):
+        n = re.search(r'^назначение: Л(\d+) листка', telo, flags=re.M) or re.fullmatch(r'Л(\d+)', kod)
+        nomer = re.search(r'^id: (\S+)', telo, flags=re.M)
+        if n and nomer:
+            karta.setdefault(int(n.group(1)), []).append(f'{kod} ({nomer.group(1)})')
+    return karta
+
+
 # kandidaty: строки таблицы кандидатов → атомы
 def kandidaty(tekst):
     atomy = []
@@ -162,13 +174,14 @@ def sluchai(schet, m):
 
 
 # blok_knigi: атом правила листка текстом
-def blok_knigi(a, stroka, slova, schet, dubli):
+def blok_knigi(a, stroka, slova, schet, dubli, v_svode=()):
     svoi = [k for k, l in dubli.items() if a['id'] in l]
     stroki = [f"### {a['id']} · {stroka}", '', '```атом', f"id: {a['id']}", 'тип: правило ОЧ',
               f"строка листка: {stroka}", f"правило в книге: {a['pravilo']}", f"группа: {a['gruppa']}",
               f"слово: {', '.join(slova) or 'нет в таблице Е.8'}", f"формула: {a['formula']}",
               f"вектор правила (книга): {a['vektor']}", f"векторы слов (программа): {vektor_po_slovam(slova)}",
               f"действие: {a['dejstvie']}", 'слой: 1 (листок; слои — по долям ≈ 23.12)',
+              f"в своде: {', '.join(v_svode) or 'нет'}",
               f"случаи: {sluchai(schet, a['id'])}", f"дубли-кандидаты: {', '.join(svoi) or 'нет'}", '```', '']
     return '\n'.join(stroki)
 
@@ -192,9 +205,9 @@ SHAPKA = ('# Словарь правил очень осторожного че�
 # chast_pravil: 46 атомов листка текстом
 def chast_pravil(kniga, schet, dubli):
     e8 = razdely(kniga)['Е.8'][1]
-    ls, sl = listok(e8), slova_listka(e8)
-    return ''.join(blok_knigi(a, ls.get(int(a['id'][1:]), '—'), sl.get(int(a['id'][1:]), []), schet, dubli)
-                   for a in atomy_knigi(kniga))
+    ls, sl, sv = listok(e8), slova_listka(e8), svod(SVOD.read_text(encoding='utf-8'))
+    return ''.join(blok_knigi(a, ls.get(int(a['id'][1:]), '—'), sl.get(int(a['id'][1:]), []), schet, dubli,
+                              sv.get(int(a['id'][1:]), [])) for a in atomy_knigi(kniga))
 
 
 # sobrat: весь словарь одним текстом
