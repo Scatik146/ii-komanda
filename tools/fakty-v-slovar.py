@@ -42,23 +42,33 @@ def pary(spisok):
     return d
 
 
-# atom: текст атома-факта
-def atom(k, nomer, arg, zametki, citaty):
+# polya: строки полей атома-факта до истории
+def polya(k, aid, arg, citata):
     mir, imya_mira = MIR[k["словарь"]]
-    aid = "%d-fakt-%s-%s" % (nomer, arg.metka, k["номер"].lower().replace("ф-", "f"))
-    citata = citaty.get(k["номер"], [k["цитата"]])[0]
     stroki = ["```атом", "id: " + aid, "тип: факт",
               "тема: факт урока, %s, мир %s (%s)" % (str(Path(k["файл"]).parent), mir, imya_mira),
               "описание: " + k["запись"], "назначение: банк фактов: урок берёт проверенный факт, а не ищет заново",
-              "вход: нет", "выход: значение", "изменяет: нет",
-              "истинность: %s = 0" % mir, "проверено: нет",
+              "вход: нет", "выход: значение", "изменяет: нет", "истинность: %s = 0" % mir, "проверено: нет",
               "источник: [О] teacher-workpad@%s %s: «%s»" % (arg.kommit, k["файл"], citata),
               "лицензия: неизвестно", "статус: черновик | %s | Claude" % DATA, "версия: %s | Claude" % DATA,
-              "автор: учитель", "критичный: 0", "состав: нет", "история:",
-              "- %s | DeepSeek | выписан по заданию %s (%s)" % (DATA, arg.metka, k["номер"]),
+              "автор: учитель", "критичный: 0", "состав: нет"]
+    return stroki
+
+
+# istoriya: строки истории атома-факта
+def istoriya(k, arg, zametki):
+    stroki = ["история:", "- %s | DeepSeek | выписан по заданию %s (%s)" % (DATA, arg.metka, k["номер"]),
               "- %s | Claude | цитата сверена с файлом программой analiz.py citaty; источник факта не сверен — истинность 0" % DATA]
     stroki += ["- %s | Claude | %s" % (DATA, z) for z in zametki.get(k["номер"], [])]
-    return aid, "\n".join(stroki + ["```", ""])
+    return stroki
+
+
+# atom: id и текст атома-факта
+def atom(k, nomer, arg, zametki, citaty):
+    aid = "%d-fakt-%s-%s" % (nomer, arg.metka, k["номер"].lower().replace("ф-", "f"))
+    citata = citaty.get(k["номер"], [k["цитата"]])[0]
+    tekst = "\n".join(polya(k, aid, arg, citata) + istoriya(k, arg, zametki) + ["```", ""])
+    return aid, tekst
 
 
 # razbor: аргументы командной строки
