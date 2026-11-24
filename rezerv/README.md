@@ -8,8 +8,8 @@
 
 | папка | что | откуда |
 |---|---|---|
-| `navyki/<имя>/SKILL.md` | 9 навыков учителя: `brifing`, `drakon-shema`, `ekonomnaya-sessiya`, `graficheskij-konspekt`, `komnata`, `ostorozhnyj-chelovek`, `slovar-forto-prologa`, `teacher-workpad-sajt`, `tri-stilya-koda` | сверено с установленными в claude.ai 23.11.2026 20:30 |
-| `navyki-zip/<имя>.zip` | те же навыки, готовые к загрузке: в настройках claude.ai, раздел навыков (Skills) → загрузить zip | 23.11.2026 |
+| `navyki/<имя>/SKILL.md` | 9 навыков учителя: `brifing`, `drakon-shema`, `ekonomnaya-sessiya`, `graficheskij-konspekt`, `komnata`, `ostorozhnyj-chelovek`, `slovar-forto-prologa`, `teacher-workpad-sajt`, `tri-stilya-koda` | сверено с установленными в claude.ai 24.11.2026 08:17 (по часам): 7 совпадают; `ostorozhnyj-chelovek` взят из установленного (правка 24.11 «Где ломается чаще всего»); `teacher-workpad-sajt` — копия здесь **новее** установленного (строка «Сначала — команда проверки урока»): загрузить zip в claude.ai |
+| `navyki-zip/<имя>.zip` | те же навыки, готовые к загрузке: в настройках claude.ai, раздел навыков (Skills) → загрузить zip | 23.11.2026; `ostorozhnyj-chelovek`, `teacher-workpad-sajt` — 24.11.2026 |
 | — | **память Claude** (общая и проектов) — с 13.11 только в приватном `Scatik146/memory_maryam_ai` (`pamyat/`); отсюда убрана, старые версии остались в истории коммитов как слепок | решение учителя 13.11 |
 
 Остальные навыки (docx, pdf, pptx, xlsx, браузер и т. п.) — встроенные Anthropic, их копировать не нужно.
