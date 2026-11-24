@@ -15,8 +15,11 @@ from shema import Shema, TROICHNYJ, vychislit, ne, i_, ili
 from uzly import po_tablice
 from izmerit import cena_uzla
 from smeshannyj_summator import razryad, tablica_tw, tablica_cifry
+import smeshannyj_razryad as korotkij
 
 N = 21
+# RAZRYAD: «таблица» — разряд по рецепту книги (81 → 27 клеток); «сокращённый» — smeshannyj_razryad.py
+RAZRYAD = {'вид': 'таблица'}
 PROB = 2000
 random.seed(24112026)
 
@@ -28,10 +31,23 @@ def slozhit_sd(s, x, y):
     t, w = [nol], []
     for i in range(d):
         xn, yn = (x[i - 1], y[i - 1]) if i > 0 else (nol, nol)
-        ti, wi = razryad(s, x[i], y[i], xn, yn, tab_t, tab_w)
+        if RAZRYAD['вид'] == 'таблица':
+            ti, wi = razryad(s, x[i], y[i], xn, yn, tab_t, tab_w)
+        else:
+            ti, wi = korotkij.razryad(s, x[i], y[i], xn, yn)
         t.append(ti)
         w.append(wi)
-    return [po_tablice(s, [w[i], t[i]], tab_c) for i in range(d)]
+    return [cifra_sd(s, w[i], t[i], tab_c) for i in range(d)]
+
+
+# cifra_sd: цифра суммы w + t — по выбранному разряду
+def cifra_sd(s, w, t, tab_c):
+    rez = None
+    if RAZRYAD['вид'] == 'таблица':
+        rez = po_tablice(s, [w, t], tab_c)
+    else:
+        rez = korotkij.cifra(s, w, t)
+    return rez
 
 
 # cifra_proizv: a_i · b_j, когда на входе биты 0 / 1: И (меньшее) на {0, 1} — это двоичное И; у старшего бита вес
@@ -127,13 +143,20 @@ def izmerit():
     return cena_uzla(s, vyh)
 
 
-# glavnoe: варианты А и Б
+# odin_progon: разряд vid, вариант imya → строка отчёта
+def odin_progon(vid, imya):
+    RAZRYAD['вид'] = vid
+    shema.NASTROJKA['ИЛИ у тритов'] = imya == 'Б'
+    c = izmerit()
+    return (f'РАЗРЯД {vid}, ВАРИАНТ {imya}: смешанный умножитель {N}×{N} → {2 * N} бит: транзисторы {c["транзисторы"]}, '
+            f'глубина {c["глубина"]}, вентили {c["вентили"]}; проверено на {PROB} парах')
+
+
+# glavnoe: два разряда × варианты А и Б
 def glavnoe():
-    for imya in ('А', 'Б'):
-        shema.NASTROJKA['ИЛИ у тритов'] = imya == 'Б'
-        c = izmerit()
-        print(f'ВАРИАНТ {imya}: смешанный умножитель {N}×{N} → {2 * N} бит: транзисторы {c["транзисторы"]}, '
-              f'глубина {c["глубина"]}, вентили {c["вентили"]}; проверено на {PROB} парах')
+    for vid in ('таблица', 'сокращённый'):
+        for imya in ('А', 'Б'):
+            print(odin_progon(vid, imya))
 
 
 if __name__ == '__main__':
