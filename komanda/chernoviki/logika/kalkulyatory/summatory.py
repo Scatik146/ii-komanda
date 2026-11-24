@@ -13,11 +13,9 @@ import random
 import itog
 import luchshie
 import izmerit
-from shema import Shema, DVOICHNYJ, TROICHNYJ, vychislit
+from shema import Shema, DVOICHNYJ, TROICHNYJ
 from uzly import volna, bystryj, polusummator, summator, slozhit_karty
-import numpy as np
-from izmerit import shirina, cena_uzla, vhody_slova, podat, sluchajnye
-from umnozhenie import chislo
+from izmerit import shirina, cena_uzla, uzel_slozheniya
 
 VARIANTY = ('А', 'Б', 'Г', 'В')
 BITY = (8, 16, 21, 32, 48)          # ширины двоичного слова; троичное — наименьшее, вмещающее тот же диапазон
@@ -39,26 +37,10 @@ def trity_dlya(n):
     return shirina(TROICHNYJ, -2 ** (n - 1), 2 ** (n - 1) - 1)
 
 
-# (как izmerit.uzel_slozheniya, но сумма не выходит за слово: у izmerit граница 2^(n−2) включительно, сумма 2^(n−1)
-# переполняет n бит — при n = 8 проверка падает; izmerit не правлю: от его случайного ряда зависят числа П.2)
-# uzel_slova: сумматор n цифр, проверка на 3000 парах
-def uzel_slova(b, n, postroit):
-    s = Shema(b)
-    a, x = vhody_slova(s, n), vhody_slova(s, n)
-    rez = postroit(s, a, x)
-    m = (3 ** n - 1) // 4
-    if b == DVOICHNYJ:
-        m = 2 ** (n - 2) - 1
-    p, q = sluchajnye(m), sluchajnye(m)
-    vyh = vychislit(s, {**podat(b, a, p, n), **podat(b, x, q, n)}, rez)
-    assert np.all(chislo(b, vyh) == p + q), (b, n, postroit.__name__)
-    return cena_uzla(s, rez)
-
-
-# slovo: (транзисторы, глубина) сумматора слова
+# slovo: (транзисторы, глубина) сумматора слова; проверка на 3000 парах — внутри izmerit.uzel_slozheniya
 def slovo(variant, b, n, vid):
     itog.variant(variant)
-    r = uzel_slova(b, n, VIDY[vid])
+    r = uzel_slozheniya(b, n, VIDY[vid])
     return (r['транзисторы'], r['глубина'])
 
 

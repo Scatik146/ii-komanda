@@ -68,7 +68,7 @@ def uzel_slozheniya(baza, n, vid):
     s = Shema(baza)
     a, b = vhody_slova(s, n), vhody_slova(s, n)
     rez = vid(s, a, b)
-    m = (2 ** (n - 2) if baza == DVOICHNYJ else (3 ** n - 1) // 4)
+    m = (2 ** (n - 2) - 1 if baza == DVOICHNYJ else (3 ** n - 1) // 4)  # 24.11: было 2^(n−2) — сумма 2^(n−1) переполняла n бит
     x, y = sluchajnye(m), sluchajnye(m)
     vyh = vychislit(s, {**podat(baza, a, x, n), **podat(baza, b, y, n)}, rez)
     assert np.all(chislo(baza, vyh) == x + y), (baza, n, vid.__name__)
