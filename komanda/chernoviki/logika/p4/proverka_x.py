@@ -497,7 +497,23 @@ def pechat_poiska(sh, nazvanie, povedenie, vhod_x, shag):
         print(f'    {imya:24} чипов {m["чипов"]:4} | виновник потерян {m["виновник потерян"]:4} | '
               f'подозреваемых в среднем {m["подозреваемых"] / m["чипов"]:6.2f} | прогонов {m["прогонов"]:7} | '
               f'работа {rabota:10} тр.·прогон')
+    luchshie(sh, itog)
     return itog
+
+
+# luchshie: точный ответ лучшими способами: перебор на битах, отсев на двух проводах + перебор, отсев на тритах + перебор
+def luchshie(sh, itog):
+    bit, prov, trit = (cena_shemy(sh, z) for z in ('бит', 'провода', 'трит'))
+    otsev = itog['3: наша, триты']['прогонов']
+    ostatok = itog['3 + точно: фильтр, потом перебор']['прогонов'] - otsev
+    rabota = {'перебор, биты': itog['точно']['прогонов'] * bit, 'отсев, два провода': otsev * prov + ostatok * bit,
+              'отсев, триты': otsev * trit + ostatok * bit}
+    dvoichnyj = min(rabota['перебор, биты'], rabota['отсев, два провода'])
+    porog = (dvoichnyj - ostatok * bit) / otsev / bit
+    print(f'    ЛУЧШИЕ (точный ответ): ' + ' | '.join(f'{k} {v}' for k, v in rabota.items()) +
+          f' | лучший двоичный / триты ×{dvoichnyj / rabota["отсев, триты"]:.2f}; '
+          f'триты выигрывают, пока тритовая схема дороже двоичной не больше чем в {porog:.2f} раза')
+    return rabota
 
 
 # pechat_shemy: всё по одной схеме
