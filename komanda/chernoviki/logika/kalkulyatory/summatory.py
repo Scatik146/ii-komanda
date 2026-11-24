@@ -12,6 +12,7 @@ import math
 import random
 import itog
 import luchshie
+import izmerit
 from shema import Shema, DVOICHNYJ, TROICHNYJ
 from uzly import volna, bystryj, polusummator, summator, slozhit_karty
 from izmerit import shirina, uzel_slozheniya, cena_uzla
@@ -156,6 +157,19 @@ def pechat_poroga():
     return porog
 
 
+# chto_esli: волна 21 бит / 14 тритов на готовых сумматорах, если троичный полный сумматор стоит sm транзисторов
+def chto_esli():
+    print('\nЧТО ЕСЛИ (вариант В, волна 21 бит / 14 тритов): цена троичного полного сумматора → слово')
+    bylo = izmerit.TRANZISTORY[TROICHNYJ]['СМ+']
+    d = slovo('В', DVOICHNYJ, 21, 'волна')
+    for sm in (72, 55, 44, 40):
+        izmerit.TRANZISTORY[TROICHNYJ]['СМ+'] = sm
+        t = slovo('В', TROICHNYJ, 14, 'волна')
+        print(f'  {sm} тр.: двоичный {d[0]} / {d[1]} | троичный {t[0]} / {t[1]}')
+    izmerit.TRANZISTORY[TROICHNYJ]['СМ+'] = bylo
+    return None
+
+
 # glavnoe: все таблицы
 def glavnoe():
     random.seed(23112026)
@@ -163,6 +177,7 @@ def glavnoe():
     pechat_razryadov()
     pechat_slov()
     pechat_poroga()
+    chto_esli()
     return None
 
 
