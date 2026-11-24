@@ -20,6 +20,7 @@ import itertools
 import numpy as np
 
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'kalkulyatory'))
+import shema                          # noqa: E402
 from shema import Shema, DVOICHNYJ   # noqa: E402
 from uzly import summator, volna     # noqa: E402
 from umnozhenie import umnozhitel, chislo  # noqa: E402
@@ -35,6 +36,7 @@ X = 'X'                                 # отметка «значение не
 
 # bit_ventil: вентиль над битами 0/1
 def bit_ventil(vid, a):
+    assert vid in VENTILI, vid
     if vid == 'НЕ':
         rez = 1 - a[0]
     if vid == 'И':
@@ -193,6 +195,13 @@ def slozhit_mery(a, b):
 
 # Obrazec: схема для опыта — {'имя', 'схема', 'входы': [[узлы операнда]], 'выходы': [узлы], 'проверка': f(числа, выход)}
 
+# chistyj_bazis: схемы строятся из И, ИЛИ, НЕ — без готовых деталей (настройку могли оставить другие программы)
+def chistyj_bazis():
+    for k in shema.NASTROJKA:
+        shema.NASTROJKA[k] = False
+    return shema.NASTROJKA
+
+
 # vse_nabory: все наборы битов входов → {узел: массив}
 def vse_nabory(vhody):
     uzly = [u for op in vhody for u in op]
@@ -207,6 +216,7 @@ def operand(zn, bity):
 
 # shema_summatora: полный сумматор одного разряда: a + b + c = сумма + 2·перенос
 def shema_summatora():
+    chistyj_bazis()
     s = Shema(DVOICHNYJ)
     a, b, c = s.vhod(), s.vhod(), s.vhod()
     vyh = list(summator(s, a, b, c))
@@ -216,6 +226,7 @@ def shema_summatora():
 
 # shema_umnozhitelya: умножитель n × n бит со знаком → 2n бит
 def shema_umnozhitelya(n):
+    chistyj_bazis()
     s = Shema(DVOICHNYJ)
     a, b = [s.vhod() for _ in range(n)], [s.vhod() for _ in range(n)]
     vyh = umnozhitel(s, a, b, lambda s_, x, y: s_.ventil('И', x, y))
@@ -225,6 +236,7 @@ def shema_umnozhitelya(n):
 
 # shema_stroki: кусок строки слоя: a·b + c·d (по n бит со знаком), сумма волной
 def shema_stroki(n):
+    chistyj_bazis()
     s = Shema(DVOICHNYJ)
     a, b, c, d = ([s.vhod() for _ in range(n)] for _ in range(4))
     p1 = umnozhitel(s, a, b, lambda s_, x, y: s_.ventil('И', x, y))
