@@ -513,6 +513,8 @@ def luchshie(sh, itog):
     print(f'    ЛУЧШИЕ (точный ответ): ' + ' | '.join(f'{k} {v}' for k, v in rabota.items()) +
           f' | лучший двоичный / триты ×{dvoichnyj / rabota["отсев, триты"]:.2f}; '
           f'триты выигрывают, пока тритовая схема дороже двоичной не больше чем в {porog:.2f} раза')
+    print('    ЦЕНА ТРИТА (тритовая схема дороже двоичной в r раз): ' + ' | '.join(
+        f'r = {r}: ×{dvoichnyj / (otsev * r * trit + ostatok * bit):.2f}' for r in (1.0, 1.2, 1.4)))
     return rabota
 
 
