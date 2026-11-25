@@ -1,0 +1,24 @@
+{
+  "zachem": "Данные ревизора tools/revizor.py: что видно из проекта «Разработка уроков» (снимок memory_read в чате 25.11.2026). Код это не вычисляет — живую память видят только инструменты памяти в чате.",
+  "data_snimka": "2026-11-25",
+  "papki_pamyati": ["obshchaya", "proekt-razrabotka-urokov"],
+  "papka_proekta": "proekt-razrabotka-urokov",
+  "pristavka_proekta": "/projects/01a1f3ab-4734-763d-bc49-fb428ef5b728/",
+  "ne_pamyat": ["index.md"],
+  "obshchaya_vidna": {
+    "obshchaya/profile.md": "/profile.md",
+    "obshchaya/areas/ii-i-informatsionnaya-bezopasnost.md": "/areas/ii-i-informatsionnaya-bezopasnost.md",
+    "obshchaya/areas/memory-maryam-ai.md": "/areas/memory-maryam-ai.md",
+    "obshchaya/areas/teacher-workpad.md": "/areas/teacher-workpad.md",
+    "obshchaya/server.md": "/topics/team-server.md"
+  },
+  "obshchaya_ne_vidna": ["obshchaya/preferences.md", "obshchaya/areas/ii-komanda.md", "obshchaya/areas/logika-kniga.md"],
+  "vnedryaetsya": {"профиль /profile.md (живой, memory_read 25.11)": 540},
+  "kartochka_och": "komanda/vstavka/claude/03-och-kartochka.md",
+  "ne_tochno": {
+    "graficheskij-konspekt/SKILL.md": "открытый навык для других ИИ — повтор может быть нарочно",
+    "obshchaya/preferences.md": "из проекта не виден (25.11) — есть ли в живой памяти, не знаю",
+    "obshchaya/areas/ii-komanda.md": "из проекта не виден (25.11) — есть ли в живой памяти, не знаю",
+    "obshchaya/areas/logika-kniga.md": "из проекта не виден (25.11) — есть ли в живой памяти, не знаю"
+  }
+}
