@@ -1,0 +1,581 @@
+{
+ "sobrano": "2026-11-26",
+ "iz": "komanda/derevo/derevo.pl",
+ "ne_pravit": true,
+ "statusy": [
+  "работает_у_нас",
+  "в_работе",
+  "заморожено",
+  "идея",
+  "завершено"
+ ],
+ "uzly": [
+  {
+   "id": "ii_komanda",
+   "roditel": "корень",
+   "status": "работает_у_нас",
+   "nazvanie": "ii-komanda — команда ИИ учителя",
+   "ostanovilis": "26.11: дерево задач, шаг 1",
+   "ne_zakryto": [
+    "README § 5: около 15 открытых вопросов",
+    "ветки не убраны: forto-prolog(-2,-3), ekspertiza-forto-prolog, komnata-tri-stilya, migraciya-proverki, pravki-043, resheniya-14-11"
+   ],
+   "istochniki": [
+    {
+     "vid": "github",
+     "put": "Scatik146/ii-komanda"
+    }
+   ],
+   "pometki": [
+    "Принцип команды: на каждом этапе — ИИ из трёх стран (США, Россия, Китай), если возможно: гибкость, выживаемость, три взгляда на мир."
+   ],
+   "opiraetsya": [],
+   "provereno": {
+    "trit": "не_знаю",
+    "pochemu": [
+     "№ 5: нет списка репозиториев"
+    ]
+   }
+  },
+  {
+   "id": "ii_py",
+   "roditel": "ii_komanda",
+   "status": "заморожено",
+   "nazvanie": "ii.py — конвейер урока",
+   "ostanovilis": "18.11: пауза; версия 0.1, 19 тестов",
+   "ne_zakryto": [
+    "klyuchi на ноутбуке",
+    "команды sborka, vernut, vydacha"
+   ],
+   "istochniki": [],
+   "pometki": [],
+   "opiraetsya": [],
+   "provereno": {
+    "trit": "не_знаю",
+    "pochemu": [
+     "№ 46: нет своего источника"
+    ]
+   }
+  },
+  {
+   "id": "scatikwork",
+   "roditel": "ii_komanda",
+   "status": "работает_у_нас",
+   "nazvanie": "Сервер SCATIKWORK",
+   "ostanovilis": "зеркала репозиториев в 03:00",
+   "ne_zakryto": [
+    "стать домом дерева задач"
+   ],
+   "istochniki": [],
+   "pometki": [],
+   "opiraetsya": [],
+   "provereno": {
+    "trit": "не_знаю",
+    "pochemu": [
+     "№ 46: нет своего источника"
+    ]
+   }
+  },
+  {
+   "id": "slovar_forto_prologa",
+   "roditel": "ii_komanda",
+   "status": "в_работе",
+   "nazvanie": "Словарь Форто-Пролога (slovar/, lib/slova)",
+   "ostanovilis": "задача 025",
+   "ne_zakryto": [
+    "slovar-iz-koda.py не читает код в HTML"
+   ],
+   "istochniki": [],
+   "pometki": [],
+   "opiraetsya": [],
+   "provereno": {
+    "trit": "не_знаю",
+    "pochemu": [
+     "№ 46: нет своего источника"
+    ]
+   }
+  },
+  {
+   "id": "yadro_trit",
+   "roditel": "ii_komanda",
+   "status": "в_работе",
+   "nazvanie": "Ядро трит",
+   "ostanovilis": "44/44 эталона",
+   "ne_zakryto": [
+    "этапы после ревизора"
+   ],
+   "istochniki": [],
+   "pometki": [],
+   "opiraetsya": [
+    "kniga_logika",
+    "drakon_graf"
+   ],
+   "provereno": {
+    "trit": "не_знаю",
+    "pochemu": [
+     "№ 46: нет своего источника"
+    ]
+   }
+  },
+  {
+   "id": "revizor",
+   "roditel": "yadro_trit",
+   "status": "работает_у_нас",
+   "nazvanie": "Ревизор навыков и памяти",
+   "ostanovilis": "25.11: отчёт",
+   "ne_zakryto": [
+    "карточку ОЧ не трогать до ≈ 23.12"
+   ],
+   "istochniki": [],
+   "pometki": [],
+   "opiraetsya": [],
+   "provereno": {
+    "trit": "не_знаю",
+    "pochemu": [
+     "№ 46: нет своего источника"
+    ]
+   }
+  },
+  {
+   "id": "kniga_logika",
+   "roditel": "ii_komanda",
+   "status": "в_работе",
+   "nazvanie": "Логика (книга, ч. 2)",
+   "ostanovilis": "вычитка",
+   "ne_zakryto": [
+    "Д.1 примеры",
+    "сверка названий с Поляковым"
+   ],
+   "istochniki": [],
+   "pometki": [],
+   "opiraetsya": [],
+   "provereno": {
+    "trit": "не_знаю",
+    "pochemu": [
+     "№ 46: нет своего источника"
+    ]
+   }
+  },
+  {
+   "id": "komnata",
+   "roditel": "ii_komanda",
+   "status": "работает_у_нас",
+   "nazvanie": "Комната переговоров",
+   "ostanovilis": "работает",
+   "ne_zakryto": [],
+   "istochniki": [],
+   "pometki": [],
+   "opiraetsya": [],
+   "provereno": {
+    "trit": "не_знаю",
+    "pochemu": [
+     "№ 46: нет своего источника"
+    ]
+   }
+  },
+  {
+   "id": "brifing",
+   "roditel": "ii_komanda",
+   "status": "работает_у_нас",
+   "nazvanie": "Брифинг",
+   "ostanovilis": "работает",
+   "ne_zakryto": [],
+   "istochniki": [],
+   "pometki": [],
+   "opiraetsya": [],
+   "provereno": {
+    "trit": "не_знаю",
+    "pochemu": [
+     "№ 46: нет своего источника"
+    ]
+   }
+  },
+  {
+   "id": "algoritm_urokov_v9",
+   "roditel": "ii_komanda",
+   "status": "работает_у_нас",
+   "nazvanie": "Алгоритм уроков v9",
+   "ostanovilis": "работает",
+   "ne_zakryto": [],
+   "istochniki": [],
+   "pometki": [],
+   "opiraetsya": [],
+   "provereno": {
+    "trit": "не_знаю",
+    "pochemu": [
+     "№ 46: нет своего источника"
+    ]
+   }
+  },
+  {
+   "id": "derevo_zadach",
+   "roditel": "ii_komanda",
+   "status": "в_работе",
+   "nazvanie": "Дерево задач",
+   "ostanovilis": "26.11: шаг 1 — факты Пролога",
+   "ne_zakryto": [
+    "Python -> JSON",
+    "страница JS"
+   ],
+   "istochniki": [],
+   "pometki": [],
+   "opiraetsya": [
+    "yadro_trit",
+    "drakon_graf"
+   ],
+   "provereno": {
+    "trit": "не_знаю",
+    "pochemu": [
+     "№ 46: нет своего источника"
+    ]
+   }
+  },
+  {
+   "id": "avtomatizaciya_dz",
+   "roditel": "ii_komanda",
+   "status": "идея",
+   "nazvanie": "Автоматизация ДЗ",
+   "ostanovilis": "ждёт схему (задание 003)",
+   "ne_zakryto": [],
+   "istochniki": [],
+   "pometki": [],
+   "opiraetsya": [],
+   "provereno": {
+    "trit": "не_знаю",
+    "pochemu": [
+     "№ 46: нет своего источника"
+    ]
+   }
+  },
+  {
+   "id": "pravila_och",
+   "roditel": "ii_komanda",
+   "status": "в_работе",
+   "nazvanie": "Правила ОЧ: карточка и испытание",
+   "ostanovilis": "испытание карточки, журнал задания 045",
+   "ne_zakryto": [
+    "карточку не трогать до ≈ 23.12"
+   ],
+   "istochniki": [],
+   "pometki": [],
+   "opiraetsya": [
+    "kniga_logika"
+   ],
+   "provereno": {
+    "trit": "не_знаю",
+    "pochemu": [
+     "№ 46: нет своего источника"
+    ]
+   }
+  },
+  {
+   "id": "sloj_och",
+   "roditel": "yadro_trit",
+   "status": "идея",
+   "nazvanie": "Слой ОЧ в ядре",
+   "ostanovilis": "ждёт конца испытания карточки ОЧ",
+   "ne_zakryto": [
+    "после испытания (≈ 23.12)"
+   ],
+   "istochniki": [],
+   "pometki": [],
+   "opiraetsya": [
+    "pravila_och"
+   ],
+   "provereno": {
+    "trit": "не_знаю",
+    "pochemu": [
+     "№ 46: нет своего источника"
+    ]
+   }
+  },
+  {
+   "id": "teacher_workpad",
+   "roditel": "корень",
+   "status": "работает_у_нас",
+   "nazvanie": "teacher-workpad — сайт уроков",
+   "ostanovilis": "25.11: урок 13 ИИИБ 6 кл.",
+   "ne_zakryto": [
+    "11 веток кроме main (урок 11 от 22.11, deepseek/proposed-change, zadanie-005-priemka)",
+    "хвосты 16.11: фото слайдов, «Дело № 6-ИИ», программа 10 кл.",
+    "MathJax офлайн"
+   ],
+   "istochniki": [
+    {
+     "vid": "github",
+     "put": "Scatik146/teacher-workpad"
+    }
+   ],
+   "pometki": [],
+   "opiraetsya": [],
+   "provereno": {
+    "trit": "не_знаю",
+    "pochemu": [
+     "№ 5: нет списка репозиториев"
+    ]
+   }
+  },
+  {
+   "id": "kurs_ii_ib",
+   "roditel": "teacher_workpad",
+   "status": "в_работе",
+   "nazvanie": "Курс «ИИ и ИБ» (1–11 кл.)",
+   "ostanovilis": "26.11: урок 13 6 кл. проведён",
+   "ne_zakryto": [
+    "разбор уроков 23–26.11"
+   ],
+   "istochniki": [],
+   "pometki": [],
+   "opiraetsya": [],
+   "provereno": {
+    "trit": "не_знаю",
+    "pochemu": [
+     "№ 46: нет своего источника"
+    ]
+   }
+  },
+  {
+   "id": "drakon_shemy",
+   "roditel": "teacher_workpad",
+   "status": "работает_у_нас",
+   "nazvanie": "Дракон-схемы на сайте (обёртка 1.4, запись 1.2)",
+   "ostanovilis": "работает",
+   "ne_zakryto": [
+    "ограды «дракон» (README § 5 п. 6)"
+   ],
+   "istochniki": [],
+   "pometki": [],
+   "opiraetsya": [],
+   "provereno": {
+    "trit": "не_знаю",
+    "pochemu": [
+     "№ 46: нет своего источника"
+    ]
+   }
+  },
+  {
+   "id": "drakon_graf",
+   "roditel": "корень",
+   "status": "работает_у_нас",
+   "nazvanie": "ДРАКОН-ГРАФ",
+   "ostanovilis": "23.11: стартовая страница",
+   "ne_zakryto": [
+    "ветки startovaya-stranica, deps-fetch, stage3, sostoyanie-14-11-vecher",
+    "ГРАФ как мини-проект: учебник, сайт, база примеров"
+   ],
+   "istochniki": [
+    {
+     "vid": "github",
+     "put": "Scatik146/drakon-graf"
+    }
+   ],
+   "pometki": [],
+   "opiraetsya": [],
+   "provereno": {
+    "trit": "не_знаю",
+    "pochemu": [
+     "№ 5: нет списка репозиториев"
+    ]
+   }
+  },
+  {
+   "id": "zhivoj_konspekt",
+   "roditel": "drakon_graf",
+   "status": "в_работе",
+   "nazvanie": "Живой конспект (родился из drakon-graf 14.11; пока только документы)",
+   "ostanovilis": "пункт «а» готов",
+   "ne_zakryto": [
+    "«б» ipaddress (DeepSeek)",
+    "«в» проверка на ЕГЭ"
+   ],
+   "istochniki": [
+    {
+     "vid": "github",
+     "put": "Scatik146/zhivoj-konspekt"
+    }
+   ],
+   "pometki": [],
+   "opiraetsya": [],
+   "provereno": {
+    "trit": "не_знаю",
+    "pochemu": [
+     "№ 5: нет списка репозиториев"
+    ]
+   }
+  },
+  {
+   "id": "skulpt",
+   "roditel": "zhivoj_konspekt",
+   "status": "в_работе",
+   "nazvanie": "skulpt (форк)",
+   "ostanovilis": "14.11: ветка zhivoj-konspekt, printLastExpr",
+   "ne_zakryto": [],
+   "istochniki": [
+    {
+     "vid": "github",
+     "put": "Scatik146/skulpt"
+    }
+   ],
+   "pometki": [],
+   "opiraetsya": [],
+   "provereno": {
+    "trit": "не_знаю",
+    "pochemu": [
+     "№ 5: нет списка репозиториев"
+    ]
+   }
+  },
+  {
+   "id": "qumir",
+   "roditel": "zhivoj_konspekt",
+   "status": "заморожено",
+   "nazvanie": "qumir (форк, страховка)",
+   "ostanovilis": "13.11: последнее — апстрим",
+   "ne_zakryto": [
+    "импорт .fil"
+   ],
+   "istochniki": [
+    {
+     "vid": "github",
+     "put": "Scatik146/qumir"
+    }
+   ],
+   "pometki": [],
+   "opiraetsya": [],
+   "provereno": {
+    "trit": "не_знаю",
+    "pochemu": [
+     "№ 5: нет списка репозиториев"
+    ]
+   }
+  },
+  {
+   "id": "komi_perm_game_calendar",
+   "roditel": "корень",
+   "status": "работает_у_нас",
+   "nazvanie": "Коми-пермяцкий игровой календарь",
+   "ostanovilis": "22.11: PR #29; 25.11: CLAUDE.md",
+   "ne_zakryto": [
+    "шаг 5 РПЦ",
+    "методика зманим (README § 5)",
+    "31 ветка"
+   ],
+   "istochniki": [
+    {
+     "vid": "github",
+     "put": "Scatik146/komi-perm-game-calendar"
+    }
+   ],
+   "pometki": [],
+   "opiraetsya": [],
+   "provereno": {
+    "trit": "не_знаю",
+    "pochemu": [
+     "№ 5: нет списка репозиториев"
+    ]
+   }
+  },
+  {
+   "id": "memory_maryam_ai",
+   "roditel": "корень",
+   "status": "работает_у_нас",
+   "nazvanie": "memory_maryam_ai — резерв ii-komanda",
+   "ostanovilis": "25.11",
+   "ne_zakryto": [
+    "ветка navyki-posle-migracii"
+   ],
+   "istochniki": [
+    {
+     "vid": "github",
+     "put": "Scatik146/memory_maryam_ai"
+    }
+   ],
+   "pometki": [],
+   "opiraetsya": [],
+   "provereno": {
+    "trit": "не_знаю",
+    "pochemu": [
+     "№ 5: нет списка репозиториев"
+    ]
+   }
+  },
+  {
+   "id": "info10_class",
+   "roditel": "корень",
+   "status": "заморожено",
+   "nazvanie": "info10-class — информатика 10 кл.: учить работать с GitHub (накрыт курсом ИИ 1–11 кл.)",
+   "ostanovilis": "16.10: уроки проведены",
+   "ne_zakryto": [
+    "задача #13 «Код Хаффмана»",
+    "ветки учеников"
+   ],
+   "istochniki": [
+    {
+     "vid": "github",
+     "put": "Scatik146/info10-class"
+    }
+   ],
+   "pometki": [],
+   "opiraetsya": [],
+   "provereno": {
+    "trit": "не_знаю",
+    "pochemu": [
+     "№ 5: нет списка репозиториев"
+    ]
+   }
+  },
+  {
+   "id": "max_class_bot",
+   "roditel": "корень",
+   "status": "работает_у_нас",
+   "nazvanie": "max-class-bot — чат-бот классного руководителя в MAX (очень важен)",
+   "ostanovilis": "26.11: бот запущен, но только шаблон; стоит",
+   "ne_zakryto": [
+    "учитель не может за него взяться",
+    "код на sourcecraft.dev и в Yandex Cloud, на GitHub пусто"
+   ],
+   "istochniki": [
+    {
+     "vid": "sourcecraft",
+     "put": "max-class-bot"
+    },
+    {
+     "vid": "github",
+     "put": "Scatik146/max-class-bot"
+    }
+   ],
+   "pometki": [],
+   "opiraetsya": [],
+   "provereno": {
+    "trit": "не_знаю",
+    "pochemu": [
+     "№ 5: нет списка репозиториев",
+     "№ 5: нет списка репозиториев"
+    ]
+   }
+  },
+  {
+   "id": "drawman",
+   "roditel": "корень",
+   "status": "заморожено",
+   "nazvanie": "drawman — «Чертежник на Пайтоне»",
+   "ostanovilis": "2017",
+   "ne_zakryto": [],
+   "istochniki": [
+    {
+     "vid": "github",
+     "put": "Scatik146/drawman"
+    }
+   ],
+   "pometki": [],
+   "opiraetsya": [],
+   "provereno": {
+    "trit": "не_знаю",
+    "pochemu": [
+     "№ 5: нет списка репозиториев"
+    ]
+   }
+  }
+ ],
+ "itog": "не_знаю"
+}
