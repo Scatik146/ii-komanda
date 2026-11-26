@@ -27,7 +27,7 @@ async function проверить(папка, факты) {
   положить(m, path.join(__dirname, 'proverka.pl'), '/proverka.pl');
   m.prolog.query("consult('/derevo.pl'), consult('/proverka.pl')").once();
   const узлов = m.prolog.query('aggregate_all(count, узел(_,_,_), N)').once().N;
-  const ошибки = ['нет_родителя', 'чужой_статус', 'в_цикле'].map((ц) => [ц, список(m, ц)]);
+  const ошибки = ['нет_родителя', 'чужой_статус', 'в_цикле', 'чужая_опора'].map((ц) => [ц, список(m, ц)]);
   ошибки.forEach(([ц, l]) => console.log(`${ц}: ${l.length ? l.join(', ') : 'нет'}`));
   const верно = m.prolog.query('дерево_верно').once().success;
   console.log(`узлов: ${узлов}; дерево_верно: ${верно}`);
